@@ -36,28 +36,37 @@ We prove 2. => 3.
 {
     We define the cut $(E, T)$ by 
     $E := \{u \mid $ there is a $s-u$-path in the residual graph corresponding to $f$ $\}$
+
+    ADD PICTURE
+    
     We show that $|f| = c(E, T)$.
-    We have $|f| = f(E, T) - f(T, E)$
-
-    Let $u \in E$, $v \in T$.
-
-    If $u \not \rightarrow v$ and $v \not \rightarrow u$ in $G$,
-    - $f(u, v) = 0$
-    - $f(v, u) = 0$
-    If $u \rightarrow v$ and $v \not \rightarrow u$ in $G$
-    - $f(u, v) = c(u, v)$
     {
-        As there is no edge from $u$ to $v$ in the residual graph, we cannot augment the flow from $u$ to $v$.
-    }
-    - $f(v, u)=0$
-    If $u \not \rightarrow v$ and $v \rightarrow u$  in $G$
-    - $f(u, v) = 0$
-    - $f(v, u) = 0$
-    {
-        As there is no from $u$ to $v$ in the residual graph, there is no flow to cancel from $v$ to $u$.
-    }
+        We have $|f| = f(E, T) - f(T, E)$
 
-    Thus, $|f| = c(E, T)$
+        Let $u \in E$, $v \in T$.
+
+        If $u \not \rightarrow v$ and $v \not \rightarrow u$ in $G$,
+        - $f(u, v) = 0$
+        - $f(v, u) = 0$
+        If $u \rightarrow v$ and $v \not \rightarrow u$ in $G$
+        - $f(u, v) = c(u, v)$
+        {
+            As there is no edge from $u$ to $v$ in the residual graph, we cannot augment the flow from $u$ to $v$.
+
+            ADD A PICTURE
+        }
+        - $f(v, u)=0$
+        If $u \not \rightarrow v$ and $v \rightarrow u$  in $G$
+        - $f(u, v) = 0$
+        - $f(v, u) = 0$
+        {
+            As there is no from $u$ to $v$ in the residual graph, there is no flow to cancel from $v$ to $u$.
+
+            ADD A PICTURE
+        }
+
+        Thus, $|f| = c(E, T)$
+    }
 }
 
 As the condition of termination of Ford-Fulkerson is 2., we have 3.
