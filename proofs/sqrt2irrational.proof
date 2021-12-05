@@ -2,10 +2,10 @@ Prove that $\sqrt 2$ is irrational.
 {
 	Suppose that $\sqrt 2$ rational.
 	$\sqrt 2 = \frac a b$ irreducible, for some integers $a$ and $b$.
-	$2 = \frac {a^2} {b^2}$ [[*]]
-	$2b^2 = a^2$
-	So $a^2$ is even.
-	So $a$ is even.    [[*]]
+	\infer1 $2 = \frac {a^2} {b^2}$ [[*]]
+	\infer1 $2b^2 = a^2$
+	\infer1 So $a^2$ is even.
+	\infer1 So $a$ is even.    [[*]]
 	{
 		Suppose $a$ is odd.
 		$a = 2k+1$ for some integer $k$
@@ -13,15 +13,15 @@ Prove that $\sqrt 2$ is irrational.
 		$a^2$ is odd
 	}
 	
-	$a = 2k$ for some $k$
-	$2b^2 = a^2$
-	$2b^2 = 4k^2$
-	$b^2 = 2k^2$
-	$b^2$ is even
+	\infer1 $a = 2k$ for some $k$
+	\infer1 $2b^2 = a^2$
+	\infer1 $2b^2 = 4k^2$
+	\infer1 $b^2 = 2k^2$
+	\infer1 $b^2$ is even
 
-	$b$ is even [[*]]
+	\infer1 $b$ is even [[*]]
 	
-	Contradiction by [[*]]
+	\infer1 Contradiction by [[*]]
 }
 	
 

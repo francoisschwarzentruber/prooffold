@@ -23,7 +23,11 @@ function makeContainer(nodes, depth) {
     return container;
 }
 
-
+function makeDiv(innerHTML) {
+    const el = document.createElement("div");
+    el.innerHTML = dollarToBackSlashParenthesis(innerHTML);
+    return el;
+}
 
 function setInvisibleUpToDepth(depth) {
     for (let d = depth; d < 100; d++) {
@@ -54,12 +58,13 @@ function linesToDOMElement(lines, depth) {
         else if (line == "}") {
             return makeContainer(nodes, depth);
         }
+        else if (line.startsWith("\\infer1")) {
+            const el = makeDiv(line.substr(7));
+            el.classList.add("infer1");
+            nodes.push(el);
+        }
         else {
-            const el = document.createElement("div");
-            if(nodes.length > 0)
-                el.classList.add("infer1");
-            el.innerHTML = dollarToBackSlashParenthesis(line);
-
+            const el = makeDiv(line);
             nodes.push(el);
         }
 

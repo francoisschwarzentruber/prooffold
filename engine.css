@@ -13,13 +13,14 @@ div {
 div.infer1::before {
     display:block;
     content:"⇓";
+    
 }
 
 .box {
     position: absolute;
-    width:300px;
+    width:400px;
     height: 800px;
-    text-align: center;
+    
     
 }
 
@@ -56,18 +57,18 @@ div.infer1::before {
 
 
 .box1 {
-    left:300px;
+    left:400px;
     background-color: rgba(189, 189, 189, 0.1);
 }
 
 
 
 .box2 {
-    left:600px;
+    left:800px;
     background-color: rgba(124, 124, 124, 0.1);
 }
 
 .box3 {
-    left:900px;
+    left:1200px;
     background-color: rgba(107, 107, 107, 0.1);
 }
