@@ -35,6 +35,13 @@ function setInvisibleUpToDepth(depth) {
         for (let i = 0; i < els.length; i++)
             els[i].hidden = true;
     }
+    for (let d = depth - 1; d < 100; d++) {
+        const els = document.querySelectorAll(".box" + d + " > .on");
+        for (let i = 0; i < els.length; i++)
+            els[i].classList.remove("on");
+
+    }
+
 }
 function linesToDOMElement(lines, depth) {
     let nodes = [];

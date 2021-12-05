@@ -1,74 +1,76 @@
 body {
+    margin: 0px;
+}
+
+.proof {
     margin:0px;
 }
 
-
-
-div {
-    margin-top:8px;
-    margin-bottom:8px;
+.box > div {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    padding:8px;
 }
 
 
 div.infer1::before {
-    display:block;
-    content:"⇓";
-    
+    display: block;
+    content: "⇓";
+
 }
 
 .box {
     position: absolute;
-    width:400px;
+    width: 400px;
     height: 800px;
-    
-    
+    margin:0px;
+    top:0px;
+
 }
 
 .button {
-    color:blue;
+    color: blue;
     border: 1px solid transparent;
     cursor: pointer;
 }
 
-.button.on {
-    
-}
+.button.on {}
 
 .box0 {
-    left:0px;
+    left: 0px;
 }
 
 .box0 .on {
-    background-color: rgba(189, 189, 189, 0.1);
+    background-color: rgb(214, 214, 214);
 }
 
 
 
 .box1 .on {
-    background-color: rgba(189, 189, 189, 0.1);
+    background-color: rgb(187, 187, 187);
 }
 
 
 
 
 .box2 .on {
-    background-color: rgba(107, 107, 107, 0.1);
+    background-color: rgb(187, 187, 187);
 }
 
 
 .box1 {
-    left:400px;
-    background-color: rgba(189, 189, 189, 0.1);
+    left: 400px;
+    background-color: rgb(214, 214, 214);
 }
 
 
 
 .box2 {
-    left:800px;
-    background-color: rgba(124, 124, 124, 0.1);
+    left: 800px;
+    background-color: rgb(187, 187, 187);
 }
 
 .box3 {
-    left:1200px;
-    background-color: rgba(107, 107, 107, 0.1);
+    left: 1200px;
+    background-color: rgba(107, 107, 107);
 }
