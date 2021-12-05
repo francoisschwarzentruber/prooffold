@@ -1,0 +1,27 @@
+Prove that $\sqrt 2$ is irrational.
+{
+	Suppose that $\sqrt 2$ rational.
+	$\sqrt 2 = \frac a b$ irreducible, for some integers $a$ and $b$.
+	$2 = \frac {a^2} {b^2}$ [[*]]
+	$2b^2 = a^2$
+	So $a^2$ is even.
+	So $a$ is even.    [[*]]
+	{
+		Suppose $a$ is odd.
+		$a = 2k+1$ for some integer $k$
+		$a^2 = 4k^2+4k+1$
+		$a^2$ is odd
+	}
+	
+	$a = 2k$ for some $k$
+	$2b^2 = a^2$
+	$2b^2 = 4k^2$
+	$b^2 = 2k^2$
+	$b^2$ is even
+
+	$b$ is even [[*]]
+	
+	Contradiction by [[*]]
+}
+	
+
