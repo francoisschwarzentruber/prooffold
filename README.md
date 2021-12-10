@@ -8,7 +8,7 @@ This repository contains a tool for reading/studying mathematical proofs. It tri
 
 Proofs are easy to be written. 
 
-`Fact
+````Fact
 Theorem
       {
         write the proof of the theorem
@@ -17,4 +17,4 @@ Theorem
            proof of that amazing fact
         }
       }
-      Fact`
+      Fact````
