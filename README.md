@@ -8,8 +8,8 @@ This repository contains a tool for reading/studying mathematical proofs. It tri
 
 Proofs are easy to be written. 
 
- '''' Fact
-      Theorem
+`Fact
+Theorem
       {
         write the proof of the theorem
         with an amazing fact
@@ -17,4 +17,4 @@ Proofs are easy to be written.
            proof of that amazing fact
         }
       }
-      Fact''''
+      Fact`
