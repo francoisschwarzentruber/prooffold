@@ -25,7 +25,8 @@ div.infer1::before {
     height: 100%;
     margin: 0px;
     top: 0px;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     transition: all 200ms;
 }
 
