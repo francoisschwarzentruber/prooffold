@@ -33,7 +33,8 @@ function setInvisibleUpToDepth(depth) {
     for (let d = depth; d < 100; d++) {
         const els = document.getElementsByClassName("box" + d);
         for (let i = 0; i < els.length; i++)
-            els[i].hidden = true;
+            els[i].classList.add("hidden");
+        //els[i].hidden = true;
     }
     for (let d = depth - 1; d < 100; d++) {
         const els = document.querySelectorAll(".box" + d + " > .on");
@@ -43,6 +44,8 @@ function setInvisibleUpToDepth(depth) {
     }
 
 }
+
+
 function linesToDOMElement(lines, depth) {
     let nodes = [];
     while (lines.length > 0) {
@@ -52,13 +55,21 @@ function linesToDOMElement(lines, depth) {
         console.log(line);
         if (line == "{") {
             const box = linesToDOMElement(lines, depth + 1);
-            box.hidden = true;
+            //      box.hidden = true;
+            box.classList.add("hidden");
             const button = nodes[nodes.length - 1];
             button.classList.add("button");
 
             button.onclick = () => {
-                let h = box.hidden;
-                setInvisibleUpToDepth(depth + 1); box.hidden = !h; button.classList.toggle("on");
+                let h = box.classList.contains("hidden");
+                setInvisibleUpToDepth(depth + 1);
+                //box.hidden = !h;
+                if (h) {
+                    button.classList.toggle("on");
+                    box.classList.remove("hidden");
+                }
+                else
+                    box.classList.add("hidden");
             };
             document.body.appendChild(box)
         }
@@ -68,6 +79,11 @@ function linesToDOMElement(lines, depth) {
         else if (line.startsWith("\\infer1")) {
             const el = makeDiv(line.substr(7));
             el.classList.add("infer1");
+            nodes.push(el);
+        }
+        else if (line == "---") {
+            const el = makeDiv(line);
+            el.style.textAlign = "center";
             nodes.push(el);
         }
         else {

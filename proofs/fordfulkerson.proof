@@ -11,18 +11,19 @@ Lemma: for all cuts $(E, T)$, $|f| = f(E, T) - f(T, E)$.
  $    = f(E, T) + f(E, E) - f(T, E) - f(E, E)$
 }
 
+---
 
 Now, we prove that the three following statements are equivalent:
 1. $f$ is a maximum flow
 2. There is no $s-t$-path in the residual graph corresponding to $f$
 3. There exists a $s-t$-cut whose capacity is $|f|$
 
-We prove 1. => 2.
+We prove $1. \Rightarrow 2$.
 {
     Otherwise we could augment the flow by running an extra step of Ford-Fulkerson algorithm.
 }
 
-We prove 3. => 1.
+We prove $3. \Rightarrow 1$.
 {
     This is because for all cuts $(E, T)$, $|f| \leq c(E, T)$.
     {
@@ -32,7 +33,7 @@ We prove 3. => 1.
     }
 }
 
-We prove 2. => 3.
+We prove $2. \Rightarrow 3$.
 {
     We define the cut $(E, T)$ by 
     $E := \{u \mid $ there is a $s-u$-path in the residual graph corresponding to $f$ $\}$
@@ -68,5 +69,7 @@ We prove 2. => 3.
         Thus, $|f| = c(E, T)$
     }
 }
+
+--- 
 
 As the condition of termination of Ford-Fulkerson is 2., we have 3.

@@ -3,13 +3,13 @@ body {
 }
 
 .proof {
-    margin:0px;
+    margin: 0px;
 }
 
-.box > div {
+.box>div {
     margin-top: 8px;
     margin-bottom: 8px;
-    padding:8px;
+    padding: 8px;
 }
 
 
@@ -22,21 +22,29 @@ div.infer1::before {
 .box {
     position: absolute;
     width: 400px;
-    height: 800px;
-    margin:0px;
-    top:0px;
-
+    height: 100%;
+    margin: 0px;
+    top: 0px;
+    overflow: hidden;
+    transition: all 200ms;
 }
 
 .button {
-    color: blue;
     border: 1px solid transparent;
     cursor: pointer;
-    border-top-left-radius: 16px;
-    border-bottom-left-radius: 16px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 16px;
+    transition: all 500ms;
 }
 
-.button.on {}
+.button.on {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.hidden {
+    width: 0px;
+}
 
 .box0 {
     left: 0px;
@@ -46,14 +54,9 @@ div.infer1::before {
     background-color: rgb(214, 214, 214);
 }
 
-
-
 .box1 .on {
     background-color: rgb(187, 187, 187);
 }
-
-
-
 
 .box2 .on {
     background-color: rgb(167, 167, 167);
@@ -64,8 +67,6 @@ div.infer1::before {
     left: 400px;
     background-color: rgb(214, 214, 214);
 }
-
-
 
 .box2 {
     left: 800px;
