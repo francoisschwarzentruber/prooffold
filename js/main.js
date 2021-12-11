@@ -46,10 +46,46 @@ function setInvisibleUpToDepth(depth) {
 }
 
 
+
+function attachReferences(domElement, references) {
+    domElement.onmouseenter = () => {
+        for (const ref of references) {
+            document.getElementById(ref).classList.add("highlight");
+        }
+    };
+    domElement.onmouseleave = () => {
+        for (const ref of references) {
+            document.getElementById(ref).classList.remove("highlight");
+        }
+    };
+    domElement.classList.add("ref");
+}
+
 function linesToDOMElement(lines, depth) {
     let nodes = [];
     while (lines.length > 0) {
         const line = lines.shift().trim();
+
+        const testEnv = (str) => {
+            if (line.startsWith(str)) {
+                const el = makeDiv(`<env>${str}</env>` + line.substr(str.length));
+                nodes.push(el);
+                return true;
+            }
+            else
+                return false;
+
+        }
+
+
+        const testEnvs = () => {
+            for (const str of ["Theorem.", "Definition.", "Proposition.", "Proof.", "Lemma."]) {
+                if (testEnv(str))
+                    return true;
+            }
+            return false;
+        }
+
         if (line == "")
             continue;
         console.log(line);
@@ -86,10 +122,20 @@ function linesToDOMElement(lines, depth) {
             el.style.textAlign = "center";
             nodes.push(el);
         }
+        else if (testEnvs()) {
+        }
+        else if (line.startsWith("\\label{")) {
+            nodes[nodes.length - 1].id = line.substr("\\label{".length, line.length - "\\label{".length - 1);
+        }
+        else if (line.startsWith("\\ref{"))
+            attachReferences(nodes[nodes.length - 1], line.substr("\\ref{".length, line.length - "\\ref{".length - 1).split(","));
+
         else {
             const el = makeDiv(line);
             nodes.push(el);
         }
+
+
 
     }
 

@@ -1,3 +1,10 @@
+:root {
+    --box1-color: rgb(230, 230, 230);
+    --box2-color: rgb(210, 210, 210);
+    --box3-color: rgb(190, 190, 190);
+    --box4-color: rgb(170, 170, 170);
+}
+
 body {
     margin: 0px;
 }
@@ -19,6 +26,11 @@ div.infer1::before {
 
 }
 
+env {
+    font-weight: bold;
+}
+
+
 .box {
     position: absolute;
     width: 400px;
@@ -33,14 +45,30 @@ div.infer1::before {
 .button {
     border: 1px solid transparent;
     cursor: pointer;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.03);
     border-radius: 16px;
+    border-left: 4px solid orange;
+    border-right: 4px solid orange;
     transition: all 500ms;
+    margin-left: 3px;
+    margin-right: 3px;
 }
 
+.ref {
+    border-radius: 16px;
+    border-left: 4px solid yellow;
+    border-right: 4px solid yellow;
+}
+
+.highlight {
+    background-color: yellow;
+}
 .button.on {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
+    border-left: 4px solid green;
+    border-right: 4px none green;
+    margin-right: 0px;
 }
 
 .hidden {
@@ -52,29 +80,39 @@ div.infer1::before {
 }
 
 .box0 .on {
-    background-color: rgb(214, 214, 214);
+    background-color: var(--box1-color);
 }
 
 .box1 .on {
-    background-color: rgb(187, 187, 187);
+    background-color: var(--box2-color);
 }
 
 .box2 .on {
-    background-color: rgb(167, 167, 167);
+    background-color: var(--box3-color);
 }
 
 
+.box3 .on {
+    background-color: var(--box4-color);
+}
+
 .box1 {
     left: 400px;
-    background-color: rgb(214, 214, 214);
+    background-color: var(--box1-color);
 }
 
 .box2 {
     left: 800px;
-    background-color: rgb(187, 187, 187);
+    background-color: var(--box2-color);
 }
 
 .box3 {
     left: 1200px;
-    background-color: rgb(167, 167, 167);
+    background-color: var(--box3-color);
+}
+
+
+.box4 {
+    left: 1600px;
+    background-color: var(--box4-color);
 }
