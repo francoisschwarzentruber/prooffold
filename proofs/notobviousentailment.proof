@@ -1,11 +1,11 @@
-Theorem. Let $F$ be a propositional formula and $C$ be a propositional clause. If every variable in $F$ occurs in $C$ and if there exists a valuation $\mathcal{A}$ such that both F and C are false under $\mathcal{A}$, then $F \vDash C$.
+Theorem. Let $F$ be a propositional formula and $C$ be a propositional clause. If every variable in $F$ occurs in $C$ and if there exists a valuation $\mathcal{A}$ such that both $F$ and $C$ are false under $\mathcal{A}$, then $F \vDash C$.
 {
     Let $F$ be a proposition formula
-    Let $C$ be clause
-    (1) Suppose Every variable in $F$ occurs in $C$
+    Let $C$ be a clause
+    (1) Suppose every variable in $F$ occurs in $C$
     (2) Suppose $\mathcal{A}$ is valuation such that $\mathcal{A}(F) = \mathcal{A}(C) = 0$
     
-    First assume $F$ is in clausal form
+    Without loss of generality, assume $F$ is in clausal form
     {
         Recall that every formula can be converted into an equivalent formula in CNF
     }
