@@ -1,0 +1,36 @@
+Theorem. Let $F$ be a propositional formula and $C$ be a propositional clause. If every variable in $F$ occurs in $C$ and if there exists a valuation $\mathcal{A}$ such that both $F$ and $C$ are false under $\mathcal{A}$, then $F \vDash C$.
+{
+    Let $F$ be a proposition formula
+    Let $C$ be a clause
+    (1) Suppose every variable in $F$ occurs in $C$
+    (2) Suppose $\mathcal{A}$ is valuation such that $\mathcal{A}(F) = \mathcal{A}(C) = 0$
+    
+    Without loss of generality, assume $F$ is in clausal form
+    {
+        Recall that every formula can be converted into an equivalent formula in CNF
+    }
+
+    By definition of CNF satisfaction and from hypothesis (2) we have:
+    (3) for some clause $D$ in $F$, $\mathcal{A}(D) = 0$
+    (4) for every literal $l$ in $C$, $\mathcal{A}(l) = 0$
+
+    Moreover,
+    every literal in $D$ is false under $A$
+    {
+      this is because of (3)
+    }
+    every literal in $D$ occurs in $C$
+    {
+      this can be deduced from (1) (4).
+      Every literal $l$ in $D$ is false under $\mathcal{A}$ but
+      every variable in $D$ occurs in $C$.
+      Therefore, if $l \in D$ either $l$ or its complement $\bar{l}$ is in $C$.
+      $\bar{l}$ can't occur in $C$ (otherwise $\mathcal{A}(C) = 1$) and therefore $l \in C$.
+    }
+    It follows that $D$ is a clause of $F$ such that $D \subseteq C$ and thus $F \vDash C$
+    Proof.
+    {
+      Let $\mathcal{A}$ be a valuation such that $\mathcal{A}(F) = 1$.
+      Then $D$ is true under $\mathcal{A}$ and since $D \subseteq C$, $C$ is also true under $\mathcal{A}$.
+    }
+}
