@@ -1,0 +1,56 @@
+Definition. A perfect matching is a matching that matches all the vertices.
+
+Theorem. (Hall's theorem) A bipartite graph $G=(A, B, E)$ has a matching that saturates $A$ iff for all $S \subseteq A$, $|S| \leq |N(S)|$.
+
+Proof.
+$\Leftarrow$
+{
+    By contradiction, suppose that some $S \subseteq A$ is such that $|S| \geq |N(S)|$.
+    Then some vertex in $S$ can not be matched.
+    Contradiction.
+}
+$\Rightarrow$
+{
+    By contradiction. Consider a maximum matching $M$.
+    That matching for sure does **not** saturate $A$.
+
+    Definition. A path is alternating if it is alternately has edges from $M$ and outside $M$.
+
+    PICTURE
+
+
+    Definition. An alternating path is augmenting if its endpoints are unmatched.
+
+
+    PICTURE
+
+    Lemma. If there is an augmenting path, then the matching is not maximum.
+    {
+        A better matching can be obtained by exchanging the edges in $M$ and outside $M$ along the augmenting path.
+    }
+
+
+    Contradiction!
+    {
+        Consider the set $S_1$ of unmatched vertices from $A$.
+        That set is non empty.
+        Let $T_1$ be the neighbor of $S_1$.
+        $T_1$ is not empty.
+        All vertices of $T_1$ are matched.
+        {
+            If some is unmatched, we could have a better matching by matching it to some vertex in $S_1$!
+        }
+        Let $S_2$ be the (non-empty) set of vertices that are matched in those in $T_1$.
+        Let $T_2$ be the neighbor of $S_2$.
+        All vertices of $T_2$ are matched.
+        {
+            If some is unmatched, we have an augmenting path!
+        }
+        etc.
+        This process is infinite.
+
+    }
+
+    
+
+}
