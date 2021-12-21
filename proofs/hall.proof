@@ -14,7 +14,7 @@ a3 -- b4;
 Theorem. (Hall's theorem) A bipartite graph $G=(A, B, E)$ has a matching that saturates $A$ iff for all $S \subseteq A$, $|S| \leq |N(S)|$.
 
 Proof.
-$\Leftarrow$
+$\Rightarrow$
 {
     By contradiction, suppose that some $S \subseteq A$ is such that $|S| > |N(S)|$.
     graph {
@@ -26,7 +26,7 @@ $\Leftarrow$
     Then some vertex in $S$ can not be matched.
     Contradiction.
 }
-$\Rightarrow$
+$\Leftarrow$
 {
     By contradiction. Consider a maximum matching $M$.
     That matching for sure does **not** saturate $A$.
