@@ -61,6 +61,20 @@ function attachReferences(domElement, references) {
     domElement.classList.add("ref");
 }
 
+
+
+function linesToDotCode(lines) {
+    let code = "";
+    while (lines.length > 0) {
+        const line = lines.shift().trim();
+        code += line;
+        if (line == "}")
+            return code;
+    }
+    return code;
+}
+
+
 function linesToDOMElement(lines, depth) {
     let nodes = [];
     while (lines.length > 0) {
@@ -89,7 +103,14 @@ function linesToDOMElement(lines, depth) {
         if (line == "")
             continue;
         console.log(line);
-        if (line == "{") {
+        if (line == "digraph {" || line == "graph {") {
+            const dotCode = line + linesToDotCode(lines);
+            const el = document.createElement("div");
+            el.innerHTML = svgFromDot(dotCode);
+            el.children[0].style.width= "100%";
+            nodes.push(el);
+        }
+        else if (line == "{") {
             const box = linesToDOMElement(lines, depth + 1);
             //      box.hidden = true;
             box.classList.add("hidden");
@@ -153,6 +174,14 @@ async function load(filename) {
     document.getElementById("proof").innerHTML = "";
     document.getElementById("proof").appendChild(proof);
     MathJax.typeset();
+
+    // format ofi .dot
+}
+
+
+function svgFromDot(dotCode) {
+    let digraph = dotCode;// for svg
+    return Viz(digraph, "svg");
 }
 
 window.onload = () => {

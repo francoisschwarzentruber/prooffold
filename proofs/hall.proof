@@ -1,11 +1,28 @@
-Definition. A perfect matching is a matching that matches all the vertices.
+Definition. Let $G=(A, B, E)$ be a bipartite graph. A matching saturates $A$ if all vertices of $A$ are matched.
+
+
+graph {
+a1 -- b3 [penwidth="3mm"];
+a1 -- b1; 
+a2 -- b2;
+a2 -- b1 [penwidth="3mm"];
+a3 -- b2 [penwidth="3mm"];
+a3 -- b4;
+}
+
 
 Theorem. (Hall's theorem) A bipartite graph $G=(A, B, E)$ has a matching that saturates $A$ iff for all $S \subseteq A$, $|S| \leq |N(S)|$.
 
 Proof.
 $\Leftarrow$
 {
-    By contradiction, suppose that some $S \subseteq A$ is such that $|S| \geq |N(S)|$.
+    By contradiction, suppose that some $S \subseteq A$ is such that $|S| > |N(S)|$.
+    graph {
+        s1 -- n3;
+        s1 -- n1; 
+        s2 -- n2;
+        s2 -- n1;
+    }
     Then some vertex in $S$ can not be matched.
     Contradiction.
 }
@@ -16,17 +33,51 @@ $\Rightarrow$
 
     Definition. A path is alternating if it is alternately has edges from $M$ and outside $M$.
 
-    PICTURE
+    graph {
+        rankdir="LR";
+        u1 -- u2;
+        u2 -- u3 [penwidth="3mm"];
+        u3 -- u4;
+        u4 --  u5 [penwidth="3mm"];
+    }
 
 
     Definition. An alternating path is augmenting if its endpoints are unmatched.
 
 
-    PICTURE
+     graph {
+        rankdir="LR";
+        u1 -- u2;
+        u2 -- u3 [penwidth="3mm"];
+        u3 -- u4;
+        u4 --  u5 [penwidth="3mm"];
+        u5 -- u6;
+    }
+
 
     Lemma. If there is an augmenting path, then the matching is not maximum.
     {
         A better matching can be obtained by exchanging the edges in $M$ and outside $M$ along the augmenting path.
+
+          graph {
+        rankdir="LR";
+        u1 -- u2;
+        u2 -- u3 [penwidth="3mm"];
+        u3 -- u4;
+        u4 --  u5 [penwidth="3mm"];
+        u5 -- u6;
+    }
+
+    becomes
+
+      graph {
+        rankdir="LR";
+        u1 -- u2 [penwidth="3mm"];
+        u2 -- u3;
+        u3 -- u4 [penwidth="3mm"];
+        u4 --  u5;
+        u5 -- u6 [penwidth="3mm"];
+    }
     }
 
 
