@@ -11,19 +11,19 @@ Proofs are easy to be written.
 
       Fact
       Theorem. This amazing!
-      \label{theorem:amazing}
             {
               write the proof of the theorem
-              with an amazing fact
+              with an amazing fact       (1)
               {
                  proof of that amazing fact
               }
+              we have that         (2)
+              Thus we have bling       by (1,2)
             }
       Another Fact
-      \ref{theorem:amazing}
       
       
-Each line is a fact, or simple text. Blocks (panels) are delimited by `{` and `}` and corresponds to a detailed proof of some fact. `\label{...}` and `\ref{...}` enable to highlight some facts used to prove another fact.
+Each line is a fact, or simple text. Blocks (panels) are delimited by `{` and `}` and corresponds to a detailed proof of some fact. `     (1)`, `   (2)` etc. and `      by (1,2)` enable to highlight some facts used to prove another fact.
 
 
 # How to contribute?
