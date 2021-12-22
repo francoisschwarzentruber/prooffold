@@ -36,7 +36,7 @@ Each line is a fact, or simple text. Blocks (panels) are delimited by `{` and `}
  - [ ] Asciiart, it partially works but soon via https://github.com/francoisschwarzentruber/asciidraw we will be able to write nice pictures
  - [ ] Arrows of implications
  - [ ] Automatic aligned equations
-
+ - [ ] Include Tikz pictures
 
 
 # How to contribute?
