@@ -108,9 +108,8 @@ Theorem. (Tutte and Berge's formula) $df(G) = |V| - 2mm(G)$
                 Suppose the induction hypothesis.                         (inductionhyp)
                 Let $S$ := maximum set  of maximum deficit
                 For all components $C$, for all $u \in C$, $C-u$ has a perfect matching.           by (obs2,obs3,inductionhyp)
-                $H$ has a matching saturating $S$             by (obs4)
                 Construct a matching $M$:
-                - Lift a matching from $H$
+                - Lift the matching from $H$ that saturates $S$              by (obs4)
                 - Get a perfect  matching for all components $C$ for all $u \in C$.
                 The number of unmatched vertex is $df(S) = df(G)$.
 
