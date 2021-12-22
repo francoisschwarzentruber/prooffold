@@ -1,0 +1,120 @@
+Definition. $mm(G) := $ size of a maximum matching.
+
+
+Definition. $df(S) := \#($odd connected components of $G\setminus S) - |S|$.
+
+
+Definition. $df(G) := \max_{S \subseteq V} df(S)$.
+
+Theorem. (Tutte and Berge's formula) $df(G) = |V| - 2mm(G)$
+{
+    Proof.
+    $\leq$
+    {
+        Let $S$ be such that $df(S) = df(G)$.                               
+        Let $M$ be a maximum matching.
+        $|V| - 2mm(G)$ is the number of unmatched vertices of $M$.
+        $M$ leaves at least $df(S)$ vertices unmatched.
+        {            
+            At worst, $M$ matches each vertex of $S$ with a vertex from a different odd components of $V \setminus S$.
+
+            asciiart {
+            ╭━━━━━━━╮
+            | . . . | S
+            ╰━┼━┼━┼━╯
+              │ │ │
+           ╭━━╯ │ ╰╮
+           │   ╭╯  │
+           │   │   │
+  /-\ /-\ /+\ /+\ /+\   /-\ /-\ /-\ 
+  | | | | |.| |.| |.|   | | | | | |
+  | | | | | | | | | |   | | | | | |
+  \-/ \-/ \-/ \-/ \-/   \-/ \-/ \-/
+ \                   /  \         /
+  -------------------    ---------
+   odd components       event components
+        of G \ S              of G \ S
+    }
+    }
+    
+
+
+
+    }
+    $\geq$
+    {
+        All the $df(S)$ have the same parity.                                  (parity)
+        {
+            For all $S \subseteq V$, $df(S) \equiv |V|$ mod 2.
+            {
+                $df(S) := \#($odd connected components of $G\setminus S) - |S|$
+                   $\equiv \sum_{C component of G \setminus S} |C| - |S|$ mod 2
+                   $\equiv |V|$ mod 2
+            }
+        }
+        Let $S$ be such $df(S) = df(G)$ with $|S|$ maximal.                     (1)
+        All connected components of $G \setminus S$ are odd.                          (obs2)
+        {
+            By contradiction. Suppose that there is an even component $C$.
+            Let $u$ a vertex in $C$.
+            Let $S' := S \cup \{u\}$.
+
+            $|S'| = |S| + 1$                                                    (2)
+            $df(S') = df(G)$                                                    (3)
+            {
+                $G \setminus S'$ has one more odd component than $G \setminus S$.
+            }
+
+            Contradiction                                by (1, 2, 3)
+        
+        }
+
+
+        For all $C$ components of $G \setminus S$ and $u \in C$, we have $df(C - c) = 0$.          (obs3)
+        {
+            By contradiction. Suppose that there is $T \subseteq C-u$ suchthat $C-u-T$ has strictly more than $|T|$ odd components.
+            Let $S' := S \cup \{u\} \cup T$.
+            $|S'| = |S| + 1 + |T|$
+            $\#odd(G-S') \geq \#odd(G-S)-1 + |T|+1 = \#odd(G-S)+|T|$
+            $df(S') = \#odd(G-S')-|S'| \geq \#odd(G-S)-|S|-1 = df(S)-1$
+            $df(S') = df(S)$                         by (max,1)
+        }
+
+        Definition. We define $H$ to be the bipartite graph with sides $S$ and the set of components $C$ of $G-S$, and a vertex $u$ in $S$ and a component $C$ are adjacent if $u$ has a neighbor in $C$.
+
+        $H$ has a matching that saturates $S$                               (obs4)
+        {
+            Check the condition of Hall's theorem.
+            {
+                Prove that for all $X \subseteq S$, we have $|X| \leq N_H(X)$.
+                {
+                    By contradiction, suppose there is a $X\subseteq S$, we have $|X| > N_H(X)$.
+                    Let $S' := S \setminus X$.
+                    $|S'| = |S| - |X|$
+                    $df(S') > df(S)$
+                    {
+                        Because $\#odd(G-S') \geq \#odd(G-S) - |N_H(X)|$.
+                    }
+                    Contradiction
+                }
+            }
+        }
+        Proof of Tutte-Berge formula
+        {
+            By induction on |V|.
+            Base case |V| = 0 is ok.
+            Induction step.
+            {
+                Suppose the induction hypothesis.                         (inductionhyp)
+                Let $S$ := maximum set  of maximum deficit
+                For all components $C$, for all $u \in C$, $C-u$ has a perfect matching.           by (obs2,obs3,inductionhyp)
+                $H$ has a matching saturating $S$             by (obs4)
+                Construct a matching $M$:
+                - Lift a matching from $H$
+                - Get a perfect  matching for all components $C$ for all $u \in C$.
+                The number of unmatched vertex is $df(S) = df(G)$.
+
+            }
+        }
+    }
+}

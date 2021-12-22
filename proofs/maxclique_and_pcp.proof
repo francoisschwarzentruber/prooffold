@@ -1,0 +1,44 @@
+Theorem. (Feige et al.) There is a polynomial-time α-approximation algorithm for MAX-CLIQUE for some 0 < α ≤ 1 if and only if P = NP.
+
+Proof.
+$\Leftarrow$
+{
+    P = NP
+    ⇓
+    CLIQUE is in P
+    ⇓
+    MAX-CLIQUE too!
+}
+
+
+$\Rightarrow$
+{
+ Suppose there is a polynomial-time α-approximation algorithm for MAX-CLIQUE for some 0 < α ≤ 1.
+
+ Let L in NP.
+
+By PCP theorem, L has a PCP protocol using $c \log n$ random bits, and $k$ oracle queries where $c$, $k$ are constants, and $n$ is the size of the input, and the acceptance probability for $x \not \in L$ is $< \alpha$.
+
+
+
+
+ Prove that L in P.
+ {
+     Build the undirected graph $G = (V, E)$ with:
+
+     - $V$ is the set of $(y, a) \in \{0, 1\}^{c \log n} \times \{0, 1\}^k$ such that the verifier acceps $x$, when $y$ are the random bits and $a$ the query answers.
+
+     - $E$ contains an edge between $(y, a)$ and $(y', a')$ when $a = a'$ and the answers are the same on the same question.
+
+
+     $x \in L$ if the maximum clique of $G$ is of size $n^c$.
+
+     $x \not \in L$ if the maximum clique of $G$ is of size $< \alpha n^c$.
+
+     L in P
+
+ }
+
+}
+
+

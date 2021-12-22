@@ -50,6 +50,8 @@ function setInvisibleUpToDepth(depth) {
 function attachReferences(domElement, references) {
     domElement.onmouseenter = () => {
         for (const ref of references) {
+            if (document.getElementById(ref) == undefined)
+                console.log("element " + ref + " not found!");
             document.getElementById(ref).classList.add("highlight");
         }
     };
@@ -74,6 +76,18 @@ function linesToDotCode(lines) {
     return code;
 }
 
+function linesToASCIIArt(lines) {
+    let code = "";
+    while (lines.length > 0) {
+        const line = lines.shift();
+        console.log(line)
+        console.log(line.length)
+        if (line.trim() == "}")
+            return code;
+        code += line + "\n";
+    }
+    return code;
+}
 
 function linesToDOMElement(lines, depth) {
     let nodes = [];
@@ -107,7 +121,15 @@ function linesToDOMElement(lines, depth) {
             const dotCode = line + linesToDotCode(lines);
             const el = document.createElement("div");
             el.innerHTML = svgFromDot(dotCode);
-            el.children[0].style.width= "100%";
+            el.children[0].style.width = "100%";
+            nodes.push(el);
+        }
+        else if (line == "asciiart {") {
+            const content = linesToASCIIArt(lines);
+            const el = document.createElement("textarea");
+            el.value = content;
+            el.rows = content.split("\n").length;
+            el.cols = 40;
             nodes.push(el);
         }
         else if (line == "{") {
@@ -124,6 +146,21 @@ function linesToDOMElement(lines, depth) {
                 if (h) {
                     button.classList.toggle("on");
                     box.classList.remove("hidden");
+                    const previousBoxRect = button.parentElement.getBoundingClientRect();
+                    const buttonRect = button.getBoundingClientRect();
+                    const boxRect = box.getBoundingClientRect();
+
+                    box.style.left = previousBoxRect.right + "px";
+
+                    if (buttonRect.top + boxRect.height / 2 < window.innerHeight) {
+                        if (buttonRect.top - + boxRect.height / 2 > 0)
+                            box.style.top = buttonRect.top - + boxRect.height / 2 + "px";
+                        else
+                            sbox.style.top = "0px";
+                    }
+                    else
+                        box.style.top = "0px";
+
                 }
                 else
                     box.classList.add("hidden");
@@ -152,7 +189,18 @@ function linesToDOMElement(lines, depth) {
             attachReferences(nodes[nodes.length - 1], line.substr("\\ref{".length, line.length - "\\ref{".length - 1).split(","));
 
         else {
-            const el = makeDiv(line);
+            const info = getInfoLine(line);
+
+
+            console.log(info)
+            const el = makeDiv(info.text);
+            if (info.id)
+                el.id = info.id;
+
+
+
+            if (info.references)
+                attachReferences(el, info.references);
             nodes.push(el);
         }
 
@@ -165,12 +213,42 @@ function linesToDOMElement(lines, depth) {
 
 
 
+
+
+function getInfoLine(line) {
+
+    if (!line.endsWith(")"))
+        return { text: line };
+
+    const parenthesisIDstring = "   (";
+    const i = line.lastIndexOf(parenthesisIDstring);
+
+    if (i >= 0) {
+        return { text: line.substr(0, i), id: line.substring(i + parenthesisIDstring.length, line.length - 1) };
+    }
+    else {
+        const parenthesisRefstring = "   by (";
+        const i = line.lastIndexOf(parenthesisRefstring);
+
+        if (i >= 0)
+            return { text: line.substr(0, i), references: line.substring(i + parenthesisRefstring.length, line.length - 1).split(",") };
+        else
+            return { text: line };
+
+    }
+
+
+}
+
+
+
+
 async function load(filename) {
     document.getElementById("menu").style.display = "none";
     const response = await fetch(`proofs/${filename}.proof`);
     const text = await response.text();
 
-    const proof = linesToDOMElement(text.split("\n").map((line) => line.trim()), 0);
+    const proof = linesToDOMElement(text.split("\n"), 0);
     document.getElementById("proof").innerHTML = "";
     document.getElementById("proof").appendChild(proof);
     MathJax.typeset();

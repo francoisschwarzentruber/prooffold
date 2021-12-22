@@ -18,60 +18,61 @@ Theorem. Ford-Fulkerson algorithm returns a maximum flow.
     3. There exists a $s-t$-cut whose capacity is $|f|$
 
     Proof.
-    $1. \Rightarrow 2$.
     {
-        Otherwise we could augment the flow by running an extra step of Ford-Fulkerson algorithm.
-    }
-
-    $3. \Rightarrow 1$.
-    {
-        This is because for all cuts $(E, T)$, $|f| \leq c(E, T)$.
+        $1. \Rightarrow 2$.
         {
-            $|f| = f(E, T) - f(T, E)$
-            \ref{lemma:cutexpression}
-            $    \leq f(E, T)$
-            $    \leq c(E, T)$
+            Otherwise we could augment the flow by running an extra step of Ford-Fulkerson algorithm.
+        }
+
+        $3. \Rightarrow 1$.
+        {
+            This is because for all cuts $(E, T)$, $|f| \leq c(E, T)$.
+            {
+                $|f| = f(E, T) - f(T, E)$
+                \ref{lemma:cutexpression}
+                $    \leq f(E, T)$
+                $    \leq c(E, T)$
+            }
+        }
+
+        $2. \Rightarrow 3$.
+        {
+            We define the cut $(E, T)$ by 
+            $E := \{u \mid $ there is a $s-u$-path in the residual graph corresponding to $f$ $\}$
+
+            ADD PICTURE
+            
+            We show that $|f| = c(E, T)$.
+            {
+                We have $|f| = f(E, T) - f(T, E)$
+                \ref{lemma:cutexpression}
+
+                Let $u \in E$, $v \in T$.
+
+                If $u \not \rightarrow v$ and $v \not \rightarrow u$ in $G$,
+                - $f(u, v) = 0$
+                - $f(v, u) = 0$
+                If $u \rightarrow v$ and $v \not \rightarrow u$ in $G$
+                - $f(u, v) = c(u, v)$
+                {
+                    As there is no edge from $u$ to $v$ in the residual graph, we cannot augment the flow from $u$ to $v$.
+
+                    ADD A PICTURE
+                }
+                - $f(v, u)=0$
+                If $u \not \rightarrow v$ and $v \rightarrow u$  in $G$
+                - $f(u, v) = 0$
+                - $f(v, u) = 0$
+                {
+                    As there is no from $u$ to $v$ in the residual graph, there is no flow to cancel from $v$ to $u$.
+
+                    ADD A PICTURE
+                }
+
+                Thus, $|f| = c(E, T)$
+            }
         }
     }
-
-    $2. \Rightarrow 3$.
-    {
-        We define the cut $(E, T)$ by 
-        $E := \{u \mid $ there is a $s-u$-path in the residual graph corresponding to $f$ $\}$
-
-        ADD PICTURE
-        
-        We show that $|f| = c(E, T)$.
-        {
-            We have $|f| = f(E, T) - f(T, E)$
-            \ref{lemma:cutexpression}
-
-            Let $u \in E$, $v \in T$.
-
-            If $u \not \rightarrow v$ and $v \not \rightarrow u$ in $G$,
-            - $f(u, v) = 0$
-            - $f(v, u) = 0$
-            If $u \rightarrow v$ and $v \not \rightarrow u$ in $G$
-            - $f(u, v) = c(u, v)$
-            {
-                As there is no edge from $u$ to $v$ in the residual graph, we cannot augment the flow from $u$ to $v$.
-
-                ADD A PICTURE
-            }
-            - $f(v, u)=0$
-            If $u \not \rightarrow v$ and $v \rightarrow u$  in $G$
-            - $f(u, v) = 0$
-            - $f(v, u) = 0$
-            {
-                As there is no from $u$ to $v$ in the residual graph, there is no flow to cancel from $v$ to $u$.
-
-                ADD A PICTURE
-            }
-
-            Thus, $|f| = c(E, T)$
-        }
-    }
-
     --- 
 
     As the condition of termination of Ford-Fulkerson is 2., we have 1., that is Ford-Fulkerson algorithm is correct.

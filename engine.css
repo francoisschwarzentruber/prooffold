@@ -1,8 +1,9 @@
 :root {
-    --box1-color: rgb(230, 230, 230);
-    --box2-color: rgb(210, 210, 210);
-    --box3-color: rgb(190, 190, 190);
-    --box4-color: rgb(170, 170, 170);
+    --box1-color: rgb(240, 240, 240);
+    --box2-color: rgb(220, 220, 220);
+    --box3-color: rgb(200, 200, 200);
+    --box4-color: rgb(180, 180, 180);
+    --box5-color: rgb(160, 160, 160);
 }
 
 body {
@@ -33,8 +34,8 @@ env {
 
 .box {
     position: absolute;
-    width: 400px;
-    height: 100%;
+    max-width: 400px;
+    max-height: 100%;
     margin: 0px;
     top: 0px;
     overflow-x: hidden;
@@ -96,6 +97,10 @@ env {
     background-color: var(--box4-color);
 }
 
+.box4 .on {
+    background-color: var(--box5-color);
+}
+
 .box1 {
     left: 400px;
     background-color: var(--box1-color);
@@ -115,4 +120,9 @@ env {
 .box4 {
     left: 1600px;
     background-color: var(--box4-color);
+}
+
+.box5 {
+    left: 1600px;
+    background-color: var(--box5-color);
 }
