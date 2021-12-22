@@ -33,7 +33,7 @@ Each line is a fact, or simple text. Blocks (panels) are delimited by `{` and `}
  - [X] Structured proof
  - [X] Labels [(1) (2)] and references [by (1,2)]
  - [X] inline graphs via graphviz
- - [~] Asciiart (soon via https://github.com/francoisschwarzentruber/asciidraw)
+ - [ ] Asciiart, it partially works but soon via https://github.com/francoisschwarzentruber/asciidraw we will be able to write nice pictures
  - [ ] Arrows of implications
  - [ ] Automatic aligned equations
 
