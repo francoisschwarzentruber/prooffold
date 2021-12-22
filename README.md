@@ -10,7 +10,7 @@ The tool is available here: https://francoisschwarzentruber.github.io/prooffold/
 Proofs are easy to be written. 
 
       Fact
-      Theorem. This amazing!
+      Theorem. $a^2 = b^2 + c^2$.
             {
               write the proof of the theorem
               with an amazing fact       (1)
@@ -24,6 +24,17 @@ Proofs are easy to be written.
       
       
 Each line is a fact, or simple text. Blocks (panels) are delimited by `{` and `}` and corresponds to a detailed proof of some fact. `     (1)`, `   (2)` etc. and `      by (1,2)` enable to highlight some facts used to prove another fact.
+
+
+
+# Features
+  [X] LaTEX for writing formulas 
+  [X] Structured proof
+  [X] Labels [(1) (2)] and references [by (1,2)]
+  [X] inline graphs via graphviz
+  [~] Asciiart (soon via https://github.com/francoisschwarzentruber/asciidraw)
+  [ ] Arrows of implications
+  [ ] Automatic aligned equations
 
 
 # How to contribute?
