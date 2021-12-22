@@ -77,7 +77,7 @@ Theorem. (Tutte and Berge's formula) $df(G) = |V| - 2mm(G)$
             $|S'| = |S| + 1 + |T|$
             $\#odd(G-S') \geq \#odd(G-S)-1 + |T|+1 = \#odd(G-S)+|T|$
             $df(S') = \#odd(G-S')-|S'| \geq \#odd(G-S)-|S|-1 = df(S)-1$
-            $df(S') = df(S)$                         by (max,1)
+            $df(S') = df(S)$                         by (1)
         }
 
         Definition. We define $H$ to be the bipartite graph with sides $S$ and the set of components $C$ of $G-S$, and a vertex $u$ in $S$ and a component $C$ are adjacent if $u$ has a neighbor in $C$.
