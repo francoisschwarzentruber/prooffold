@@ -28,13 +28,15 @@ Each line is a fact, or simple text. Blocks (panels) are delimited by `{` and `}
 
 
 # Features
-  [X] LaTEX for writing formulas 
-  [X] Structured proof
-  [X] Labels [(1) (2)] and references [by (1,2)]
-  [X] inline graphs via graphviz
-  [~] Asciiart (soon via https://github.com/francoisschwarzentruber/asciidraw)
-  [ ] Arrows of implications
-  [ ] Automatic aligned equations
+
+ - [X] LaTEX for writing formulas 
+ - [X] Structured proof
+ - [X] Labels [(1) (2)] and references [by (1,2)]
+ - [X] inline graphs via graphviz
+ - [~] Asciiart (soon via https://github.com/francoisschwarzentruber/asciidraw)
+ - [ ] Arrows of implications
+ - [ ] Automatic aligned equations
+
 
 
 # How to contribute?
