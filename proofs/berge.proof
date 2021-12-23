@@ -56,17 +56,25 @@ Lemma. There is an augmenting path iff the matching is not maximum.
 
     $\Leftarrow$
     {
-        Let $M'$ be a larger matching than $M$.       (larger)
+        Let $M'$ be a strictly larger matching than $M$, i.e. $|M'| > |M|$.       (larger)
 
         Let $D$ the graph whose edges are those in the symmetric difference of $M$ and $M'$, i.e. $(M - M') \cup (M' - M)$.
 
-$D$ contains a component $C$ that has more edges from $M'$ than $M$.         by (larger)
+$D$ contains a component $C$ that has strictly more edges from $M'$ than $M$.              (largercomponent)
+{
+    By contradiction. Suppose that all components have less edges from $M'$ than $M$.
 
-Each component of $D$ is either an isolated vertex, an even cycle whose edges alternate between $M$ and $M'$, or a path whose edges alternate between $M$ and $M'$ with distinct points.
+    Then $|M| \leq |M'|$.          (smaller)
+
+    Contradiction.            by (smaller,larger)
+
+}   
+
+Each component of $D$ is either an isolated vertex, an even cycle whose edges alternate between $M$ and $M'$, or a path whose edges alternate between $M$ and $M'$ with distinct points.              (characterisationcomponent)
 {
     In $D$, each vertex is incident to at most 2 edges: one from $M$ and one from $M'$.
 
-    A component of $D is either isolated vertex, a cycle or a path.
+    A component of $D$ is either isolated vertex, a cycle or a path.
 
     A cycle must be even.
     {
@@ -82,7 +90,23 @@ Each component of $D$ is either an isolated vertex, an even cycle whose edges al
 
     
 }
-$C$ is an augmenting path.
+
+$C$ is not an isolated vertex           (notisolatedvertex)
+{
+    because otherwise $C$ contains as many edges from $M$ and $M'$ (zero!).           (samecomponent0)
+
+    Contradiction           by (samecomponent0,largercomponent)
+}            
+
+$C$ is not an even cycle whose edges alternate between $M$ and $M'$           (notevencycle)      
+{
+    because otherwise $C$ contains as many edges from $M$ and $M'$.           (samecomponent)
+
+    Contradiction           by (samecomponent,largercomponent)
+}            
+
+
+$C$ is an augmenting path.                 by (characterisationcomponent,notisolatedvertex,notevencycle)
 
 
 
