@@ -27,6 +27,11 @@ div.infer1::before {
 
 }
 
+
+
+textarea {
+    margin:8px;
+}
 env {
     font-weight: bold;
 }
