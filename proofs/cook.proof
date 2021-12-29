@@ -10,7 +10,7 @@
 \newcommand{\set}[1]{\{#1\}}
 \newcommand\caserubanindices{\set{1, \dots, f(w)}}
 \newcommand{\lbigand}{\bigwedge}
-\newcommand{\lbigor}{\bigcup}
+\newcommand{\lbigor}{\bigvee}
 \newcommand{\limply}{\rightarrow}
 \newcommand{\lequiv}{\leftrightarrow}
 
@@ -40,15 +40,27 @@ algo(phi)
         
     Let $M$ a non-deterministic Turing machine deciding $A$ in poly-time $f(n)$.
 
+    W.l.o.g. we suppose that $M$ loops on its accepting state $q_{acc}$.
+    {
+        We replace the machine $M$ by the following machine:
+
+        asciiart {
+newmachineM(w)
+        run M(w)
+        if M accepts W
+                loop on $q_{acc}$
+        }
+    }
+
     Reduce $A$ to SAT in poly-time. Given an $A$-instance $w$, we define a Boolean formula $tr(w)$.
     {
-        Given a finite set $P$ of propositional variables, define $\#(P) = 1$.
+        Given a finite set $P$ of propositional variables, define $\#(P) = 1$, saying that ``exactly one variable in $P$ is true''
         {
-            1. We define $\#(P) \geq 1$
+            1. We define $\#(P) \geq 1$, saying that ``at least one variable in $P$ is true''
              {
-                 to be $\bigcup_{p \in P} p$
+                 to be $\lbigor_{p \in P} p$
              }
-            2. We define $\#(P) \leq 1$
+            2. We define $\#(P) \leq 1$ saying that ``at most one variable in $P$ is true''
             {
                 to be $\bigwedge_{p, p' \in P, p \neq p'} \lnot p \lor \lnot p'$
             }
@@ -58,10 +70,10 @@ algo(phi)
 
 
 
-       Consider a collection $\vec p$ of atomic propositions
-$\mtlogetat q$
-$\mtlogcurseur i$
-$\mtruban i a$
+       Consider a collection $\vec p$ of propositional variables that contains:
+- variable $\mtlogetat q$ saying that the machine is in state $q$
+- variable $\mtlogcurseur i$ saying that the cursor is at position $i$
+- variable $\mtruban i a$ saying that the cell at position $i$ contains symbol $a$
 
 Define $isConfig(\vec p)$
 {
@@ -98,20 +110,34 @@ Define $acceptingConfig(\vec p)$
 
 Define $succ(\vec p, \vec p')$
 {
-    to be the conjunction of:
+    Define $symbcur(\mtlogconfigurationvecp, a)$, saying that the symbol under the cursor is $a$
+    {
+        $:= \lbigor_{i \in \caserubanindices} \mtlogcurseur{i} \limply \mtruban{i}{a}$
+    }
+
+    Define $rightMvt(\mtlogconfigurationvecp, \mtlogconfigurationvecp')$ to say that the cursor moved one cell right
+    {
+$:= \lbigor_{i \in \caserubanindices, i < s}  \mtlogcurseur{i} \land \mtlogcurseur{i+1}'$
+    }
+
+    Define $leftMvt(\mtlogconfigurationvecp, \mtlogconfigurationvecp')$ to say that the cursor moved one cell left
+    {
+        $:= \lbigor_{i \in \caserubanindices, i > 0}  \mtlogcurseur{i} \land \mtlogcurseur{i-1}'$
+    }  
+
+
+
+    $succ(\vec p, \vec p')$ to be the conjunction of:
     $isConfig(\mtlogconfigurationvecp)$
     $isConfig(\mtlogconfigurationvecp')$
-$sameTapeExcept(\mtlogconfigurationvecp, \mtlogconfigurationvecp')$
-{
-    $:= \lbigand_{i \in \caserubanindices} \lnot \mtlogcurseur{i} \limply \lbigand_{a\in Gamma} (\mtruban{i}{a} \lequiv \mtruban{i}{a}')$
-}
- $\lbigor_{(q, a, b, q', \rightarrow) \in \delta} \mtlogetat{q} \land symbcur(\mtlogconfigurationvecp, a) \land symbcur(\mtlogconfigurationvecp', b)\land \mtlogetat{q'} \land rightMvt(\mtlogconfigurationvecp, \mtlogconfigurationvecp')$
- $\lbigor_{(q, a, b, q', \leftarrow) \in \delta} \mtlogetat{q} \land symbcur(\mtlogconfigurationvecp, a) \land symbcur(\mtlogconfigurationvecp', b)\land \mtlogetat{q'} \land leftMvt(\mtlogconfigurationvecp, \mtlogconfigurationvecp')$
 
-where
-$symbcur(\mtlogconfigurationvecp, a) := \lbigor_{i \in \caserubanindices} \mtlogcurseur{i} \limply \mtruban{i}{a}$
-$rightMvt(\mtlogconfigurationvecp, \mtlogconfigurationvecp')  := \lbigor_{i \in \caserubanindices, i < s}  \mtlogcurseur{i} \land \mtlogcurseur{i+1}'$
-$leftMvt(\mtlogconfigurationvecp, \mtlogconfigurationvecp')  := \lbigor_{i \in \caserubanindices, i > 0}  \mtlogcurseur{i} \land \mtlogcurseur{i-1}'$
+    $sameTapeExcept(\mtlogconfigurationvecp, \mtlogconfigurationvecp')$
+    {
+        $:= \lbigand_{i \in \caserubanindices} \lnot \mtlogcurseur{i} \limply \lbigand_{a\in Gamma} (\mtruban{i}{a} \lequiv \mtruban{i}{a}')$
+    }
+    $\lbigor_{(q, a, b, q', \rightarrow) \in \delta} \mtlogetat{q} \land symbcur(\mtlogconfigurationvecp, a) \land symbcur(\mtlogconfigurationvecp', b)\land \mtlogetat{q'} \land rightMvt(\mtlogconfigurationvecp, \mtlogconfigurationvecp')$
+    $\lbigor_{(q, a, b, q', \leftarrow) \in \delta} \mtlogetat{q} \land symbcur(\mtlogconfigurationvecp, a) \land symbcur(\mtlogconfigurationvecp', b)\land \mtlogetat{q'} \land leftMvt(\mtlogconfigurationvecp, \mtlogconfigurationvecp')$
+ 
 }
 
 Define $tr(w)$

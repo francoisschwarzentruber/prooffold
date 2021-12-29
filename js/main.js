@@ -117,13 +117,13 @@ function linesToDOMElement(lines, depth) {
         if (line == "")
             continue;
         console.log(line);
-        if(line.startsWith("\\newcommand")) {
+        if (line.startsWith("\\newcommand")) {
             const el = document.createElement("div");
             el.innerHTML = "\\(" + line + " \\)";
-            el.style.display= "none";
+            el.style.display = "none";
             document.body.append(el);
         }
-        else        if (line == "digraph {" || line == "graph {") {
+        else if (line == "digraph {" || line == "graph {") {
             const dotCode = line + linesToDotCode(lines);
             const el = document.createElement("div");
             el.innerHTML = svgFromDot(dotCode);
@@ -152,11 +152,32 @@ function linesToDOMElement(lines, depth) {
                 if (h) {
                     button.classList.toggle("on");
                     box.classList.remove("hidden");
-                    const previousBoxRect = button.parentElement.getBoundingClientRect();
+
+                    const previousBox = button.parentElement;
+                    //const previousBoxRect = previousBox.getBoundingClientRect();
+                    const previousBoxRectRight = (previousBox.style.left == "" ? 0 : parseInt(previousBox.style.left)) + previousBox.clientWidth - 3;
                     const buttonRect = button.getBoundingClientRect();
                     const boxRect = box.getBoundingClientRect();
 
-                    box.style.left = previousBoxRect.right + "px";
+                    box.style.left = previousBoxRectRight + "px";//TODO: 
+
+
+                    /*
+                    resize the box if it contains long formulae!
+                    */
+                    const resizeBox = (box) => {
+                        let m = 400;
+                        for (const el of box.children)
+                            if (el.children.length > 0)
+                                m = Math.max(m, el.children[0].getBoundingClientRect().width);
+
+                        if (m > 400)
+                            box.style.maxWidth = m + 5 + "px";
+
+                    }
+
+                    resizeBox(box);
+
 
                     if (buttonRect.top + boxRect.height / 2 < window.innerHeight) {
                         if (buttonRect.top - + boxRect.height / 2 > 0)
@@ -166,6 +187,8 @@ function linesToDOMElement(lines, depth) {
                     }
                     else
                         box.style.top = "0px";
+
+                    setTimeout(() => document.body.scrollLeft = window.outerWidth, 500);
 
                 }
                 else
@@ -196,17 +219,16 @@ function linesToDOMElement(lines, depth) {
 
         else {
             const info = getInfoLine(line);
-
-
             console.log(info)
             const el = makeDiv(info.text);
             if (info.id)
                 el.id = info.id;
 
-
-
             if (info.references)
                 attachReferences(el, info.references);
+
+            if (line.startsWith("Let ") || line.startsWith("Define "))
+                el.classList.add("definition");
             nodes.push(el);
         }
 
