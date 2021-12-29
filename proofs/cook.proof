@@ -1,0 +1,141 @@
+\newcommand{\mtlogconfigurationvecp}{\vec p}
+        \newcommand{\mtlogetat}[1]{p_{state = #1}}
+\newcommand{\mtlogcurseur}[1]{p_{curpos = #1}}
+\newcommand{\mtruban}[2]{p_{tape[#1] = #2}}
+
+\newcommand{\aumoinsunevraie}[1]{\# (#1) {\geq}1}
+\newcommand{\auplusunevraie}[1]{\# (#1) {\leq} 1}
+\newcommand{\exactementunevraie}[1]{\# (#1) {=} 1}
+\newcommand{\suchthat}{\mid}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand\caserubanindices{\set{1, \dots, f(w)}}
+\newcommand{\lbigand}{\bigwedge}
+\newcommand{\lbigor}{\bigcup}
+\newcommand{\limply}{\rightarrow}
+\newcommand{\lequiv}{\leftrightarrow}
+
+
+Theorem. (Cook) SAT is NP-complete.
+{
+    Proof.
+    SAT is in NP.
+    {
+        We design a non-deterministic algorithm deciding SAT in poly-time.
+
+        asciiart {
+algo(phi)
+        for all variables p in phi
+            nu[p] := choose 0 or 1
+
+        if nu |= phi
+            accept
+        else
+            reject
+        }
+    }
+
+    SAT is NP-hard.
+    {
+        Consider an NP problem $A$.
+        
+    Let $M$ a non-deterministic Turing machine deciding $A$ in poly-time $f(n)$.
+
+    Reduce $A$ to SAT in poly-time. Given an $A$-instance $w$, we define a Boolean formula $tr(w)$.
+    {
+        Given a finite set $P$ of propositional variables, define $\#(P) = 1$.
+        {
+            1. We define $\#(P) \geq 1$
+             {
+                 to be $\bigcup_{p \in P} p$
+             }
+            2. We define $\#(P) \leq 1$
+            {
+                to be $\bigwedge_{p, p' \in P, p \neq p'} \lnot p \lor \lnot p'$
+            }
+           
+            Formula $\#(P) = 1$ is  $\#(P) \leq 1 \land  \#(P) \geq 1$
+        }
+
+
+
+       Consider a collection $\vec p$ of atomic propositions
+$\mtlogetat q$
+$\mtlogcurseur i$
+$\mtruban i a$
+
+Define $isConfig(\vec p)$
+{
+    to be the conjunction of:
+ $existenceUnicityState(\vec p)$
+ {
+      $:= \exactementunevraie{\{ \mtlogetat{q} \suchthat  q \in Q\}}$
+ }
+
+$existenceUnicityCursor(\vec p)$
+{
+    $:= \exactementunevraie{\{\mtlogcurseur{i} \suchthat i \in \caserubanindices\}}$
+}
+$existenceUnicityTape(\vec p)$
+{
+     $:= \bigwedge_{i \in \caserubanindices} \exactementunevraie{\{\mtruban{i}{a} \suchthat a \in \Gamma\}}$
+}
+
+}
+
+Define $initialConfig(\vec p, w)$
+{
+    to be the conjunction of:
+   $isConfig(\mtlogconfigurationvecp)$
+   $\mtlogetat{q_0}$
+   $\mtlogcurseur{1}$
+   $\lbigand_{i \in \caserubanindices} \mtruban{i}{w_i}$
+}
+
+Define $acceptingConfig(\vec p)$
+{
+  $ := isConfig(\mtlogconfigurationvecp) \land \mtlogetat{q_{acc}}$.
+}
+
+Define $succ(\vec p, \vec p')$
+{
+    to be the conjunction of:
+    $isConfig(\mtlogconfigurationvecp)$
+    $isConfig(\mtlogconfigurationvecp')$
+$sameTapeExcept(\mtlogconfigurationvecp, \mtlogconfigurationvecp')$
+{
+    $:= \lbigand_{i \in \caserubanindices} \lnot \mtlogcurseur{i} \limply \lbigand_{a\in Gamma} (\mtruban{i}{a} \lequiv \mtruban{i}{a}')$
+}
+ $\lbigor_{(q, a, b, q', \rightarrow) \in \delta} \mtlogetat{q} \land symbcur(\mtlogconfigurationvecp, a) \land symbcur(\mtlogconfigurationvecp', b)\land \mtlogetat{q'} \land rightMvt(\mtlogconfigurationvecp, \mtlogconfigurationvecp')$
+ $\lbigor_{(q, a, b, q', \leftarrow) \in \delta} \mtlogetat{q} \land symbcur(\mtlogconfigurationvecp, a) \land symbcur(\mtlogconfigurationvecp', b)\land \mtlogetat{q'} \land leftMvt(\mtlogconfigurationvecp, \mtlogconfigurationvecp')$
+
+where
+$symbcur(\mtlogconfigurationvecp, a) := \lbigor_{i \in \caserubanindices} \mtlogcurseur{i} \limply \mtruban{i}{a}$
+$rightMvt(\mtlogconfigurationvecp, \mtlogconfigurationvecp')  := \lbigor_{i \in \caserubanindices, i < s}  \mtlogcurseur{i} \land \mtlogcurseur{i+1}'$
+$leftMvt(\mtlogconfigurationvecp, \mtlogconfigurationvecp')  := \lbigor_{i \in \caserubanindices, i > 0}  \mtlogcurseur{i} \land \mtlogcurseur{i-1}'$
+}
+
+Define $tr(w)$
+{
+    to be the conjunction of:
+    $initialConfig(\vec p_0, w)$
+    $\bigwedge_{t =0..f(w)-1} succ(\vec p_t, \vec p_{t+1})$
+    $acceptingConfig(\vec p_{f(w)}) $
+
+}
+
+
+
+    }
+
+    1. $tr(w)$ is computable in poly-time in $w$
+
+    2. $w$ is $A$ iff $tr(w)$ is satisfiable.
+
+
+    }
+
+
+
+
+
+}
