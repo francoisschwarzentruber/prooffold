@@ -117,7 +117,13 @@ function linesToDOMElement(lines, depth) {
         if (line == "")
             continue;
         console.log(line);
-        if (line == "digraph {" || line == "graph {") {
+        if(line.startsWith("\\newcommand")) {
+            const el = document.createElement("div");
+            el.innerHTML = "\\(" + line + " \\)";
+            el.style.display= "none";
+            document.body.append(el);
+        }
+        else        if (line == "digraph {" || line == "graph {") {
             const dotCode = line + linesToDotCode(lines);
             const el = document.createElement("div");
             el.innerHTML = svgFromDot(dotCode);
