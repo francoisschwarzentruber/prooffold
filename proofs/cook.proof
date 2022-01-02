@@ -22,15 +22,15 @@ Theorem. (Cook) SAT is NP-complete.
     {
         We design a non-deterministic algorithm deciding SAT in poly-time.
 
-        asciiart {
-algo(phi)
-        for all variables p in phi
-            nu[p] := choose 0 or 1
+        algo {
+algo($\phi$)
+        for all variables $p$ in $\phi$
+                $\nu[p]$ := choose 0 or 1
 
-        if nu |= phi
-            accept
+        if $\nu \models \phi$
+                accept
         else
-            reject
+                reject
         }
     }
 
@@ -44,10 +44,10 @@ algo(phi)
     {
         We replace the machine $M$ by the following machine:
 
-        asciiart {
-newmachineM(w)
-        run M(w)
-        if M accepts W
+        algo {
+newmachineM($w$)
+        run $M(w)$
+        if $M$ accepts $w$
                 loop on $q_{acc}$
         }
     }

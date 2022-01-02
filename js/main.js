@@ -92,7 +92,9 @@ function linesToASCIIArt(lines) {
 function linesToDOMElement(lines, depth) {
     let nodes = [];
     while (lines.length > 0) {
-        const line = lines.shift().trim();
+        const rawLine = lines.shift();
+        const line = rawLine.trim();
+        const nbSpace = rawLine.length - line.length;
 
         const testEnv = (str) => {
             if (line.startsWith(str)) {
@@ -136,6 +138,13 @@ function linesToDOMElement(lines, depth) {
             el.value = content;
             el.rows = content.split("\n").length;
             el.cols = 40;
+            nodes.push(el);
+        }
+        else if (line == "algo {") {
+            const el = linesToDOMElement(lines);
+            el.classList.remove("box");
+            el.classList.add("algo");
+            el.style.display = "block";
             nodes.push(el);
         }
         else if (line == "{") {
@@ -183,7 +192,7 @@ function linesToDOMElement(lines, depth) {
                         if (buttonRect.top - + boxRect.height / 2 > 0)
                             box.style.top = buttonRect.top - + boxRect.height / 2 + "px";
                         else
-                            sbox.style.top = "0px";
+                            box.style.top = "0px";
                     }
                     else
                         box.style.top = "0px";
@@ -229,6 +238,8 @@ function linesToDOMElement(lines, depth) {
 
             if (line.startsWith("Let ") || line.startsWith("Define "))
                 el.classList.add("definition");
+
+            el.style.left = nbSpace + "px";
             nodes.push(el);
         }
 

@@ -22,6 +22,8 @@ Theorem. (Hall's theorem) A bipartite graph $G=(A, B, E)$ has a matching that sa
             s1 -- n1; 
             s2 -- n2;
             s2 -- n1;
+            s3 -- n1;
+            s4 -- n2;
         }
         Then some vertex in $S$ can not be matched.
         Contradiction.

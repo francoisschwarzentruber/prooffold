@@ -18,7 +18,15 @@ body {
     margin-top: 8px;
     margin-bottom: 8px;
     padding: 8px;
+    width:fit-content;
+    
 }
+
+.algo>div {
+    width:fit-content;
+    position:relative;
+}
+
 
 
 div.infer1::before {
@@ -30,8 +38,9 @@ div.infer1::before {
 
 
 textarea {
-    margin:8px;
+    margin: 8px;
 }
+
 env {
     font-weight: bold;
 }
@@ -71,18 +80,21 @@ env {
 .highlight {
     background-color: yellow;
 }
+
 .button.on {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
     border-left: 4px solid green;
     border-right: 4px none green;
     margin-right: 0px;
+    width: auto;
 }
 
 
 .definition {
-    background-color: rgba(0,  255,0, 0.2);
+    background-color: rgba(0, 255, 0, 0.2);
 }
+
 .hidden {
     width: 0px;
 }

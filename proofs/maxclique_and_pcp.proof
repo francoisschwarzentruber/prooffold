@@ -1,5 +1,9 @@
-Theorem. (Feige et al.) There is a polynomial-time α-approximation algorithm for MAX-CLIQUE for some 0 < α ≤ 1 if and only if P = NP.
+Definition. MAX-CLIQUE: given an undirected graph, compute a maximum clique.
 
+Theorem. (Feige et al.)
+There is a polynomial-time α-approximation algorithm for MAX-CLIQUE for some 0 < α ≤ 1      $\Leftrightarrow$      P = NP.
+
+{
 Proof.
 $\Leftarrow$
 {
@@ -42,3 +46,4 @@ By PCP theorem, L has a PCP protocol using $c \log n$ random bits, and $k$ oracl
 }
 
 
+}

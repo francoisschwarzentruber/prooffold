@@ -1,0 +1,118 @@
+
+
+König's Theorem. In a bipartite graph,
+size of a maximum matching = size of a minimum vertex cover.
+{
+    Proof.
+    $\leq$
+    {
+    Remark. Proof of $\leq$ holds for arbitrary graphs.
+        Let $M$ a matching. Let $C$ a vertex cover.
+        We have $|M| \leq |C|$.
+        {
+            $M = \bigcup_{u \in C} (M \cap Adj(u))$
+            {
+                Any edge is adjacent to some vertex in $C$.
+            }
+            where $Adj(u)$ is the set of edges adjacent to $u$
+            
+            $|M \cap Adj(u)| \leq 1$
+            {
+                Each vertex in $C$ has at most one incident edge from $M$.
+            }
+
+            $|M| \leq \sum_{u \in C} |M \cap Adj(c)|$
+
+            $|M| \leq |C|$
+        }
+    }
+
+
+    $\geq$
+    {
+        Let $N$ be the flow network constructed from the bipartitite graph, by adding a source $s$ and a sink $t$.
+        
+        digraph {
+            s -> a1 [penwidth="3mm"];
+            s -> a2 [penwidth="3mm"];
+            s -> a3 [penwidth="3mm"];
+            a1 -> b1 [penwidth="3mm"];
+            a1 -> b2;
+            a2 -> b2;
+            a2 -> b3 [penwidth="3mm"];
+            a2 -> b4 ;
+            a3 ->  b4 [penwidth="3mm"];
+            b1 -> t [penwidth="3mm"];
+            b2 -> t;
+            b3 -> t [penwidth="3mm"];
+            b4 -> t [penwidth="3mm"];
+        }
+
+        A maximum matching = value of a max flow                        (maxflow)
+        {
+            Indeed, we can run Ford-Fulkerson's algorithm to compute a maximum matching.
+        }      
+
+        value of max flow = value of min cut                         (maxflowmincut)
+        {
+            This is the duality theorem for the maximum flow problem.
+        }
+
+        Let $(E, T)$ be a min cut with $s \in E$ and $t \in T$.
+        
+        Let $A, B$ be the two sets of vertices in the bipartite graph.
+
+        Let $C = (A \cap T)\cup (B \cap E)$.
+
+        $C$ is a vertex, i.e. covers all edges.
+        {
+            By contradiction.
+
+            Suppose there is an edge left uncovered by $C$.
+
+            That edge is of capacity $\infty$
+
+            That edge is from $E$ to $T$.
+
+            The capacity of the min cut is infinite.
+
+            Contradiction.
+        }
+        $\# C = $ value of a min cut.                              (Cmincut)
+        {
+            The value of the min cut $(E, T)$ is the number of edges from $s$ into $A \cap T$ and from $B \cap E$ to $t$. It corresponds to $\# C$.
+        }
+        maximum matching $= \# C$                   by (maxflow,maxflowmincut,Cmincut)
+        ⇓
+        maximum matching $\geq$ minimum vertex cover
+    }
+
+
+}
+
+
+Examples
+{
+    A maximum matching:
+        graph {
+            a1 -- b1 [penwidth="3mm"];
+            a1 -- b2;
+            a2 -- b2;
+            a2 -- b3 [penwidth="3mm"];
+            a2 -- b4 ;
+            a3 --  b4 [penwidth="3mm"];
+        }
+
+A minimum vertex cover:
+graph {
+            a1 -- b1;
+            a1 -- b2;
+            a2 -- b2;
+            a2 -- b3;
+            a2 -- b4 ;
+            a3 --  b4;
+            a1 [style=filled, fillcolor=orange]
+            a2 [style=filled, fillcolor=orange]
+            a3 [style=filled, fillcolor=orange]
+        }
+}

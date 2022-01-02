@@ -1,47 +1,49 @@
 Prove that $\sqrt 2$ is irrational.
 {
-	Suppose that $\sqrt 2$ rational.
-	⇓
-	$\sqrt 2 = \frac a b$ irreducible, for some integers $a$ and $b$.
-	\label{irreducible}
-⇓
-	$2b^2 = a^2$
-	{
-		$\sqrt 2 = \frac a b$ 
-		⇓
-	$2 = \left(\frac {a} b\right)^2$
-			⇓
-	$2 = \frac {a^2} {b^2}$
-	⇓
-	$2b^2 = a^2$
-	}
-	\label{$2b^2 = a^2$}
-	⇓
-	$a^2$ is even.
-	⇓
-	\label{a2evenimpliesaeven}
+	Lemma. $a^2$ even implies $a$ even.  
+	\label{lemma}
 	{
 		Suppose $a$ is odd.
 		$a = 2k+1$ for some integer $k$
 		$a^2 = 4k^2+4k+1$
 		$a^2$ is odd
 	}
-
+	Suppose that $\sqrt 2$ rational.
+	⇓
+	$\sqrt 2 = \frac a b$ irreducible, for some integers $a$ and $b$.
+	\label{irreducible}
+⇓
+	{
+		$\sqrt 2 = \frac a b$ 
+		⇓
+		$2 = \left(\frac {a} b\right)^2$
+				⇓
+		$2 = \frac {a^2} {b^2}$
+		⇓
+		$2b^2 = a^2$
+	}
+	$2b^2 = a^2$
+	\label{$2b^2 = a^2$}
+	⇓
+	$a^2$ is even.
+	⇓             by (lemma)
 	$a$ is even.
 	\label{aeven}
-	
-	
 	⇓
-	$a = 2k$ for some $k$
-	⇓
-	\ref{$2b^2 = a^2$}
-	$2b^2 = 4k^2$
-	⇓
-	$b^2 = 2k^2$
-	⇓
-	$b^2$ is even
-	⇓
-	\ref{a2evenimpliesaeven}
+	{
+		$a$ is even	
+		⇓
+		$a = 2k$ for some $k$
+		⇓
+		\ref{$2b^2 = a^2$}
+		$2b^2 = 4k^2$
+		⇓
+		$b^2 = 2k^2$
+		⇓
+		$b^2$ is even
+		⇓              by (lemma)
+		$b$ is even
+	}
 	$b$ is even
 	\label{beven}
 	
