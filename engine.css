@@ -2,8 +2,9 @@
     --box1-color: rgb(240, 240, 240);
     --box2-color: rgb(220, 220, 220);
     --box3-color: rgb(200, 200, 200);
-    --box4-color: rgb(180, 180, 180);
-    --box5-color: rgb(160, 160, 160);
+    --box4-color: rgb(220, 220, 220);
+    --box5-color: rgb(240, 240, 240);
+    --box6-color: rgb(220, 220, 220);
 }
 
 body {
@@ -124,6 +125,10 @@ env {
     background-color: var(--box5-color);
 }
 
+.box5 .on {
+    background-color: var(--box6-color);
+}
+
 .box1 {
     left: 400px;
     background-color: var(--box1-color);
@@ -148,4 +153,15 @@ env {
 .box5 {
     left: 1600px;
     background-color: var(--box5-color);
+}
+
+.box6 {
+    left: 1600px;
+    background-color: var(--box6-color);
+}
+
+
+.example {
+    color: darkblue;
+    background-color: rgba(128, 128, 255, 0.2);
 }

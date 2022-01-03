@@ -59,10 +59,22 @@ newmachineM($w$)
             1. We define $\#(P) \geq 1$, saying that ``at least one variable in $P$ is true''
              {
                  to be $\lbigor_{p \in P} p$
+                 Example
+                 {
+                     For $P = \{p_1, p_2, p_3\}$,
+                     $\#(\{p_1, p_2, p_3\}) \geq 1$ is the formula $p_1 \lor p_2 \lor p_3$.
+                 }
              }
             2. We define $\#(P) \leq 1$ saying that ``at most one variable in $P$ is true''
             {
                 to be $\bigwedge_{p, p' \in P, p \neq p'} \lnot p \lor \lnot p'$
+                Example
+                 {
+                     For $P = \{p_1, p_2, p_3\}$,
+                     $\#(\{p_1, p_2, p_3\}) \leq 1$ is the formula $(\lnot p_1 \lor \lnot p_2) \land$ $(\lnot p_1 \lor \lnot p_3) \land $ $(\lnot p_1 \lor \lnot  p_3)$.
+
+                     In other words, we prevent that two variables are true.For instance $p_1$ and $p_3$ cannot be both true because formula $(\lnot p_1 \lor \lnot  p_3)$ would be false.
+                 }
             }
            
             Formula $\#(P) = 1$ is  $\#(P) \leq 1 \land  \#(P) \geq 1$
@@ -81,15 +93,61 @@ Define $isConfig(\vec p)$
  $existenceUnicityState(\vec p)$
  {
       $:= \exactementunevraie{\{ \mtlogetat{q} \suchthat  q \in Q\}}$
+      We prevent the machine to be in two different inner states $q$ and $q'$:
+          asciiart {
+        ┌───┬───┬───┬───┬───┬─
+        │ 0 │ 1 │ 0 │ 1 │ 1 │ ... 
+        └───┴───┴───┴───┴───┴─
+                      ↑
+                    q and q'
+    }
+    We also prevent the machine to be in no inner state:
+    asciiart {
+        ┌───┬───┬───┬───┬───┬─
+        │ 0 │ 1 │ 0 │ 1 │ 1 │ ... 
+        └───┴───┴───┴───┴───┴─
+                      ↑
+                    
+    }
  }
 
 $existenceUnicityCursor(\vec p)$
 {
     $:= \exactementunevraie{\{\mtlogcurseur{i} \suchthat i \in \caserubanindices\}}$
+    We prevent to have multiple cursors:
+    asciiart {
+        ┌───┬───┬───┬───┬───┬─
+        │ 0 │ 1 │ 0 │ 1 │ 1 │ ... 
+        └───┴───┴───┴───┴───┴─
+          ↑           ↑
+          q           q
+    }
+    We also prevent to have no cursor at all:
+    asciiart {
+        ┌───┬───┬───┬───┬───┬─
+        │ 0 │ 1 │ 0 │ 1 │ 1 │ ... 
+        └───┴───┴───┴───┴───┴─
+    }
 }
 $existenceUnicityTape(\vec p)$
 {
      $:= \bigwedge_{i \in \caserubanindices} \exactementunevraie{\{\mtruban{i}{a} \suchthat a \in \Gamma\}}$
+     We prevent a cell to contain two symbols:
+         asciiart {
+        ┌───┬───┬───┬───┬───┬─
+        │ 0 │ 1 │ 0 │01 │ 1 │ ... 
+        └───┴───┴───┴───┴───┴─
+                  ↑
+                  q
+    }
+    We also prevent a cell to contain no symbol:
+    asciiart {
+        ┌───┬───┬───┬───┬───┬─
+        │ 0 │ 1 │ 0 │   │ 1 │ ... 
+        └───┴───┴───┴───┴───┴─
+                  ↑
+                  q
+    }
 }
 
 }
@@ -101,11 +159,26 @@ Define $initialConfig(\vec p, w)$
    $\mtlogetat{q_0}$
    $\mtlogcurseur{1}$
    $\lbigand_{i \in \caserubanindices} \mtruban{i}{w_i}$
+   where $w_i$ is $\_$ if $i$ is bigger than the length of word $w$
+    asciiart {
+        ┌───┬───┬───┬───┬───┬─
+        │w1 │w2 │w3 │ _ │ _ │ ... 
+        └───┴───┴───┴───┴───┴─
+          ↑
+         q0
+    }
 }
 
 Define $acceptingConfig(\vec p)$
 {
   $ := isConfig(\mtlogconfigurationvecp) \land \mtlogetat{q_{acc}}$.
+      asciiart {
+        ┌───┬───┬───┬───┬───┬─
+        │ 1 │ 0 │ 1 │ 1 │ 0 │ ... 
+        └───┴───┴───┴───┴───┴─
+              ↑
+             qacc
+    }
 }
 
 Define $succ(\vec p, \vec p')$
@@ -113,6 +186,13 @@ Define $succ(\vec p, \vec p')$
     Define $symbcur(\mtlogconfigurationvecp, a)$, saying that the symbol under the cursor is $a$
     {
         $:= \lbigor_{i \in \caserubanindices} \mtlogcurseur{i} \limply \mtruban{i}{a}$
+              asciiart {
+        ┌───┬───┬───┬───┬───┬─
+        │ ? │ a │ ? │ ? │ ? │ ... 
+        └───┴───┴───┴───┴───┴─
+              ↑
+              q
+    }
     }
 
     Define $rightMvt(\mtlogconfigurationvecp, \mtlogconfigurationvecp')$ to say that the cursor moved one cell right

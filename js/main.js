@@ -233,6 +233,9 @@ function linesToDOMElement(lines, depth) {
             if (info.id)
                 el.id = info.id;
 
+            if (info.text == "Example" || info.text == "Examples")
+                el.classList.add("example");
+
             if (info.references)
                 attachReferences(el, info.references);
 
@@ -303,7 +306,8 @@ function svgFromDot(dotCode) {
 
 window.onload = () => {
     document.querySelectorAll("#menu a").forEach(function (a) {
-        a.href = `?id=${a.id}`;
+        if (a.id)
+            a.href = `?id=${a.id}`;
     });
 
     let url = window.location.toString();
