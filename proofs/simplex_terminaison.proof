@@ -1,0 +1,173 @@
+Bland's rule. We always choose:
+- the leftmost positive cost variable to be entering variable
+- the leftmost lowest ratio variable to be the leaving variable
+
+Example
+{
+    algo {
+        max $390 - 2x_1 + 3x_2 + 8000x_3 - x_5$
+        $x_4 = 100 - x_2 + ...$
+        $x_6 = 50 - x_2 + ...$
+        $x_7 = 50 - x_2 + ...$
+        $x_8 = 80 - x_2 + ...$
+    }
+    We choose $x_2$ to be the entering variable.
+
+    The smallest ratio is 50. We take $x_6$ to be the leaving variable.
+}
+
+
+Theorem. Simplex algorithm terminates when Bland's rule is applied.
+{
+    By contradiction, suppose the algorithm loops.
+    {
+        We compute tableaux one after another and at some point we get an already computed tableau.
+        The execution looks like:
+        digraph {
+            rankdir=LR;
+            1 [label=""];
+            2 [label=""];
+            3 [label=""];
+            4 [label=""];
+            5 [label=""];
+            6 [label=""];
+            7 [label=""];
+            8 [label=""];
+            1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 3;
+        }
+
+        In the graph below, nodes are tableaux.
+        
+    }
+    
+    Let $F$ the set of variables that enters (and also leaves) the base during the cycle.
+    Variables in $F$ equal 0 in all basic solutions on the cycle.
+    {
+        By contradiction. Some variable in $F$ is positive.
+        The objective would improve.
+        We would not have the cycle.
+    }
+    Let $v$ be the rightmost variable in $F$.
+    Let $B$ a basis in the cycle after which $v$ will enter.
+    Let $B'$ a basis in the cycle after which $v$ will leave.
+    Let $u$ the variable that enters after $B'$.
+        digraph {
+        rankdir=LR;
+        7 [label="B'"];
+        1 -> 2 -> 3 -> B;
+        B -> 5 [label="+v"];
+        5 -> 6 -> 7;
+        7-> 8 [label="-v +u"];
+        8 -> 3;
+    }
+
+    
+
+    
+    Consider the linear program:
+    algo {
+        max $c^t x$
+        $Ax = b$
+        $x_{F\setminus\{v\}} \geq 0$
+        $x_v \leq 0$
+        $x_{N\setminus F} =0$
+    }
+    where $N = \{1, \dots, n\} \setminus B$.
+
+    That linear program has an optimum.
+    {
+        Let $\tilde x$ the basic solution at $B$.
+
+        $\tilde x$ is a solution
+
+        $\tilde x$ is optimum.
+        {
+            Consider the objective as written in the tableau corresponding to $B$.
+
+            The coefficients in the objective are in front of variables in $N$.
+
+            $x_{N\setminus F} =0$ so the coefficient in front of variables in $N\setminus F$ are irrelevant.
+
+            Impossible to increase the objective by increasing $x_{F\setminus\{v\}}$.
+            {
+                In the objective function at $B$, all coefficients in front of variables in $F \setminus \{v\}$ are $\leq 0$.
+                {
+                    By contradiction. Suppose there is a variable in $F \setminus \{v\}$ with a coefficient $> 0$.
+                    Consider the leftmost one.
+                    That variable is different from $v$.
+                    By the Bland's rule, that variable is the entering variable.
+                    Contradiction.
+                }
+            }
+            Impossible to increase the objective by changing $x_v$.            
+        }
+    }   
+    That linear program is unbounded.
+    {
+            Let $\tilde x$ basic solution at $B$.
+
+            $\tilde x$ is also the basic solution at $B'$.
+
+            Let $\tilde x (t)$ be such that
+            algo {
+                $\tilde x (t)_u = t$
+                $\tilde x (t)_i = 0$ for all $i \in N' \setminus \{u\}$
+                $\tilde x (t)_{B'}$ defined by the equational system at $B'$: $x_{B'} = p' + Q'x_{N'}$
+            }
+
+            $\tilde x (t)$ is a solution
+            {
+                $\tilde x (t)_{N\setminus F} =\tilde x (t)_{N'\setminus F}=0$
+                {
+                    Because $N\setminus  F= N' \setminus F$.
+                }
+                $\tilde x (t)_v \leq 0$
+                {
+                    Let $q'_{vu}$ be the coefficient line $v$, column $u$ in the matrix of the tableau $B'$.
+                    $\tilde x(t)_v = \tilde x_v + t q'_{vu}$
+                    $\tilde x_v = 0$
+                    {
+                        $v \in F$
+                    }
+                    $q'_{vu} < 0$
+                        {
+                            As $v$ leaves and $u$ enters, $q'_{vu} < 0$.
+                        }
+                    
+                }
+
+
+                $\tilde x(t)_{F\setminus\{v\}} \geq 0$
+                {
+                     In $B'$, $q'_{iu} \geq 0$ for all $i \in F \setminus \{v\}$.    
+                        {
+                            By contradiction. Suppose $q'_{iu} < 0$ for some $i \in F \setminus \{v\}$.
+                            $i$ is a candidate for being a leaving variable.
+                            $i$ is on the left of $v$.
+                            By Bland's rule, $v$ is not selected.
+                            Contradiction.
+                        }       
+
+                    $\tilde x_i = 0$
+                    {
+                        Because $i \in F$.
+                    }
+                    $\tilde x(t)_i = \tilde x_i + t q'_{iu}$
+                    
+                }
+            }
+
+            the objective  $\rightarrow_{t \rightarrow +\infty} +\infty$
+            {
+                $u$ will enter in the base.
+
+                The coefficient in front of $u$ is positive.
+
+                In the tableau $B'$, the objective is $c^t \tilde x (t)$
+
+                $c^t \tilde x (t) = value + t \times $ this positive coefficient
+            }
+           
+    }
+    Contradiction.
+}

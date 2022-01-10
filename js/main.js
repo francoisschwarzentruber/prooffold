@@ -1,8 +1,3 @@
-
-
-
-
-
 function dollarToBackSlashParenthesis(line) {
     let left = true;
     while (line.indexOf("$") > -1) {
@@ -89,6 +84,27 @@ function linesToASCIIArt(lines) {
     return code;
 }
 
+
+
+function installEnv(line) {
+    const testEnv = (str) => {
+        if (line.startsWith(str)) {
+            return `<env>${str}</env>` + line.substr(str.length);
+        } else
+            return undefined;
+    }
+
+    for (const str of ["Theorem.", "Definition.", "Proposition.", "Proof.", "Lemma."]) {
+        const newLine = testEnv(str);
+        if (newLine)
+            return newLine;
+    }
+    return line;
+
+
+}
+
+
 function linesToDOMElement(lines, depth) {
     let nodes = [];
     while (lines.length > 0) {
@@ -96,58 +112,39 @@ function linesToDOMElement(lines, depth) {
         const line = rawLine.trim();
         const nbSpace = rawLine.length - line.length;
 
-        const testEnv = (str) => {
-            if (line.startsWith(str)) {
-                const el = makeDiv(`<env>${str}</env>` + line.substr(str.length));
-                nodes.push(el);
-                return true;
-            }
-            else
-                return false;
-
-        }
-
-
-        const testEnvs = () => {
-            for (const str of ["Theorem.", "Definition.", "Proposition.", "Proof.", "Lemma."]) {
-                if (testEnv(str))
-                    return true;
-            }
-            return false;
-        }
-
         if (line == "")
             continue;
+
+
+
+
+
         console.log(line);
         if (line.startsWith("\\newcommand")) {
             const el = document.createElement("div");
             el.innerHTML = "\\(" + line + " \\)";
             el.style.display = "none";
             document.body.append(el);
-        }
-        else if (line == "digraph {" || line == "graph {") {
+        } else if (line == "digraph {" || line == "graph {") {
             const dotCode = line + linesToDotCode(lines);
             const el = document.createElement("div");
             el.innerHTML = svgFromDot(dotCode);
             el.children[0].style.width = "100%";
             nodes.push(el);
-        }
-        else if (line == "asciiart {") {
+        } else if (line == "asciiart {") {
             const content = linesToASCIIArt(lines);
             const el = document.createElement("textarea");
             el.value = content;
             el.rows = content.split("\n").length;
             el.cols = 40;
             nodes.push(el);
-        }
-        else if (line == "algo {") {
+        } else if (line == "algo {") {
             const el = linesToDOMElement(lines);
             el.classList.remove("box");
             el.classList.add("algo");
             el.style.display = "block";
             nodes.push(el);
-        }
-        else if (line == "{") {
+        } else if (line == "{") {
             const box = linesToDOMElement(lines, depth + 1);
             //      box.hidden = true;
             box.classList.add("hidden");
@@ -168,7 +165,7 @@ function linesToDOMElement(lines, depth) {
                     const buttonRect = button.getBoundingClientRect();
                     const boxRect = box.getBoundingClientRect();
 
-                    box.style.left = previousBoxRectRight + "px";//TODO: 
+                    box.style.left = previousBoxRectRight + "px"; //TODO: 
 
 
                     /*
@@ -189,52 +186,47 @@ function linesToDOMElement(lines, depth) {
 
 
                     if (buttonRect.top + boxRect.height / 2 < window.innerHeight) {
-                        if (buttonRect.top - + boxRect.height / 2 > 0)
-                            box.style.top = buttonRect.top - + boxRect.height / 2 + "px";
+                        if (buttonRect.top - +boxRect.height / 2 > 0)
+                            box.style.top = buttonRect.top - +boxRect.height / 2 + "px";
                         else
                             box.style.top = "0px";
-                    }
-                    else
+                    } else
                         box.style.top = "0px";
 
                     setTimeout(() => document.body.scrollLeft = window.outerWidth, 500);
 
-                }
-                else
+                } else
                     box.classList.add("hidden");
             };
             document.body.appendChild(box)
-        }
-        else if (line == "}") {
+        } else if (line == "}") {
             return makeContainer(nodes, depth);
-        }
-        else if (line.startsWith("\\infer1")) {
+        } else if (line.startsWith("\\infer1")) {
             const el = makeDiv(line.substr(7));
             el.classList.add("infer1");
             nodes.push(el);
-        }
-        else if (line == "---") {
+        } else if (line == "---") {
             const el = makeDiv(line);
             el.style.textAlign = "center";
             nodes.push(el);
-        }
-        else if (testEnvs()) {
-        }
-        else if (line.startsWith("\\label{")) {
+        } else if (line.startsWith("\\label{")) {
             nodes[nodes.length - 1].id = line.substr("\\label{".length, line.length - "\\label{".length - 1);
-        }
-        else if (line.startsWith("\\ref{"))
+        } else if (line.startsWith("\\ref{"))
             attachReferences(nodes[nodes.length - 1], line.substr("\\ref{".length, line.length - "\\ref{".length - 1).split(","));
 
         else {
             const info = getInfoLine(line);
             console.log(info)
+            info.text = installEnv(info.text);
+            
             const el = makeDiv(info.text);
             if (info.id)
                 el.id = info.id;
 
             if (info.text == "Example" || info.text == "Examples")
                 el.classList.add("example");
+
+            
 
             if (info.references)
                 attachReferences(el, info.references);
@@ -260,22 +252,31 @@ function linesToDOMElement(lines, depth) {
 function getInfoLine(line) {
 
     if (!line.endsWith(")"))
-        return { text: line };
+        return {
+            text: line
+        };
 
     const parenthesisIDstring = "   (";
     const i = line.lastIndexOf(parenthesisIDstring);
 
     if (i >= 0) {
-        return { text: line.substr(0, i), id: line.substring(i + parenthesisIDstring.length, line.length - 1) };
-    }
-    else {
+        return {
+            text: line.substr(0, i),
+            id: line.substring(i + parenthesisIDstring.length, line.length - 1)
+        };
+    } else {
         const parenthesisRefstring = "   by (";
         const i = line.lastIndexOf(parenthesisRefstring);
 
         if (i >= 0)
-            return { text: line.substr(0, i), references: line.substring(i + parenthesisRefstring.length, line.length - 1).split(",") };
+            return {
+                text: line.substr(0, i),
+                references: line.substring(i + parenthesisRefstring.length, line.length - 1).split(",")
+            };
         else
-            return { text: line };
+            return {
+                text: line
+            };
 
     }
 
@@ -300,7 +301,7 @@ async function load(filename) {
 
 
 function svgFromDot(dotCode) {
-    let digraph = dotCode;// for svg
+    let digraph = dotCode; // for svg
     return Viz(digraph, "svg");
 }
 
@@ -325,5 +326,3 @@ window.onload = () => {
     MathJax.typeset();
 
 }
-
-

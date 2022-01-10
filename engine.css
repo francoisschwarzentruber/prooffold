@@ -19,13 +19,13 @@ body {
     margin-top: 8px;
     margin-bottom: 8px;
     padding: 8px;
-    width:fit-content;
-    
+    width: fit-content;
+
 }
 
 .algo>div {
-    width:fit-content;
-    position:relative;
+    width: fit-content;
+    position: relative;
 }
 
 
@@ -164,4 +164,6 @@ env {
 .example {
     color: darkblue;
     background-color: rgba(128, 128, 255, 0.2);
+    margin-left: auto;
+    margin-right: 0;
 }

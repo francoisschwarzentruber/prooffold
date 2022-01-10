@@ -1,2 +1,19 @@
 miaou   (a)
 miaoumiaou      by (a)
+
+digraph {
+    arg;
+    arg2;
+    a1 [label="miaou2"];
+    za [label="", shape=plaintext, width=0, height=-3];
+    a [label="miaou"];
+    b [label="<div>Theorem: ersersejrmjsern sero ser ser sr er </div>"];
+    z [label="", shape=plaintext, width=0, height=-33];
+    c [label="conclusion"];
+    a1 -> za [color="black:white:black", dir=none];
+    za -> a [color="black:white:black"];
+    a -> b [color="black:white:black"];
+    a -> z [color="black:white:black", dir=none];
+    b -> z [color="black:white:black", dir=none];
+    z -> c [color="black:white:black"];
+}
