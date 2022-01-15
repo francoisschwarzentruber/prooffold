@@ -48,9 +48,39 @@ Theorem. Simplex algorithm terminates when Bland's rule is applied.
         We would not have the cycle.
     }
     Let $v$ be the rightmost variable in $F$.
-    Let $B$ a basis in the cycle after which $v$ will enter.
-    Let $B'$ a basis in the cycle after which $v$ will leave.
-    Let $u$ the variable that enters after $B'$.
+    Let $B$ be a basis in the cycle after which $v$ will enter.
+    {
+        The tableau for $B$ is something like:
+        algo {
+            max $42 ... + 4v ...$
+            ...
+        }
+        Just after $v$ enters in the base. So the tableau becomes:
+        algo {
+            max $42 ...$
+            ...
+            $v = ...$
+            ...
+        }
+    }
+    Let $B'$ be a basis in the cycle after which $v$ will leave, and let $u$ be the variable that enters after $B'$.
+    {
+        The tableau for $B'$ is something like:
+        algo {
+            max $42 ...+ 2u + ...$
+            ...
+            $v = ...$
+            ...
+        }
+        Just after $v$ leaves the base, the tableau becomes:
+        algo {
+            max $42 ... + 4v ...$
+            ...
+            $u = ...$
+            ...
+        }
+    }
+    
         digraph {
         rankdir=LR;
         7 [label="B'"];
@@ -74,7 +104,7 @@ Theorem. Simplex algorithm terminates when Bland's rule is applied.
     }
     where $N = \{1, \dots, n\} \setminus B$.
 
-    That linear program has an optimum.
+    That linear program has an optimum.                      (hasoptimum)
     {
         Let $\tilde x$ the basic solution at $B$.
 
@@ -99,12 +129,16 @@ Theorem. Simplex algorithm terminates when Bland's rule is applied.
                     Contradiction.
                 }
             }
-            Impossible to increase the objective by changing $x_v$.            
+            Impossible to increase the objective by changing $x_v$.
+            {
+                $v$ will entering the base. So the coefficint in front of $v$ is positive.
+                $x_v$ is negative.
+            }            
         }
     }   
-    That linear program is unbounded.
+    That linear program is unbounded.               (unbounded)
     {
-            Let $\tilde x$ basic solution at $B$.
+            Let $\tilde x$ be the basic solution at $B$.
 
             $\tilde x$ is also the basic solution at $B'$.
 
@@ -169,5 +203,5 @@ Theorem. Simplex algorithm terminates when Bland's rule is applied.
             }
            
     }
-    Contradiction.
+    Contradiction.                   by (hasoptimum,unbounded)
 }
