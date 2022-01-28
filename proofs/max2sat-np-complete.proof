@@ -1,0 +1,76 @@
+
+MAX2SAT
+- input: a 2CNF $\phi$, an integer $k$
+- output: yes if there is a valuation $\nu$ making at least $k$ clauses of $\phi$ true; no otherwise.
+
+Theorem. MAX2SAT is NP-complete.
+{
+    MAX2SAT is in NP.
+    {
+        Guess a valuation $\nu$ and verify in poly-time in $\phi$ and $k$
+    }
+    MAX2SAT is NP-hard.
+    {
+        \newcommand{\nbclauses}{m}
+        We reduce 3SAT to MAX2SAT.
+
+        Consider a 3SAT instance $ \varphi = \bigwedge_{i=1}^\nbclauses (a_i \vee b_i \vee c_i)$ where $a_i, b_i, c_i$ are litterals.
+
+        We construct $tr(\varphi) = (\varphi', k)$ where:
+        - $\varphi'$ is the formula $\begin{array}{l@{}l}\bigwedge_{i=1}^\nbclauses ( & a_i \wedge b_i \wedge c_i \wedge d_i \\	& \wedge (\neg a_i \vee \neg b_i) \wedge (\neg a_i \vee \neg c_i) \wedge (\neg c_i \vee \neg b_i)\\	& \wedge (a_i \vee \neg d_i) \wedge (b_i \vee \neg d_i) \wedge (c_i \vee \neg d_i))\end{array}$
+        - $k = 7m$.
+
+        $tr$ is a poly-time reduction from 3SAT to MAX2SAT.
+        {
+            1. $tr(\varphi)$ is computable in poly-time in $|\varphi|$
+
+            2. $\varphi$ is a 3SAT positive instance iff $tr(\varphi)$ is a MAX2SAT positive instance
+            {
+                $\varphi$ is satisfiable iff there is a valuation making at least $7m$ clauses of $\varphi'$ true
+                {
+                    Consider $\nu'$ a valuation. The following table sums up the situation (note that the roles of $a_i, b_i, c_i$ are symmetric):
+                    <table><tr><td>Number of $\nu'$-true litterals among $a_i, b_i, c_i$</td><td>Number of $\nu'$-true clauses of index $i$  if $d_i$ is $\nu'$-false</td><td>Number of $\nu'$-true clauses of index $i$ if $d_i$ is $\nu'$-false</td></tr><tr><td>0</td><td>6</td><td>4</td></tr><tr><td>1</td><td>7</td><td>6</td></tr><tr><td>2</td><td>7</td><td>7</td></tr><tr><td>3</td><td>6</td><td>7</td></tr></table>          (table)
+                        
+                    
+                    $\Rightarrow$
+                    {
+                        Consider a valuation $\nu$ making $\varphi$ satisfiable.
+
+                        $\nu \models a_i \vee b_i \vee c_i$ for all i.
+
+                        We construct a valuation $\nu'$, equal to $\nu$ for propositions $a_i, b_i, c_i$ and with 
+                        $\nu'(d_i)= 1$ exactly if $\nu(a_i) = \nu(b_i) = \nu(c_i)=1$
+
+                        $\nu'$ satisfies at least $7m$ (actually exactly $7m$)             by (table)
+                    }
+
+                    $\Leftarrow$
+                    {
+                            By contraposition.
+                        
+                            Suppose that $\varphi$ is not satisfiable.             (1)
+
+                            Any valuation makes strictly less that $7m$ clauses of $\varphi'$ true.
+                            {
+                                Consider a valuation $\nu$.
+
+                                
+
+                               There exists $i$ such that $(a_i \vee b_i \vee c_i)$ is $\nu$-false.        (2)            by (1)
+
+                                Among the clauses  in $\varphi'$ for that $i$, at most 6 are $\nu'$-true            by (table)
+                                
+
+
+                                For another index $i'$ different from $i$, at most 7 are $\nu'$-true                by (table)
+                                
+                                
+                                The number of true clauses is bounded by $(m-1)7 + 6 < 7m$.             by (2,3)
+                            }
+                    }
+                }
+            }
+        }
+
+    }
+}
