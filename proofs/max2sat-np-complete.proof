@@ -52,11 +52,11 @@ Theorem. MAX2SAT is NP-complete.
 
                             Any valuation makes strictly less that $7m$ clauses of $\varphi'$ true.
                             {
-                                Consider a valuation $\nu$.
+                                Consider an arbirary valuation $\nu'$.
 
                                 
 
-                               There exists $i$ such that $(a_i \vee b_i \vee c_i)$ is $\nu$-false.        (2)            by (1)
+                               There exists $i$ such that $(a_i \vee b_i \vee c_i)$ is $\nu'$-false.        (2)            by (1)
 
                                 Among the clauses  in $\varphi'$ for that $i$, at most 6 are $\nu'$-true            by (table)
                                 
@@ -65,7 +65,7 @@ Theorem. MAX2SAT is NP-complete.
                                 For another index $i'$ different from $i$, at most 7 are $\nu'$-true                by (table)
                                 
                                 
-                                The number of true clauses is bounded by $(m-1)7 + 6 < 7m$.             by (2,3)
+                                The number of true $\nu'$-clauses is bounded by $(m-1)7 + 6 < 7m$.             by (2,3)
                             }
                     }
                 }

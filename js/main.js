@@ -154,18 +154,19 @@ function linesToDOMElement(lines, depth) {
             button.onclick = () => {
                 let h = box.classList.contains("hidden");
                 setInvisibleUpToDepth(depth + 1);
-                //box.hidden = !h;
+
                 if (h) {
                     button.classList.toggle("on");
                     box.classList.remove("hidden");
 
                     const previousBox = button.parentElement;
+                    const previousBoxRect = previousBox.getBoundingClientRect();
                     //const previousBoxRect = previousBox.getBoundingClientRect();
-                    const previousBoxRectRight = (previousBox.style.left == "" ? 0 : parseInt(previousBox.style.left)) + previousBox.clientWidth - 3;
+                    const previousBoxRectRight = (previousBox.style.left == "" ? 0 : parseInt(previousBox.style.left)) + previousBox.offsetWidth - 3;
                     const buttonRect = button.getBoundingClientRect();
                     const boxRect = box.getBoundingClientRect();
 
-                    box.style.left = previousBoxRectRight + "px"; //TODO: 
+
 
 
                     /*
@@ -185,13 +186,27 @@ function linesToDOMElement(lines, depth) {
                     resizeBox(box);
 
 
-                    if (buttonRect.top + boxRect.height / 2 < window.innerHeight) {
-                        if (buttonRect.top - +boxRect.height / 2 > 0)
-                            box.style.top = buttonRect.top - +boxRect.height / 2 + "px";
-                        else
-                            box.style.top = "0px";
-                    } else
-                        box.style.top = "0px";
+                    //if last element + boxRect sufficiently big + there is space on the bottom of previousBox
+                    const INDENT = 32;
+                    if (previousBox.children[previousBox.children.length - 1] == button &&
+                        boxRect.width >= previousBoxRect.width - INDENT && previousBoxRect.top + previousBoxRect.height + boxRect.height < window.innerHeight) {
+                        //then put the box below (instead of on the right)
+                        console.log("below")
+                        box.style.left = (previousBoxRect.left + INDENT) + "px";
+                        box.style.top = previousBoxRect.top + previousBoxRect.height;
+                    } else {
+                        box.style.left = previousBoxRectRight + "px";
+                        let y = buttonRect.top - boxRect.height / 2;
+                        if (y + boxRect.height > window.innerHeight)
+                            y = window.innerHeight - boxRect.height;
+                        if (y < 0)
+                            y = 0;
+                        box.style.top = y + "px";
+                    }
+
+
+
+
 
                     setTimeout(() => document.body.scrollLeft = window.outerWidth, 500);
 
@@ -218,7 +233,7 @@ function linesToDOMElement(lines, depth) {
             const info = getInfoLine(line);
             console.log(info)
             info.text = installEnv(info.text);
-            
+
             const el = makeDiv(info.text);
             if (info.id)
                 el.id = info.id;
@@ -226,7 +241,7 @@ function linesToDOMElement(lines, depth) {
             if (info.text == "Example" || info.text == "Examples")
                 el.classList.add("example");
 
-            
+
 
             if (info.references)
                 attachReferences(el, info.references);
@@ -256,27 +271,38 @@ function getInfoLine(line) {
             text: line
         };
 
-    const parenthesisIDstring = "   (";
-    const i = line.lastIndexOf(parenthesisIDstring);
+    let text = undefined;
+    let id = undefined;
+    let references = undefined;
 
-    if (i >= 0) {
-        return {
-            text: line.substr(0, i),
-            id: line.substring(i + parenthesisIDstring.length, line.length - 1)
-        };
-    } else {
+    {
+        const parenthesisIDstring = "    (";
+        const i = line.lastIndexOf(parenthesisIDstring);
+
+
+        if (i >= 0) {
+            const j = line.indexOf(")", i);
+            text = line.substr(0, i);
+            id = line.substring(i + parenthesisIDstring.length, j)
+        }
+    }
+
+    {
         const parenthesisRefstring = "   by (";
         const i = line.lastIndexOf(parenthesisRefstring);
 
-        if (i >= 0)
-            return {
-                text: line.substr(0, i),
-                references: line.substring(i + parenthesisRefstring.length, line.length - 1).split(",")
-            };
-        else
-            return {
-                text: line
-            };
+        if (i >= 0) {
+            references = line.substring(i + parenthesisRefstring.length, line.length - 1).split(",");
+            if(!text) text = line.substr(0, i);
+        } else if(!text)
+            text = line;
+
+
+        return {
+            text: text,
+            id: id,
+            references: references
+        };
 
     }
 
@@ -291,9 +317,10 @@ async function load(filename) {
     const response = await fetch(`proofs/${filename}.proof`);
     const text = await response.text();
 
+    document.body.innerHTML = "";
     const proof = linesToDOMElement(text.split("\n"), 0);
-    document.getElementById("proof").innerHTML = "";
-    document.getElementById("proof").appendChild(proof);
+
+    document.body.appendChild(proof);
     MathJax.typeset();
 
     // format ofi .dot

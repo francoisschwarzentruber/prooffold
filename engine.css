@@ -49,6 +49,7 @@ env {
 
 .box {
     position: absolute;
+    width: max-content;
     max-width: 500px;
     max-height: 100%;
     margin: 0px;
@@ -58,6 +59,7 @@ env {
     transition: all 200ms;
     border-top-right-radius: 16px;
     border-bottom-right-radius: 16px;
+    display: block;
 }
 
 .button {

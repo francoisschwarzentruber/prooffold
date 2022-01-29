@@ -1,5 +1,6 @@
-miaou   (a)
-miaoumiaou      by (a)
+miaou               (a)
+miaoumiaou    (b)         by (a)
+miaoumiaou          by (a,b)
 
 digraph {
     arg;
