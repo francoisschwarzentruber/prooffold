@@ -58,14 +58,14 @@ Theorem. MAX2SAT is NP-complete.
 
                                There exists $i$ such that $(a_i \vee b_i \vee c_i)$ is $\nu'$-false.        (2)            by (1)
 
-                                Among the clauses  in $\varphi'$ for that $i$, at most 6 are $\nu'$-true            by (table)
+                                Among the clauses  in $\varphi'$ for that $i$, at most 6 are $\nu'$-true   (3)         by (2,table)
                                 
 
 
-                                For another index $i'$ different from $i$, at most 7 are $\nu'$-true                by (table)
+                                For another index $i'$ different from $i$, at most 7 are $\nu'$-true       (4)         by (table)
                                 
                                 
-                                The number of true $\nu'$-clauses is bounded by $(m-1)7 + 6 < 7m$.             by (2,3)
+                                The number of true $\nu'$-clauses is bounded by $(m-1)7 + 6 < 7m$.             by (3,4)
                             }
                     }
                 }
