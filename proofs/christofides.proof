@@ -1,0 +1,56 @@
+algo {
+    Christofides's algorithm
+              $T$ := minimum spanning tree                (T)
+              $O$ := odd degree vertices in $T$
+              $M$ = minimum perfect matching among $I$                   (M)
+              $TM$ := multiset contaning edges of $T$ and a copy of edges of $M$           (TM)
+              $\tau$ := Eulerian tour in $TM$                     (tau)
+              $sol$ :=  $\tau$ in which we remove non-first occurrences               (sol)
+              return $sol$
+}
+
+Theorem. Christofides's is a $\frac 3 2$-approximation algorithm for metric TSP.
+{
+    Let $opt$ be an minimum TSP tour
+    $w(sol) \leq w(tau) = w(T) + w(M)$               (A)         by (TM,sol,tau)
+    $w(T) \leq w(opt)$                       (B)
+    {
+        Let $e$ be an edge in $opt$
+        $w(opt - e) \leq w(opt)$                   (1)
+        $w(opt - e)$ is a spanning tree                 (opt-eST)
+        $w(T) \leq w(opt - e)$                   (2)      by (opt-eST,T)
+        $w(T) \leq w(opt)$                           by (1,2)
+    }
+    $w(M) \leq \frac 1 2 w(opt)$                         (C)
+    {
+        Let $opt_{\mid O}$ be the tour $opt$ obtained by removing (and thus shortcutting) nodes outside $O$
+        $opt_{\mid O}$ is a cycle over $O$
+        $|O|$ is even
+        {
+            By contradiction. Suppose that $|O|$ is odd.
+            The sum of degrees of vertices in $O$ is odd.                           (i)
+            The sum of degrees of vertices in $\bar{O}$ is even.                   (ii)
+            The sum of degrees of all vertices is $2 \times $ number of edges in $T$.              (iii)
+            Contradiction.                  by (i,ii,iii)
+        }
+        $opt_{\mid O}$ is a trivial union of two perfect matchings over $O$
+        {
+            Picture of $opt_{\mid O}$ where perfect matchings are shown:
+                         graph {
+                1 -- 2 [penwidth="3mm"];
+                2 -- 3;
+                3 -- 4 [penwidth="3mm"];
+                4 -- 5;
+                5 -- 6 [penwidth="3mm"];
+                6 -- 1;
+            }
+        }
+        One of the two perfect matching is of weight $\leq \frac{w(opt_{\mid O})}2 \leq \frac1 2w(opt)$.              (3)
+        $w(M) \leq \frac 1 2 w(opt)$                       by (3,M)
+
+    }
+
+    $w(sol) \leq \frac 3 2 w(opt)$                   by (A,B,C)
+
+}
+
