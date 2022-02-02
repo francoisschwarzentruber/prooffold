@@ -1,0 +1,36 @@
+algo {
+    $M_{alg}$ := a maximal matching (for $\subseteq$) in $G$          (1)
+    $C_{alg}$ := the set of endpoints of edges in $M_{alg}$            (Calg)
+    return $C_{alg}$
+}
+
+Theorem. The algorithm is a 2-approximation for vertex cover.
+{
+    $C_{alg}$ is a vertex cover
+    {
+        By contradiction.
+        Some edge $e$ is not touched by $C_{alg}$           (2)
+        $C_{alg} \cup M_{alg}$ is a matching              (3)    by (1,2)
+        Contradiction with the maximality of $M_{alg}$           by (1,3)
+    }
+
+
+    Let $C^*$ be a minimum vertex cover.
+    $|C_{alg}| \leq 2|C^*|$
+    {
+        $|C_{alg}| = 2|M_{alg}|$              by (Calg)
+        For all vertex cover $C$, for all matching $M$, $|M| \leq |C|$         (MleqC)
+        {
+            Let $f : M \rightarrow C$ such that $f(e)$ is one of the endpoint of $e$ that in $C$
+            As $M$ is matching, $f$ is injective.
+        }
+        $|M_{alg}| \leq |C^*|$           by (MleqC)
+    }
+
+
+
+
+
+
+
+}

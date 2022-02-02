@@ -1,4 +1,4 @@
-algo {
+    algo {
     Christofides's algorithm
               $T$ := minimum spanning tree                (T)
               $O$ := odd degree vertices in $T$
