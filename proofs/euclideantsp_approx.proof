@@ -1,0 +1,198 @@
+Euclidean TSP:
+input: $n$ points in $\mathbb{R}^2$ with Euclidean distances, i.e. $d(x,y) = ||x - y||_2$
+output: shortest tour that visits all points
+
+Example
+{
+    p5 {{
+         let x = 100;
+        let y = 100;
+
+        p.setup = function() {
+            p.createCanvas(400, 300);
+            
+p.stroke('purple'); // Change the color
+p.strokeWeight(10);
+p.background("white");
+            for(let i = 0; i<10; i++) {
+                p.point(Math.random() * 400, Math.random() * 300);
+            }
+        };
+
+        p.draw = function() {
+            
+            
+        };
+    }}
+}
+
+
+
+Algorithm:
+     1. Rounding the instance
+     {
+         Definition. We say that an instance is $\epsilon$-nice if:
+         a. Every point are in the bounding box $[0, \lceil \frac{8n}{\epsilon}\rceil]^2$
+         b. Every point belong to a grid
+         c. Any two different points have distances at least 4.
+     
+        Picture 
+        {
+
+        }
+        
+
+        We can transform $I$ into an $\epsilon$-nice instance $I'$ such that $opt(I') \leq (1+\epsilon)opt(I)$
+        {
+            We keep control on the weight of a shortest tour by translating and scaling the input instance.
+            {
+                By translating all points, nothing is changed. A shortest tour simply remain the same and has the same weight.
+                TODO: ANIMATED PICTURE where it moves and that is it
+                By scaling the instance by a factor $\alpha$, we keep the same shortest tour, we just multiply the weight by $\alpha$.
+                TODO: ANIMATED PICTURE where we can scale :)
+            }
+
+            Let $L := \lceil \frac{8n}{\epsilon}]^2 \rceil$
+            We translate/scale the input so that it fits in the bounding square [0, L]$
+            
+            Consider a grid with spacing $\frac{\epsilon L}{2n}$
+
+            Let $I'$ obtained by mapping each point of $I$ to the closest point in that grid
+            {
+                Note that somes points in $I$ might map to the same point in $I'$ (and we keep only one single point in that case)
+            }
+            Distance between two different points in $I'$ is at least 4.
+            {
+                asciiart {
+      .                         .
+       <----------------------->
+              at least 4
+                }
+                The grid spacing is $\frac {\epsilon L}{2n} \geq \frac {\epsilon}{2n} \frac{8n}{\epsilon} = 4$
+            }
+
+            $opt(I') \leq (1+\epsilon)opt(I)$
+            {
+                $opt(I') = opt(I) + change$
+
+                The change in cost is at $\epsilon L$
+                {
+                    Every edge between two points changed by at most $\frac {\epsilon L} n$
+                    {
+                        This is because every point moved by at most a distance of $\frac {\epsilon L} {2n}$
+                    }
+                    There are $n$ edges.
+                }
+                $L \leq opt(I)$
+                {
+                    There are two points at distance at least $L$ in $I$
+                }
+                
+            }
+
+
+        }
+
+
+
+     }
+     2. Partitioning the space into squares
+     {
+         Let $L'$ be the smallest power of 2 such that $L' \geq 2L$
+         Example 
+         {
+             $L := 48$
+             $2L := 96$
+             asciiart {
+    1  2  4  8  16   32   64   128   256
+    X  X  X  X  X    X    X     V 
+             }
+             We take $L' := 128$
+         }
+         We define a quadtree 
+         {
+             root: the square of length $L'$
+             level 1: squares of length $\frac {L'} 2$
+             level 2: squares of length $\frac {L'} 4$
+             $\vdots$
+             level $k = O(\log L') = O(\log \frac n \epsilon)$: squares of length 1
+             PICTURE
+         }
+         Remark
+         {
+             We aim at applying dynamic programming on squares of the quadtree. The problem is a tour may enter and exit a square at any point on the border. We may get an infinite number of subproblems!
+         }
+         We define portals
+         {
+             Let $m$ be a power of 2 such that $m \in [\frac {k} \epsilon, \frac {2k} \epsilon]$.
+
+             For each square, put a portal into each of the four corners and put $m-1$ equally spaced portals along each side
+             PICTURE
+
+             Portals of a square are a subset of the portals of its children
+             {
+                 This is true because $m$ is a power of 2
+             }
+             PICTURE
+             Definition. A p-tour is a tour that enters and exists each square only though its portals.
+             PICTURE
+         }
+         Remark 
+         {
+             We may need to translate the $L' \times L'$-bounding square, otherwise the $p$-tour may be significantly different from an optimum tour.
+         }
+         Let us translate the $L' \times L'$-bounding square!
+         {
+             There exists integers  $a, b$ in $[0, \frac {L'} 2[$ such that translating the the $L' \times L'$-bounding square by $(-a, -b)$ leads to the existence of a p-tour of cost $\leq (1+4\epilson)opt$.
+             {
+                Let $a, b$ be two integers picked uniformly at random from $[0, \frac {L'} 2[$. Let us translate the $L' \times L'$-bounding square by $(-a, -b)$. Then $\mathbb{P}($ there is p-tour of cost  $\leq (1+4\epilson)opt$) $\geq \frac 1 2$.
+                {
+                    We massage the optimum tour into a p-tour.
+                    TODO
+                }
+             }
+             The sequel dynamic programming approach will be nested in a loop over all possible  $a, b$ in [0, \frac {L'} 2[$.
+
+             This loop makes a polynomial number of iterations.
+             {
+                 Because $L' = O(\frac n \epsilon)$.
+             }
+         }
+
+
+
+     }
+     3. Applying dynamic programming
+     {
+         Subproblems are described by:
+         - a square
+         - a possile way for entering and exiting a square via portals
+
+         There is a polynomial number of squares.
+         {
+             $1+ 4 +4^2 + ... L'^2 = O(\frac {n^2} {\epsilon^2})$
+         }
+
+         W.l.o.g we suppose that p-tours do not cross itself except at portals, and that it goes through a portal at most twice.
+         {
+            Examples
+            {
+
+            }
+         }
+         Examples of subproblems
+         {
+
+         }
+         There is a polynomial number of possible ways for entering and exiting a square via portals
+         {
+
+         }
+         Recursive equation
+         {
+             Example
+             {
+
+             }
+         }
+     }

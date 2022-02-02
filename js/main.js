@@ -71,6 +71,22 @@ function linesToDotCode(lines) {
     return code;
 }
 
+
+
+function linesToJS(lines) {
+    let code = "";
+    while (lines.length > 0) {
+        const line = lines.shift();
+        console.log(line)
+        console.log(line.length)
+        if (line.trim() == "}}")
+            return code;
+        code += line + "\n";
+    }
+    return code;
+}
+
+
 function linesToASCIIArt(lines) {
     let code = "";
     while (lines.length > 0) {
@@ -138,7 +154,36 @@ function linesToDOMElement(lines, depth) {
             el.rows = content.split("\n").length;
             el.cols = 40;
             nodes.push(el);
-        } else if (line == "algo {") {
+        }
+        else if(line == "p5 {{") {
+            /**
+            
+const s = p => {
+  let x = 100;
+  let y = 100;
+
+  p.setup = function() {
+    p.createCanvas(700, 410);
+  };
+
+  p.draw = function() {
+    p.background(0);
+    p.fill(255);
+    p.rect(x, y, 50, 50);
+  };
+};
+
+new p5(s, document.getElementById("p5test")); // invoke p5
+ */
+            const content = linesToJS(lines);
+            const el = document.createElement("div");
+            document.body.append(el);
+            el.id = "p5arg";
+            eval("const s = p => {" + content + "}; new p5(s, document.getElementById('p5arg'))");
+            el.id = "";
+            nodes.push(el);
+        }
+        else if (line == "algo {") {
             const el = linesToDOMElement(lines);
             el.classList.remove("box");
             el.classList.add("algo");
@@ -352,4 +397,6 @@ window.onload = () => {
 
     MathJax.typeset();
 
+
 }
+

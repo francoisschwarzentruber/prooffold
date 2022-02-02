@@ -9,10 +9,10 @@
               return $sol$
 }
 
-Theorem. Christofides's is a $\frac 3 2$-approximation algorithm for metric TSP.
+Theorem. Christofides's theorem is a $\frac 3 2$-approximation algorithm for metric TSP.
 {
     Let $opt$ be an minimum TSP tour
-    $w(sol) \leq w(tau) = w(T) + w(M)$               (A)         by (TM,sol,tau)
+    $w(sol) \leq w(\tau) = w(T) + w(M)$               (A)         by (TM,sol,tau)
     $w(T) \leq w(opt)$                       (B)
     {
         Let $e$ be an edge in $opt$
