@@ -24,15 +24,35 @@ Proofs are easy to be written.
       
       
 Each line is a fact, or simple text. Blocks (panels) are delimited by `{` and `}` and corresponds to a detailed proof of some fact. `     (1)`, `   (2)` etc. and `      by (1,2)` enable to highlight some facts used to prove another fact.
+Graphs in graphviz are described by:
 
+             graph {
+                 <<graphviz code>>
+              }
 
+             digraph {
+                 <<graphviz code>>
+              }
 
+Algorithms need indentation and they can be written via:
+
+             algo {
+                 <<description of the algorithm>>
+              }
+              
+Interactive canvas are dsecribed in Processing (P5) via:
+
+             p5 {{
+                 <<graphviz code>>
+              }}
+              
 # Features
 
  - [X] LaTEX for writing formulas 
  - [X] Structured proof
  - [X] Labels [(1) (2)] and references [by (1,2)]
  - [X] inline graphs via graphviz
+ - [X] integeractive canvas described in Processing (P5JS)
  - [ ] Asciiart, it partially works but soon via https://github.com/francoisschwarzentruber/asciidraw we will be able to write nice pictures
  - [ ] Arrows of implications
  - [ ] Automatic aligned equations
