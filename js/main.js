@@ -1,3 +1,7 @@
+const openTabs = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
+const tabs = new Map();
+let id = undefined;
+
 function dollarToBackSlashParenthesis(line) {
     let left = true;
     while (line.indexOf("$") > -1) {
@@ -154,27 +158,26 @@ function linesToDOMElement(lines, depth) {
             el.rows = content.split("\n").length;
             el.cols = 40;
             nodes.push(el);
-        }
-        else if(line == "p5 {{") {
+        } else if (line == "p5 {{") {
             /**
             
-const s = p => {
-  let x = 100;
-  let y = 100;
+                const s = p => {
+                let x = 100;
+                let y = 100;
 
-  p.setup = function() {
-    p.createCanvas(700, 410);
-  };
+                p.setup = function() {
+                    p.createCanvas(700, 410);
+                };
 
-  p.draw = function() {
-    p.background(0);
-    p.fill(255);
-    p.rect(x, y, 50, 50);
-  };
-};
+                p.draw = function() {
+                    p.background(0);
+                    p.fill(255);
+                    p.rect(x, y, 50, 50);
+                };
+                };
 
-new p5(s, document.getElementById("p5test")); // invoke p5
- */
+                new p5(s, document.getElementById("p5test")); // invoke p5
+                */
             const content = linesToJS(lines);
             const el = document.createElement("div");
             document.body.append(el);
@@ -182,8 +185,10 @@ new p5(s, document.getElementById("p5test")); // invoke p5
             eval("const s = p => {" + content + "}; new p5(s, document.getElementById('p5arg'))");
             el.id = "";
             nodes.push(el);
-        }
-        else if (line == "algo {") {
+        } else if (line == "js {{") {
+            const content = linesToJS(lines);
+            window.eval(content);
+        } else if (line == "algo {") {
             const el = linesToDOMElement(lines);
             el.classList.remove("box");
             el.classList.add("algo");
@@ -193,9 +198,10 @@ new p5(s, document.getElementById("p5test")); // invoke p5
             const box = linesToDOMElement(lines, depth + 1);
             //      box.hidden = true;
             box.classList.add("hidden");
+            const ibutton = nodes.length - 1;
             const button = nodes[nodes.length - 1];
             button.classList.add("button");
-
+            tabs.set(button, box);
             button.onclick = () => {
                 let h = box.classList.contains("hidden");
                 setInvisibleUpToDepth(depth + 1);
@@ -249,14 +255,16 @@ new p5(s, document.getElementById("p5test")); // invoke p5
                         box.style.top = y + "px";
                     }
 
-
-
-
-
                     setTimeout(() => document.body.scrollLeft = window.outerWidth, 500);
 
-                } else
+                    openTabs[depth] = ibutton;
+
+                } else {
+                    openTabs[depth] = -1;
                     box.classList.add("hidden");
+                }
+                updateURL();
+
             };
             document.body.appendChild(box)
         } else if (line == "}") {
@@ -338,8 +346,8 @@ function getInfoLine(line) {
 
         if (i >= 0) {
             references = line.substring(i + parenthesisRefstring.length, line.length - 1).split(",");
-            if(!text) text = line.substr(0, i);
-        } else if(!text)
+            if (!text) text = line.substr(0, i);
+        } else if (!text)
             text = line;
 
 
@@ -389,10 +397,25 @@ window.onload = () => {
     if (split.length > 1) {
         let searchParams = new URLSearchParams(split[1]);
         if (searchParams.get("id")) {
-            const id = searchParams.get("id");
+            id = searchParams.get("id");
             console.log("loading " + id)
-            load(id);
+            load(id).then(() => {
+                if (searchParams.get("tabs")) {
+                    const strtabs = searchParams.get("tabs");
+                    let node = document.querySelectorAll(".box0")[0];
+                    for (const tab of strtabs.split("/")) {
+                        const i = parseInt(tab);
+                        if (i < 0)
+                            break;
+                        console.log("open tab n°" + i)
+                        node.children[i].onclick();
+                        node = tabs.get(node.children[i]);
+                    }
+
+                }
+            });
         }
+
     }
 
     MathJax.typeset();
@@ -400,3 +423,11 @@ window.onload = () => {
 
 }
 
+
+
+
+
+function updateURL() {
+    const url = window.location.href.split("?")[0];
+    window.history.pushState({}, null, url + `?id=${id}&tabs=${openTabs.join("/")}`);
+}

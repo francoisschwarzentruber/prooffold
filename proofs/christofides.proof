@@ -1,6 +1,9 @@
     algo {
     Christofides's algorithm
               $T$ := minimum spanning tree                (T)
+              {
+                  The minimum spanning tree can be computed via Kruskal's algorithm for instance.
+              }
               $O$ := odd degree vertices in $T$
               $M$ = minimum perfect matching among $I$                   (M)
               $TM$ := multiset contaning edges of $T$ and a copy of edges of $M$           (TM)
@@ -8,7 +11,10 @@
               $sol$ :=  $\tau$ in which we remove non-first occurrences               (sol)
               return $sol$
 }
-
+Example
+{
+    
+}
 Theorem. Christofides's theorem is a $\frac 3 2$-approximation algorithm for metric TSP.
 {
     Let $opt$ be an minimum TSP tour

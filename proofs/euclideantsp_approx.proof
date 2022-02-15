@@ -1,3 +1,34 @@
+js {{
+     function randomPoints() {
+         const points = []
+            for(let i = 0; i<10; i++) { points.push({x : 10 + Math.random() * 190, y: 10 + Math.random() * 140}); }
+        return points;
+     }
+
+
+
+    function drawPoints2(p, points) {
+         p.stroke('blue');
+        p.strokeWeight(8);
+        for(let point of points) {
+            p.point(point.x, point.y);
+        }
+     }
+
+     function drawPoints(p, points) {
+         p.stroke('red');
+        p.strokeWeight(8);
+        for(let point of points) {
+            p.point(point.x, point.y);
+        }
+     }
+}}
+
+
+
+
+
+
 Euclidean TSP:
 input: $n$ points in $\mathbb{R}^2$ with Euclidean distances, i.e. $d(x,y) = ||x - y||_2$
 output: shortest tour that visits all points
@@ -5,24 +36,10 @@ output: shortest tour that visits all points
 Example
 {
     p5 {{
-         let x = 100;
-        let y = 100;
-
-        p.setup = function() {
-            p.createCanvas(400, 300);
-            
-p.stroke('purple'); // Change the color
-p.strokeWeight(10);
-p.background("white");
-            for(let i = 0; i<10; i++) {
-                p.point(Math.random() * 400, Math.random() * 300);
-            }
-        };
-
-        p.draw = function() {
-            
-            
-        };
+        let points = randomPoints();
+        p.setup = () => p.createCanvas(200, 150);
+        p.mouseClicked = () => points = randomPoints();
+        p.draw = () =>  {p.background("white"); drawPoints(p, points);}
     }}
 }
 
@@ -32,36 +49,96 @@ Algorithm:
      1. Rounding the instance
      {
          Definition. We say that an instance is $\epsilon$-nice if:
-         a. Every point are in the bounding box $[0, \lceil \frac{8n}{\epsilon}\rceil]^2$
-         b. Every point belong to a grid
-         c. Any two different points have distances at least 4.
-     
-        Picture 
-        {
+         a. Every point is in a bounding box that is a grid of size $[0, O(\frac{n}{\epsilon})]^2$
+         b. Every point is on the grid
+         c. Any two different points have distances at least 4
+         
+        p5 {{
+            let points = randomPoints();
+            for(let point of points) {
+                point.x = Math.round(point.x / 40) * 40;
+                point.y = Math.round(point.y / 40) * 40;
+            }
+            points.push({x:0, y: 60});
+            points.push({x:90, y: 0});
+            points.push({x:200, y: 150});
+            p.setup = () => p.createCanvas(400, 300);
+            p.draw = () => {
+                p.background("white");
+                p.stroke('black');
+                p.strokeWeight(1);
+                p.translate(10,10);
+                p.rect(0, 0, 200, 150);
+                for(let x = 0; x<200; x+=10)
+                for(let y = 0; y<200; y+=10)
+                        p.rect(x, y, 10, 10);
+                
+                drawPoints(p, points);
+            }
+        }}
 
-        }
-        
 
-        We can transform $I$ into an $\epsilon$-nice instance $I'$ such that $opt(I') \leq (1+\epsilon)opt(I)$
+        We can transform $I$ into an $\epsilon$-nice instance $I'$ such that $opt(I') \leq (1+\epsilon)opt(I)$                        
         {
-            We keep control on the weight of a shortest tour by translating and scaling the input instance.
+            We keep control on the weight of a shortest tour by translating and scaling the input instance.                       (translatingscalingisok)
             {
                 By translating all points, nothing is changed. A shortest tour simply remain the same and has the same weight.
-                TODO: ANIMATED PICTURE where it moves and that is it
+                p5 {{
+                        let direction = false;
+                        let x = 0;
+                        let points = randomPoints();
+                        p.setup = () => p.createCanvas(300, 150);
+                        p.draw = () =>  {p.background("white"); p.translate(x, 0); drawPoints(p, points); 
+                        x+=direction ? 1 : -1;
+                        if(x < 0 ||x > 100) direction = !direction;
+                        }
+                }}
                 By scaling the instance by a factor $\alpha$, we keep the same shortest tour, we just multiply the weight by $\alpha$.
-                TODO: ANIMATED PICTURE where we can scale :)
+                p5 {{
+                        let direction = false;
+                        let factor = 1.0;
+                        let points = randomPoints();
+                        p.setup = () => p.createCanvas(200, 150);
+                        p.mouseClicked = () => points = randomPoints();
+                        p.draw = () =>  {p.background("white"); p.scale(factor); drawPoints(p, points); 
+                        factor+=direction ? 0.01 : -0.01;
+                        if(factor < 0.5 || factor > 1) direction = !direction;
+                        }
+                }}
             }
 
-            Let $L := \lceil \frac{8n}{\epsilon}]^2 \rceil$
-            We translate/scale the input so that it fits in the bounding square [0, L]$
+            Let $L := \lceil \frac{8n}{\epsilon} \rceil$
+            We translate/scale the input so that it fits in the bounding square $[0, L]$                          by (translatingscalingisok)
             
             Consider a grid with spacing $\frac{\epsilon L}{2n}$
 
             Let $I'$ obtained by mapping each point of $I$ to the closest point in that grid
             {
+                p5 {{
+                    let points = randomPoints();
+                    let points2 = points.map((point) => ({x: Math.round(point.x / 40) * 40, y: Math.round(point.y / 40) * 40 }));
+                    
+                    points.push({x:10, y: 60});
+                    points.push({x:90, y: 10});
+                    points.push({x:200, y: 150});
+                    p.setup = () => p.createCanvas(400, 300);
+                    p.draw = () => {
+                        p.background("white");
+                        p.translate(10, 10);
+                        p.stroke('black');
+                        p.strokeWeight(1);
+                        p.rect(0, 0, 200, 200);
+                        for(let x = 0; x<200; x+=40)
+                        for(let y = 0; y<200; y+=40)
+                                p.rect(x, y, 40, 40);
+                        
+                        drawPoints(p, points);
+                        drawPoints2(p, points2);
+                    }
+                }}
                 Note that somes points in $I$ might map to the same point in $I'$ (and we keep only one single point in that case)
             }
-            Distance between two different points in $I'$ is at least 4.
+            Grid spacing is at least 4.                         (gridspacingmorethan4)
             {
                 asciiart {
       .                         .
@@ -74,21 +151,27 @@ Algorithm:
             $opt(I') \leq (1+\epsilon)opt(I)$
             {
                 $opt(I') = opt(I) + change$
-
-                The change in cost is at $\epsilon L$
-                {
-                    Every edge between two points changed by at most $\frac {\epsilon L} n$
+                The change in cost is at most $\epsilon \times opt(I)$
+                { 
+                    The change in cost is at most $\epsilon L$
                     {
-                        This is because every point moved by at most a distance of $\frac {\epsilon L} {2n}$
+                        Every edge between two points changed by at most $\frac {\epsilon L} n$
+                        {
+                            This is because every point moved by at most a distance of $\frac{\text{space grid}} 2 \times \sqrt 2 \leq \text{space grid} =  \frac {\epsilon L} {2n}$
+                        }
+                        There are $n$ edges.
                     }
-                    There are $n$ edges.
+                    $L \leq opt(I)$
+                    {
+                        $L$ is the size of the bounding box
+                        ⇓
+                        There are two points at distance at least $L$ in $I$
+                        ⇓
+                        Making a tour will cost at least $L$
+                    }
                 }
-                $L \leq opt(I)$
-                {
-                    There are two points at distance at least $L$ in $I$
-                }
-                
             }
+
 
 
         }
@@ -109,49 +192,236 @@ Algorithm:
              }
              We take $L' := 128$
          }
-         We define a quadtree 
+         We define a quadtree of levels $0..k$
          {
              root: the square of length $L'$
              level 1: squares of length $\frac {L'} 2$
              level 2: squares of length $\frac {L'} 4$
              $\vdots$
              level $k = O(\log L') = O(\log \frac n \epsilon)$: squares of length 1
-             PICTURE
+             p5 {{
+                    let point = {x:0, y:0};
+
+                    p.setup = () => p.createCanvas(400, 400);
+                    p.draw = () => {
+                        p.background("white");
+                        p.stroke('black');
+                        p.strokeWeight(1);
+                        
+                        for(let w = 400; w > 12; w /= 2) {
+                            p.rect(Math.floor(p.mouseX/w)*w, Math.floor(p.mouseY/w)*w, w, w);
+                        }
+
+                        p.stroke('red');
+                        p.strokeWeight(10);
+                        p.point(p.mouseX, p.mouseY);
+                    }
+                    
+                }}
          }
-         Remark
+         Subsquares alone do not define dynamic programming subproblems.
          {
              We aim at applying dynamic programming on squares of the quadtree. The problem is a tour may enter and exit a square at any point on the border. We may get an infinite number of subproblems!
          }
-         We define portals
+         ⇓
+         That is why we define portals
          {
              Let $m$ be a power of 2 such that $m \in [\frac {k} \epsilon, \frac {2k} \epsilon]$.
 
              For each square, put a portal into each of the four corners and put $m-1$ equally spaced portals along each side
-             PICTURE
+             p5 {{
+                    let point = {x:0, y:0};
+
+                    p.setup = () => p.createCanvas(400, 400);
+                    p.draw = () => {
+                        p.background("white");
+                        
+                        let wPortal = 8;
+                        for(let w = 400; w > 12; w /= 2) {
+                            const x1 = Math.floor(p.mouseX/w)*w;
+                            const y1 =  Math.floor(p.mouseY/w)*w;
+                            p.stroke('black');
+                            p.strokeWeight(1);
+                            p.rect(x1, y1, w, w);
+                            p.stroke('blue');
+                            p.strokeWeight(wPortal);
+                            wPortal -= 1;
+                            const m = 2;
+                            for(let x = x1; x<x1+w; x+=w/m) {
+                                p.point(x,y1);
+                                p.point(x,y1+w);
+                            }
+                            for(let y = y1; y<y1+w; y+=w/m) {
+                                p.point(x1,y);
+                                p.point(x1+w,y);
+                            }
+                        }
+                    }
+                }}
 
              Portals of a square are a subset of the portals of its children
              {
                  This is true because $m$ is a power of 2
              }
-             PICTURE
-             Definition. A p-tour is a tour that enters and exists each square only though its portals.
-             PICTURE
+             Definition. A p-tour (portal-tour) is a tour that enters and exists each square only though its portals.
+             
          }
-         Remark 
+         
+         Issue: a $p$-tour may may be significantly different from an optimum tour.
          {
-             We may need to translate the $L' \times L'$-bounding square, otherwise the $p$-tour may be significantly different from an optimum tour.
+                p5 {{
+                    let points = [];
+
+                    const nb = 8;
+                    for(let i = 0; i < nb; i++) {
+                        points.push({x: 100+i*100/nb, y: 90});
+                        points.push({x: 100+i*100/nb, y: 110});
+                        points.push({x: 100+i*100/nb, y: 190});
+                        points.push({x: 100+i*100/nb, y: 210});
+                        points.push({x: 90, y: 100+i*100/nb});
+                        points.push({x: 110, y: 100+i*100/nb});
+                        points.push({x: 190, y: 100+i*100/nb});
+                        points.push({x: 210, y: 100+i*100/nb});
+                    }
+
+                    p.setup = () => p.createCanvas(400, 400);
+                    p.draw = () => {
+                        
+
+                        p.background("white");
+                        
+                        let wPortal = 8;
+                        for(let w = 400; w > 12; w /= 2) {
+                            const x1 = Math.floor(p.mouseX/w)*w;
+                            const y1 =  Math.floor(p.mouseY/w)*w;
+                            p.stroke('black');
+                            p.strokeWeight(1);
+                            p.rect(x1, y1, w, w);
+                            p.stroke('blue');
+                            p.strokeWeight(wPortal);
+                            wPortal -= 1;
+                            const m = 2;
+                            for(let x = x1; x<x1+w; x+=w/m) {
+                                p.point(x,y1);
+                                p.point(x,y1+w);
+                            }
+                            for(let y = y1; y<y1+w; y+=w/m) {
+                                p.point(x1,y);
+                                p.point(x1+w,y);
+                            }
+                        }
+                        drawPoints(p, points);
+                    }
+                }}
+
          }
-         Let us translate the $L' \times L'$-bounding square!
+         ⇓
+         Solution: let us translate the $L' \times L'$-bounding square!
          {
-             There exists integers  $a, b$ in $[0, \frac {L'} 2[$ such that translating the the $L' \times L'$-bounding square by $(-a, -b)$ leads to the existence of a p-tour of cost $\leq (1+4\epilson)opt$.
+             There exists integers  $a, b$ in $[0, \frac {L'} 2[$ such that translating the the $L' \times L'$-bounding square by $(-a, -b)$ leads to the existence of a p-tour of cost $\leq (1+4\epsilon)opt$.
              {
-                Let $a, b$ be two integers picked uniformly at random from $[0, \frac {L'} 2[$. Let us translate the $L' \times L'$-bounding square by $(-a, -b)$. Then $\mathbb{P}($ there is p-tour of cost  $\leq (1+4\epilson)opt$) $\geq \frac 1 2$.
+                Let $a, b$ be two integers picked uniformly at random from $[0, \frac {L'} 2[$. Let us translate the $L' \times L'$-bounding square by $(-a, -b)$. Then $\mathbb{P}($ there is p-tour of cost  $\leq (1+4\epsilon)opt$) $\geq \frac 1 2$.
                 {
-                    We massage the optimum tour into a p-tour.
-                    TODO
+                    We massage an optimum tour into a p-tour.
+                    Consider an optimum tour.
+
+
+                    $\mathbb{E} (\text{total increase for all detours}) \leq 2 \epsilon opt$
+                    {
+                        Definition. For every vertical or horizontal line $\ell$ of the grid, $t(\ell)$ := #times the optimum tour crosses $\ell$.
+                        Let $T := \sum_{\ell} t(\ell)$ be the total number of crossings.
+                        $T \leq 2opt$
+                        {
+                            Consider an edge $e = (u, v)$ with $u = (x_u, y_u)$ and $v = (x_v, y_v)$.
+                            Let $x := |x_u - x_v|$ and $y := |y_v - y_u|$.
+                            $e$ crosses at most $x+1$ vertical and $y+1$ horizontal lines.
+                            $e$'s contribution to $T$ is at most $x+y+2$.
+                            $e$'s contribution to $opt$ is $\sqrt{x^2+y^2}$.
+                            $x+y+2 \leq 2\sqrt{x^2+y^2}$
+                            {
+                                $x+y \leq \sqrt{2(x^2+x^2)}$
+                                {
+                                    $(a-b)^2 = x^2 + y^2 - 2xy \geq 0$
+                                    ⇓
+                                    $2xy \leq x^2 + y^2$
+                                    ⇓
+                                    $x^2 + y^2 + 2xy \leq 2x^2 + 2y^2$
+                                    ⇓
+                                    $(x+y)^2 \leq 2x^2 + 2y^2$
+                                    ⇓
+                                    $x+y \leq \sqrt{2(x^2+y^2)}$
+                                }
+                                $2 \leq \frac 1 2 \sqrt{x^2+x^2}$
+                                {
+                                    $4 \leq \sqrt{x^2+x^2}$
+                                    {
+                                        Because two different points are of distance at least 4.
+                                    }
+                                }
+                                $\sqrt 2 + \frac 1 2 \leq 2$
+                            }
+                        }
+                        Consider a crossing of a line, let say a vertical one at depth $i$ in the quadtree.
+                        p5 {{
+                            p.setup = () => {p.createCanvas(250, 250);}
+                            
+                            p.draw = () => {
+                                p.scale(0.8);
+                                p.background("white");
+                                p.stroke('black');
+                                p.strokeWeight(1);
+                                p.line(200,0,200,400);
+                                p.stroke('blue');
+                                p.strokeWeight(8);
+                                p.point(200, 150);
+                                p.point(200, 250);
+                                p.stroke('red');
+                                p.strokeWeight(8);
+                                p.point(100, 300);
+                                p.point(350, 100);
+                                p.strokeWeight(2);
+                                p.line(100, 300, 350, 100);
+
+                                p.stroke('green');
+                                p.line(100, 300, 195, 220);
+                                p.line(195, 220, 195, 250);
+                                p.line(195, 250, 205, 250);
+                                p.line( 205, 250, 205, 220);
+                                p.line( 205, 220, 350, 100);
+                            }
+                        }}
+                        
+
+                        $\mathbb{E}$ (detour for $e$ introduced by line $\ell$) $\leq \epsilon$
+                        {
+                            $\mathbb{E}$ (detour for $e$ introduced by line $\ell$) $= \sum_{i=1}^k \mathbb{P}$ (line $\ell$ crosses edge $e$ at level $i$) $\times$  detour at level $i$
+
+                            Detour is at most $\frac {L'} {2^i m}$
+                            {
+                                Spacing between portals at depth $i$ is $\frac {L'} {2^i m}$
+                            }
+                        
+                            $\mathbb{P}($ line $\ell$ crosses edge $e$ at level $i$) $\leq \frac {2^i} {L'}$
+                            {
+                                There are $\frac{L'} 2$  possible lines (that $\ell$ could be mapped to)
+                                There are at most $2^{i-1}$ lines that are of depth $i$  (that $\ell$ could be mapped to)
+                                The probability is then $\leq \frac{2^{i-1}} {\frac {L'} 2}$
+                            }
+
+                            $\mathbb{E}$ (detour for $e$ introduced by line $\ell$) $\leq \sum_{i=1\^k \frac {L'} {2^i m} \frac {2^i} {L'} = \frac{k} m$
+
+                            $\frac k m \leq \epsilon$
+                        }
+                    }
+                    
+
+                    $\mathbb{P}$(total length increase of detours $\geq 4\epsilon  opt$) $\leq \frac {\mathbb{E} (\text{total increase for all detours})} {4\epsilon opt} = \frac {2 \epsilon opt} {4 \epsilon opt} = \frac 1 2$
+                    {
+                        Markov inequality
+                    }
                 }
              }
-             The sequel dynamic programming approach will be nested in a loop over all possible  $a, b$ in [0, \frac {L'} 2[$.
+             The sequel dynamic programming approach will be nested in a loop over all possible  $a, b$ in $[0, \frac {L'} 2[$.
 
              This loop makes a polynomial number of iterations.
              {
@@ -168,25 +438,73 @@ Algorithm:
          - a square
          - a possile way for entering and exiting a square via portals
 
-         There is a polynomial number of squares.
-         {
-             $1+ 4 +4^2 + ... L'^2 = O(\frac {n^2} {\epsilon^2})$
-         }
+         
 
-         W.l.o.g we suppose that p-tours do not cross itself except at portals, and that it goes through a portal at most twice.
-         {
+         W.l.o.g we suppose that p-tours do not cross itself except at portals, and that it enters/exists through a portal at most twice in a given square.
+         { 
+            We can shortcut crossings  
             Examples
             {
+                asciiart {
+      .       .
+     / \     / \
+    /   \   /   \
+    :    \ /     :
+    :     X     /
+    \    / \   /   
+     \  /   \ / 
+      -.     .
+                }
 
+                becomes
+
+                  asciiart {
+      .-------.
+     /         \
+    /           \
+    :            :
+    :           /
+    \          /   
+     \        / 
+      -.-----.
+                }
+
+                which is shorter!
             }
+
+
+            If it enters/exits more that three times in a given square, we can shortcut the tour.
+            Examples 
+            {
+                TODO
+            }
+
          }
+        A subproblem is given by:
+        - a square
+        - for each portal, whether there is 0, 1 or 2 transitions.
+    
          Examples of subproblems
          {
 
          }
-         There is a polynomial number of possible ways for entering and exiting a square via portals
+         The number of subproblems is $poly(n)$ (but not polynomial in $\frac 1 \epsilon$!)
          {
-
+            There is a polynomial number of squares.
+            {
+                There is 1 square at level 0.
+                There are 4 squares at level 1.
+                $\dots$
+                There are $L'^2$ squares at level $k$.
+                $1+ 4 +4^2 + ... L'^2 = O(\frac {n^2} {\epsilon^2})$
+            }
+            The number of possible ways for entering and exiting a square via portals is $poly(n)$ (but not $\frac 1 \epsilon$!)
+            {
+                There are $4m$ portals in a given square.
+                There are three possibilities for a portal: 0, 1 or 2 transitions.
+                So there are $3^{4m}$ possible ways.
+                $m = O(\frac k \epsilon) = O(\frac {\log L'} epsilon) = O(\frac {\log \frac n \epsilon} epsilon)$
+            }
          }
          Recursive equation
          {
