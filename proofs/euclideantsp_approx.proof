@@ -37,8 +37,10 @@ Example
 {
     p5 {{
         let points = randomPoints();
-        p.setup = () => p.createCanvas(200, 150);
-        p.mouseClicked = () => points = randomPoints();
+        
+        p.setup = () => {const canvas = p.createCanvas(200, 150);
+        canvas.mouseClicked = () => points = randomPoints();}
+        
         p.draw = () =>  {p.background("white"); drawPoints(p, points);}
     }}
 }
@@ -67,8 +69,10 @@ Algorithm:
                 points.push({x:200, y: 150});
             }
             generate();
-            p.mouseClicked = generate;
-            p.setup = () => p.createCanvas(400, 300);
+            
+            p.setup = () => {const canvas = p.createCanvas(400, 300);
+               canvas.mouseClicked = generate;
+        }
             p.draw = () => {
                 p.background("white");
                 p.stroke('black');
@@ -104,8 +108,10 @@ Algorithm:
                         let direction = false;
                         let factor = 1.0;
                         let points = randomPoints();
-                        p.setup = () => p.createCanvas(200, 150);
-                        p.mouseClicked = () => points = randomPoints();
+                        p.setup = () => {
+                            const canvas = p.createCanvas(200, 150);
+                        canvas.mouseClicked = () => points = randomPoints();
+                        }
                         p.draw = () =>  {p.background("white"); p.scale(factor); drawPoints(p, points); 
                         factor+=direction ? 0.01 : -0.01;
                         if(factor < 0.5 || factor > 1) direction = !direction;
@@ -503,7 +509,7 @@ Algorithm:
             }
             The number of path endpoint specifications is $poly(n)$ (but not $\frac 1 \epsilon$!)
             {
-                $m = O(\frac k \epsilon) = O(\frac {\log L'} epsilon) = O(\frac {\log \frac n \epsilon} epsilon)$
+                $m = O(\frac k \epsilon) = O(\frac {\log L'} epsilon) = O(\frac {\log \frac n \epsilon} \epsilon)$
                 There are $4m$ portals in a given square.
                 There are three possibilities for a portal: it is used 0, 1 or 2 times.
                 
