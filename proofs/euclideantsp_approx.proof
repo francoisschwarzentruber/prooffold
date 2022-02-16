@@ -48,20 +48,26 @@ Example
 Algorithm:
      1. Rounding the instance
      {
+         Definition. A bounding box is the smallest axis-parallel  square that contains all $n$ points.
          Definition. We say that an instance is $\epsilon$-nice if:
          a. Every point is in a bounding box that is a grid of size $[0, O(\frac{n}{\epsilon})]^2$
          b. Every point is on the grid
-         c. Any two different points have distances at least 4
+         c. The grid spacing is at least 4
          
         p5 {{
-            let points = randomPoints();
-            for(let point of points) {
-                point.x = Math.round(point.x / 40) * 40;
-                point.y = Math.round(point.y / 40) * 40;
+            let points;
+            function generate() {
+                points = randomPoints();
+                for(let point of points) {
+                    point.x = Math.round(point.x / 10) * 10;
+                    point.y = Math.round(point.y / 10) * 10;
+                }
+                points.push({x:0, y: 60});
+                points.push({x:90, y: 0});
+                points.push({x:200, y: 150});
             }
-            points.push({x:0, y: 60});
-            points.push({x:90, y: 0});
-            points.push({x:200, y: 150});
+            generate();
+            p.mouseClicked = generate;
             p.setup = () => p.createCanvas(400, 300);
             p.draw = () => {
                 p.background("white");
@@ -219,12 +225,12 @@ Algorithm:
                     
                 }}
          }
-         Subsquares alone do not define dynamic programming subproblems.
+         😥 Subsquares alone lead to an <em>infinite</em>  number of dynamic programming subproblems.
          {
              We aim at applying dynamic programming on squares of the quadtree. The problem is a tour may enter and exit a square at any point on the border. We may get an infinite number of subproblems!
          }
          ⇓
-         That is why we define portals
+         😀 That is why we define portals
          {
              Let $m$ be a power of 2 such that $m \in [\frac {k} \epsilon, \frac {2k} \epsilon]$.
 
@@ -267,7 +273,7 @@ Algorithm:
              
          }
          
-         Issue: a $p$-tour may may be significantly different from an optimum tour.
+         😥 Issue: a $p$-tour may may be significantly different from an optimum tour.
          {
                 p5 {{
                     let points = [];
@@ -316,7 +322,7 @@ Algorithm:
 
          }
          ⇓
-         Solution: let us translate the $L' \times L'$-bounding square!
+         😀 Solution: let us translate the $L' \times L'$-bounding square!
          {
              There exists integers  $a, b$ in $[0, \frac {L'} 2[$ such that translating the the $L' \times L'$-bounding square by $(-a, -b)$ leads to the existence of a p-tour of cost $\leq (1+4\epsilon)opt$.
              {
@@ -434,12 +440,6 @@ Algorithm:
      }
      3. Applying dynamic programming
      {
-         Subproblems are described by:
-         - a square
-         - a possile way for entering and exiting a square via portals
-
-         
-
          W.l.o.g we suppose that p-tours do not cross itself except at portals, and that it enters/exists through a portal at most twice in a given square.
          { 
             We can shortcut crossings  
@@ -480,16 +480,19 @@ Algorithm:
             }
 
          }
-        A subproblem is given by:
-        - a square
-        - for each portal, whether there is 0, 1 or 2 transitions.
-    
-         Examples of subproblems
-         {
+        Subproblems are described by:
+         - a square $s$
+         - A collection of portal-to-portal path endpoint specifications $(s_1, t_1, \dots, s_r, t_r)$ where $s_1, \dots, s_r, t_1, \dots, t_r$ are portals of $s$.
+        A subproblem is to compute $OPT[s, (s_1, t_1, \dots, s_r, t_r)]$ the minimum weight of connecting a path from $s_1$ to $t_1$, ..., a path from $s_r$ to $t_r$, so that each point in $s$ is visited
 
-         }
-         The number of subproblems is $poly(n)$ (but not polynomial in $\frac 1 \epsilon$!)
-         {
+        The goal problem is to compute $OPT(\text{bounding box}, [])$ but with the additional constraint that it forms a single path (the tour!).
+         
+        Examples of subproblems
+        {
+            TODO
+        }
+        The number of subproblems is $poly(n)$ (but not polynomial in $\frac 1 \epsilon$!)
+        {
             There is a polynomial number of squares.
             {
                 There is 1 square at level 0.
@@ -498,19 +501,61 @@ Algorithm:
                 There are $L'^2$ squares at level $k$.
                 $1+ 4 +4^2 + ... L'^2 = O(\frac {n^2} {\epsilon^2})$
             }
-            The number of possible ways for entering and exiting a square via portals is $poly(n)$ (but not $\frac 1 \epsilon$!)
+            The number of path endpoint specifications is $poly(n)$ (but not $\frac 1 \epsilon$!)
             {
-                There are $4m$ portals in a given square.
-                There are three possibilities for a portal: 0, 1 or 2 transitions.
-                So there are $3^{4m}$ possible ways.
                 $m = O(\frac k \epsilon) = O(\frac {\log L'} epsilon) = O(\frac {\log \frac n \epsilon} epsilon)$
+                There are $4m$ portals in a given square.
+                There are three possibilities for a portal: it is used 0, 1 or 2 times.
+                
+                So there are $3^{4m}$ configurations for the usage of the portals.
+
+                There are at most $4m$ paths.
+                {
+                    Suppose there are strictly more than $4m$ paths
+                    ⇓
+                    A portal is used strictly more than 2 times.
+                    ⇓
+                    Contradiction.
+                }
+                
+                For each configuration, there are $O(2^{8m}))$ path specifications.
+                {
+                    Consider a configuration.
+                    Retain that configuration only if it involves an even number of portal usages.
+                    {
+                        Indeed, each path connects a portal to another one. Each path contributes to two portal usages.
+                    }
+                    Let $r$ be the number of possible paths (it is the number of portal usages divided by 2).
+                    Given a configuration, the number of layouts with $r$ paths is the $r$-th Catalan number $C_r := \frac 1 {r+1} \binom {2r} r$ and is bounded by $2^{2r} = O(2^{8m}))$
+                    {
+                        There are no crossings.
+                        A path endpoint specification corresponds to a arrangement of parentheseses.
+                    }
+                }
+                
+
             }
          }
          Recursive equation
          {
+             We compute  $OPT[s, (s_1, t_1, \dots, s_r, t_r)]$ by constructing paths from $s_1$ to $t_1$... from $s_r$ to $t_r$ by gluying solutions from
+             $OPT(s', ...)$, $OPT(s'', ...)$, $OPT(s''', ...)$, $OPT(s'''', ...)$. We take care that the usage of the portals at the border of $s$ coincide with the usage at the corresponding border of $s'$, $s''$, $s'''$ and $s''''$.
+             asciiart {
+                 --------------------
+                |         |          |
+                |   s'    |    s''   |
+                |         |          |
+                |         |          |
+                ----------------------
+                |         |          |
+                |   s'''  |    s'''' |
+                |         |          |
+                |         |          |
+                ----------------------
+             }
              Example
              {
-
+                 TODO
              }
          }
      }
