@@ -1,6 +1,9 @@
 \newcommand{\xrand}{x_{rand}}
 \newcommand{\xnear}{x_{near}}
 
+This is a rewriting of the proof available <a href="https://arxiv.org/pdf/1809.07051.pdf">here</a> in the geometrical case.
+
+
 algo {
     input: a starting point $x_{init}$, a goal region $\Gamma$, $k$ the number of iterations
     output: a tree rooted in $x_{init}$
