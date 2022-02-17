@@ -1,0 +1,103 @@
+\newcommand{\xrand}{x_{rand}}
+\newcommand{\xnear}{x_{near}}
+
+algo {
+    input: a starting point $x_{init}$, a goal region $\Gamma$, $k$ the number of iterations
+    output: a tree rooted in $x_{init}$
+    GEOM-RRT($x_{init}$, $\Gamma$, k)
+             $\tau$ := new tree containing a single node $x_{init}$
+             for $i$ := 1 to $k$
+                    $x_{rand}$ := choose uniformly a random point
+                    $x_{near}$ := the point in $\tau$ that is the nearest from $x_{rand}$
+                    $x_{new}$ := new point obtained by walking a distance $min(||x_{near} - x_{rand}||, \eta)$ from $x_{near}$ in the direction of $x_{rand}$
+                    if there is no collision between $x_{near}$ and $x_{new}$
+                             add the vertex $x_{new}$ in $\tau$
+                             add the edge $(x_{near}, x_{new})$ in $\tau$
+             return $\tau$
+}
+
+W.l.o.g. we suppose the space is $[0, 1]^d$.
+Let $\mathcal F$ be the free space.
+
+Suppose that $\Gamma$ is a ball $B_{\delta_{goal}}(x_{goal})$.
+Suppose there is a valid trajectory $\pi : [0, t_{\pi}] \rightarrow \mathcal F$.
+Suppose that the clearance of the trajectory is $\delta_{clear} > 0$.
+Suppose that $\pi(t_{\pi}) = x_{goal}$.
+Theorem. There exists constants $a, b > 0$ (depending of the complexity of the map) such that $\mathbb{P}$(GEOM-RRT fails reaching $\Gamma$ from $x_{init}$ after $k$ iterations) $\leq ae^{-bk}$.
+{
+    Let $\delta := min(\delta_{clear}, \delta_{goal})$
+    Let $L$ be the Euclidean length of $\pi$
+    Let $\nu := min(\delta, \eta)$
+    Let $m := \frac{5L}\nu$
+    Let $x_{init} = x_0, x_1, \dots, x_m = x_{goal}$ be points along the path $\pi$ with $||x_i - x_{i+1}|| \leq \frac \nu 5$
+    $B_{\nu}(x_i) \subseteq \mathcal F$
+    {
+        Because $\nu \leq \delta_{clear}$
+    }
+    We suppose that $m < k$
+    {
+        This assumption is not stupid since the number of iterations is huge.
+    }
+    Lemma. Suppose that in the execution of GEOM-RRT, $\tau$ contains a point $x'_i \in B_{\nu/5}(x_i)$. If the new sample $x_{rand} \in B_{\nu/5}(x_{i+1})$ then the segment $[x_{near}, x_{rand}] \subseteq \mathcal F$.            (lemma)
+    {      
+         $||\xnear - \xrand|| \leq ||x_i' - \xrand||$     (*)
+         {
+                Indeed, $\xnear$ is the nearest point from $\xrand$. So it is nearest than $x_i'$.  
+         }
+        $||\xnear - x_i|| \leq ||\xnear - \xrand|| + ||\xrand - x_i||$
+        $\leq ||x_i' - \xrand|| + ||\xrand - x_i||$           by (*)
+        $\leq ||x_i'- x_i|| + ||x_i - x_{i+1}|| + ||x_{i+1} - \xrand|| + ||\xrand - x_{i+1}|| + ||x_{i+1} - ||x_i||$
+        {
+            Triangular inequalities.
+        }
+        $\leq \nu/5+\nu/5+\nu/5+\nu/5+\nu/5$
+        $\leq \nu$
+        ⇓
+        $\xnear \in B_{\nu}(x_i)$
+        $x_{rand} \in B_{\nu/5}(x_{i+1}) \subseteq B_{\nu}(x_i)$ (hypothesis)
+         $[x_{near}, x_{rand}] \subseteq \mathcal F$
+
+         Remark. $x_{new} = \xrand$.
+         {
+             $||\xnear - \xrand|| \leq ||x'_i + x_i|| + ||x_i - x_{i+1}|| + ||x_{i+1} - \xrand||$
+             $\leq 3\frac \nu 5 < \nu \leq \eta$
+         }
+      
+
+    }
+    Let $p := \mathbb{P}($ the next added vertex is in $B_{\nu/5}(x_{i+1}) \mid B_{\nu/5}(x_i)$ is reached)
+    $p \geq |B_{\nu/5}|$.               by (lemma)
+
+    Consider the Markov chain where states are $0, \dots, m$. The meaning of state $i$ is $B_{\nu/5}(x_i)$ is reached.
+    digraph {
+        rankdir=LR; 
+        0 -> 0 [label="1-p"];
+        1 -> 1 [label="1-p"];
+        2 -> 2 [label="1-p"];
+        3 -> 3 [label="1-p"];
+        4 -> 4 [label="1-p"];
+        5 -> 5 [label="1"];
+        0 -> 1 [label="p"];
+        1 -> 2 [label="p"];
+        2 -> 3 [label="p"];
+        3 -> 4 [label="p"];
+        4 -> 5 [label="p"];
+    }
+    $\mathbb P($ state $m$ in the Markov chain is not reached) $\leq \frac {m}{(m-1)!} k^m e^{-pk}$.
+    {
+        Let $X_k$ := state reached in less than $k$ trials
+        \newcommand{\proba}{\mathbb P}
+        $\proba(X_k < m) = \sum_{i=0}^{m-1} \proba(X_k = i)$
+        $= \sum_{i=0}^{m-1} \binom k i p^i (1-p)^{k-i}$
+        $\leq  \sum_{i=0}^{m-1} \binom k {m-1} p^i (1-p)^{k-i}$
+        {
+            As $m < k$
+        }
+        $\leq \binom k {m-1} m (1-p)^k$
+        $\leq \binom k {m-1} m e^{-pk}$
+        {
+            As $1-p \leq e^{-p}$.
+        }
+    }
+}
+
