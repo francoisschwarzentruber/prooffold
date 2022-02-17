@@ -45,7 +45,12 @@ function setInvisibleUpToDepth(depth) {
 }
 
 
-
+/**
+ * 
+ * @param {*} domElement 
+ * @param {*} references 
+ * @description add the mouse listener for handling the references
+ */
 function attachReferences(domElement, references) {
     domElement.onmouseenter = () => {
         for (const ref of references) {
@@ -135,7 +140,7 @@ function linesToDOMElement(lines, depth) {
 
         console.log(line);
         if (line == "") {
-            if(!(nodes.length > 0 && nodes[nodes.length-1].classList.contains("vspace"))) {
+            if (!(nodes.length > 0 && nodes[nodes.length - 1].classList.contains("vspace"))) {
                 const el = document.createElement("div");
                 el.classList.add("vspace");
                 nodes.push(el);
@@ -213,6 +218,7 @@ function linesToDOMElement(lines, depth) {
                     const previousBox = button.parentElement;
                     const previousBoxRect = previousBox.getBoundingClientRect();
                     //const previousBoxRect = previousBox.getBoundingClientRect();
+                    const previousBoxRectLeft = (previousBox.style.left == "" ? 0 : parseInt(previousBox.style.left));
                     const previousBoxRectRight = (previousBox.style.left == "" ? 0 : parseInt(previousBox.style.left)) + previousBox.offsetWidth - 3;
                     const buttonRect = button.getBoundingClientRect();
                     const boxRect = box.getBoundingClientRect();
@@ -230,7 +236,7 @@ function linesToDOMElement(lines, depth) {
                                 m = Math.max(m, el.children[0].getBoundingClientRect().width);
 
                         if (m > 400)
-                            box.style.maxWidth = m + 5 + "px";
+                            box.style.maxWidth = m + 32 + "px";
 
                     }
 
@@ -243,7 +249,7 @@ function linesToDOMElement(lines, depth) {
                         boxRect.width >= previousBoxRect.width - INDENT && previousBoxRect.top + previousBoxRect.height + boxRect.height < window.innerHeight) {
                         //then put the box below (instead of on the right)
                         console.log("below")
-                        box.style.left = (previousBoxRect.left + INDENT) + "px";
+                        box.style.left = (previousBoxRectLeft + INDENT) + "px";
                         box.style.top = previousBoxRect.top + previousBoxRect.height;
                     } else {
                         box.style.left = previousBoxRectRight + "px";
@@ -297,6 +303,9 @@ function linesToDOMElement(lines, depth) {
                 nodes[nodes.length - 1].classList.add("centered");
                 nextElementClass = "centered";
             }
+            if (["=", "$=", "$\\leq", "$\\geq", "< ", "> "].find((value) => info.text.startsWith(value)))
+                el.classList.add("indent");
+
             if (info.id)
                 el.id = info.id;
 
@@ -375,7 +384,13 @@ function getInfoLine(line) {
 
 }
 
-
+function attachReferencesAdditionalSpan() {
+    document.querySelectorAll("span").forEach((span) => {
+        const refA = span.getAttribute("ref");
+        if (refA != undefined)
+            attachReferences(span, refA.split(","));
+    });
+}
 
 
 async function load(filename) {
@@ -385,7 +400,7 @@ async function load(filename) {
 
     document.body.innerHTML = "";
     const proof = linesToDOMElement(text.split("\n"), 0);
-
+    attachReferencesAdditionalSpan();
     document.body.appendChild(proof);
     MathJax.typeset();
 

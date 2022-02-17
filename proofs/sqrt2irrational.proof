@@ -1,7 +1,6 @@
 Prove that $\sqrt 2$ is irrational.
 {
-	Lemma. $a^2$ even implies $a$ even.  
-	\label{lemma}
+	Lemma. $a^2$ even implies $a$ even.            (lemma)
 	{
 		Suppose $a$ is odd.
 		$a = 2k+1$ for some integer $k$
@@ -11,8 +10,7 @@ Prove that $\sqrt 2$ is irrational.
 	
 	Suppose that $\sqrt 2$ rational.
 	⇓
-	$\sqrt 2 = \frac a b$ irreducible, for some integers $a$ and $b$.
-	\label{irreducible}
+	$\sqrt 2 = \frac a b$ irreducible, for some integers $a$ and $b$.         (irreducible)
 ⇓
 	{
 		$\sqrt 2 = \frac a b$ 
@@ -23,20 +21,17 @@ Prove that $\sqrt 2$ is irrational.
 		⇓
 		$2b^2 = a^2$
 	}
-	$2b^2 = a^2$
-	\label{$2b^2 = a^2$}
+	$2b^2 = a^2$                 ($2b^2 = a^2$)
 	⇓
 	$a^2$ is even.
 	⇓             by (lemma)
-	$a$ is even.
-	\label{aeven}
+	$a$ is even.                  (aeven)
 	⇓
 	{
 		$a$ is even	
 		⇓
 		$a = 2k$ for some $k$
-		⇓
-		\ref{$2b^2 = a^2$}
+		⇓                          by ($2b^2 = a^2$)
 		$2b^2 = 4k^2$
 		⇓
 		$b^2 = 2k^2$
@@ -45,11 +40,7 @@ Prove that $\sqrt 2$ is irrational.
 		⇓              by (lemma)
 		$b$ is even
 	}
-	$b$ is even
-	\label{beven}
+	$b$ is even           (beven)
 	
-	Contradiction
-	\ref{irreducible,aeven,beven}
+	Contradiction        by (irreducible,aeven,beven)
 }
-	
-

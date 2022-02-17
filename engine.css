@@ -5,6 +5,7 @@
     --box4-color: rgb(220, 220, 220);
     --box5-color: rgb(240, 240, 240);
     --box6-color: rgb(220, 220, 220);
+    --box7-color: rgb(200, 200, 200);
 }
 
 body {
@@ -33,6 +34,8 @@ body {
     padding: 8px;
     width: fit-content;
 }
+
+
 
 .box>div.centered {
     width: initial;
@@ -146,6 +149,10 @@ env {
     background-color: var(--box6-color);
 }
 
+.box6 .on {
+    background-color: var(--box7-color);
+}
+
 .box1 {
     left: 400px;
     background-color: var(--box1-color);
@@ -177,10 +184,19 @@ env {
     background-color: var(--box6-color);
 }
 
+.box7 {
+    left: 1600px;
+    background-color: var(--box7-color);
+}
 
 .example {
     color: darkblue;
     background-color: rgba(128, 128, 255, 0.2);
     margin-left: auto;
     margin-right: 0;
+}
+
+
+.indent {
+    margin-left: 20px;
 }

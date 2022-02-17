@@ -26,6 +26,7 @@ Suppose that $\Gamma$ is a ball $B_{\delta_{goal}}(x_{goal})$.
 Suppose there is a valid trajectory $\pi : [0, t_{\pi}] \rightarrow \mathcal F$.
 Suppose that the clearance of the trajectory is $\delta_{clear} > 0$.
 Suppose that $\pi(t_{\pi}) = x_{goal}$.
+
 Theorem. <br/>There exists constants $a, b > 0$ (depending of the complexity of the map) such that<br/> $\mathbb{P}$(GEOM-RRT fails reaching $\Gamma$ from $x_{init}$ after $k$ iterations) $\leq ae^{-bk}$.
 {
     Let $\delta := min(\delta_{clear}, \delta_{goal})$
@@ -47,16 +48,16 @@ Theorem. <br/>There exists constants $a, b > 0$ (depending of the complexity of 
          {
                 Indeed, $\xnear$ is the nearest point from $\xrand$. So it is nearest than $x_i'$.  
          }
-        $||\xnear - x_i|| \leq ||\xnear - \xrand|| + ||\xrand - x_i||$
-        $\leq ||x_i' - \xrand|| + ||\xrand - x_i||$           by (*)
+        $||\xnear - x_i|| \leq$ <span id="**">$||\xnear - \xrand||$</span> $ + ||\xrand - x_i||$
+        $\leq$ <span ref="*,**">$||x_i' - \xrand||$</span> $+ ||\xrand - x_i||$
         $\leq ||x_i'- x_i|| + ||x_i - x_{i+1}|| + ||x_{i+1} - \xrand|| + ||\xrand - x_{i+1}|| + ||x_{i+1} - ||x_i||$
         {
             Triangular inequalities.
         }
         $\leq \nu/5+\nu/5+\nu/5+\nu/5+\nu/5$
         $\leq \nu$
-        ⇓
-        $\xnear \in B_{\nu}(x_i)$
+        
+        i.e. $\xnear \in B_{\nu}(x_i)$
         $x_{rand} \in B_{\nu/5}(x_{i+1}) \subseteq B_{\nu}(x_i)$ (hypothesis)
          $[x_{near}, x_{rand}] \subseteq \mathcal F$
 

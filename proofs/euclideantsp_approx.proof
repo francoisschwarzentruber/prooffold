@@ -39,7 +39,7 @@ Example
         let points = randomPoints();
         
         p.setup = () => {const canvas = p.createCanvas(200, 150);
-        canvas.mouseClicked = () => points = randomPoints();}
+        canvas.elt.onclick = () => points = randomPoints();}
         
         p.draw = () =>  {p.background("white"); drawPoints(p, points);}
     }}
@@ -71,7 +71,7 @@ Algorithm:
             generate();
             
             p.setup = () => {const canvas = p.createCanvas(400, 300);
-               canvas.mouseClicked = generate;
+               canvas.elt.onclick = generate;
         }
             p.draw = () => {
                 p.background("white");
@@ -231,7 +231,7 @@ Algorithm:
                     
                 }}
          }
-         
+
          😥 Subsquares alone lead to an <em>infinite</em>  number of dynamic programming subproblems.
          {
              We aim at applying dynamic programming on squares of the quadtree. The problem is a tour may enter and exit a square at any point on the border. We may get an infinite number of subproblems!
@@ -333,7 +333,7 @@ Algorithm:
          {
              There exists integers  $a, b$ in $[0, \frac {L'} 2[$ such that translating the the $L' \times L'$-bounding square by $(-a, -b)$ leads to the existence of a p-tour of cost $\leq (1+4\epsilon)opt$.
              {
-                Let $a, b$ be two integers picked uniformly at random from $[0, \frac {L'} 2[$. Let us translate the $L' \times L'$-bounding square by $(-a, -b)$. Then $\mathbb{P}($ there is p-tour of cost  $\leq (1+4\epsilon)opt$) $\geq \frac 1 2$.
+                Let $a, b$ be two integers picked uniformly at random from $[0, \frac {L'} 2[$. Let us translate the $L' \times L'$-bounding square by $(-a, -b)$. Then:<br/> $\mathbb{P}($ there is p-tour of cost  $\leq (1+4\epsilon)opt$) $\geq \frac 1 2$.
                 {
                     We massage an optimum tour into a p-tour.
                     Consider an optimum tour.
@@ -421,7 +421,7 @@ Algorithm:
                                 The probability is then $\leq \frac{2^{i-1}} {\frac {L'} 2}$
                             }
 
-                            $\mathbb{E}$ (detour for $e$ introduced by line $\ell$) $\leq \sum_{i=1\^k \frac {L'} {2^i m} \frac {2^i} {L'} = \frac{k} m$
+                            $\mathbb{E}$ (detour for $e$ introduced by line $\ell$) $\leq \sum_{i=1}^k \frac {L'} {2^i m} \frac {2^i} {L'} = \frac{k} m$
 
                             $\frac k m \leq \epsilon$
                         }
