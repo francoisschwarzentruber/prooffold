@@ -8,6 +8,7 @@ Prove that $\sqrt 2$ is irrational.
 		$a^2 = 4k^2+4k+1$
 		$a^2$ is odd
 	}
+	
 	Suppose that $\sqrt 2$ rational.
 	⇓
 	$\sqrt 2 = \frac a b$ irreducible, for some integers $a$ and $b$.

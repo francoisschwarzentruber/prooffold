@@ -48,7 +48,7 @@ Example
 
 
 Algorithm:
-     1. Rounding the instance
+     1. Rounding the instance                       (step1)
      {
          Definition. A bounding box is the smallest axis-parallel  square that contains all $n$ points.
          Definition. We say that an instance is $\epsilon$-nice if:
@@ -193,7 +193,7 @@ Algorithm:
      }
      2. Partitioning the space into squares
      {
-         Let $L'$ be the smallest power of 2 such that $L' \geq 2L$
+         Let $L'$ be the smallest power of 2 such that $L' \geq 2L$ where $L = O(\frac n \epsilon)$ was defined in step 1.         by (step1)
          Example 
          {
              $L := 48$
@@ -204,7 +204,7 @@ Algorithm:
              }
              We take $L' := 128$
          }
-         We define a quadtree of levels $0..k$
+         We define a quadtree of levels $0..k = O(\log \frac n \epsilon)$
          {
              root: the square of length $L'$
              level 1: squares of length $\frac {L'} 2$
@@ -231,6 +231,7 @@ Algorithm:
                     
                 }}
          }
+         
          😥 Subsquares alone lead to an <em>infinite</em>  number of dynamic programming subproblems.
          {
              We aim at applying dynamic programming on squares of the quadtree. The problem is a tour may enter and exit a square at any point on the border. We may get an infinite number of subproblems!

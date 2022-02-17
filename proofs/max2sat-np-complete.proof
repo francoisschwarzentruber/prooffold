@@ -41,7 +41,7 @@ Theorem. MAX2SAT is NP-complete.
                         We construct a valuation $\nu'$, equal to $\nu$ for propositions $a_i, b_i, c_i$ and with 
                         $\nu'(d_i)= 1$ exactly if $\nu(a_i) = \nu(b_i) = \nu(c_i)=1$
 
-                        $\nu'$ satisfies at least $7m$ clauses (actually exactly $7m$)             by (table)
+                        $\nu'$ satisfies at least $7m$ clauses of $\varphi'$ (actually exactly $7m$)             by (table)
                     }
 
                     $\Leftarrow$
@@ -65,7 +65,7 @@ Theorem. MAX2SAT is NP-complete.
                                 For another index $i'$ different from $i$, at most 7 are $\nu'$-true       (4)         by (table)
                                 
                                 
-                                The number of true $\nu'$-clauses is bounded by $(m-1)7 + 6 < 7m$.             by (3,4)
+                                The number of  $\nu'$-true clauses of $\varphi'$ is bounded by $(m-1)7 + 6 < 7m$.             by (3,4)
                             }
                     }
                 }

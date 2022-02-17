@@ -15,19 +15,34 @@ body {
     margin: 0px;
 }
 
+
+
+
+
 .box>div {
-    margin-top: 8px;
-    margin-bottom: 8px;
     padding: 8px;
     width: fit-content;
+}
 
+.box>div.verticalConnector {
+    width: initial;
+    text-align: center;
+}
+
+.box>div.vspace {
+    padding: 8px;
+    width: fit-content;
+}
+
+.box>div.centered {
+    width: initial;
+    text-align: center;
 }
 
 .algo>div {
     width: fit-content;
     position: relative;
 }
-
 
 
 div.infer1::before {

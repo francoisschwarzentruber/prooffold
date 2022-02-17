@@ -26,7 +26,7 @@ Suppose that $\Gamma$ is a ball $B_{\delta_{goal}}(x_{goal})$.
 Suppose there is a valid trajectory $\pi : [0, t_{\pi}] \rightarrow \mathcal F$.
 Suppose that the clearance of the trajectory is $\delta_{clear} > 0$.
 Suppose that $\pi(t_{\pi}) = x_{goal}$.
-Theorem. There exists constants $a, b > 0$ (depending of the complexity of the map) such that $\mathbb{P}$(GEOM-RRT fails reaching $\Gamma$ from $x_{init}$ after $k$ iterations) $\leq ae^{-bk}$.
+Theorem. <br/>There exists constants $a, b > 0$ (depending of the complexity of the map) such that<br/> $\mathbb{P}$(GEOM-RRT fails reaching $\Gamma$ from $x_{init}$ after $k$ iterations) $\leq ae^{-bk}$.
 {
     Let $\delta := min(\delta_{clear}, \delta_{goal})$
     Let $L$ be the Euclidean length of $\pi$

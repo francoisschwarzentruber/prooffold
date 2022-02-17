@@ -127,20 +127,20 @@ function installEnv(line) {
 
 function linesToDOMElement(lines, depth) {
     let nodes = [];
+    let nextElementClass = undefined; //next class to add to the next element (because of ⇓ for instance that says that the next element is centered)
     while (lines.length > 0) {
         const rawLine = lines.shift();
         const line = rawLine.trim();
         const nbSpace = rawLine.length - line.length;
 
-        if (line == "")
-            continue;
-
-
-
-
-
         console.log(line);
-        if (line.startsWith("\\newcommand")) {
+        if (line == "") {
+            if(!(nodes.length > 0 && nodes[nodes.length-1].classList.contains("vspace"))) {
+                const el = document.createElement("div");
+                el.classList.add("vspace");
+                nodes.push(el);
+            }
+        } else if (line.startsWith("\\newcommand")) {
             const el = document.createElement("div");
             el.innerHTML = "\\(" + line + " \\)";
             el.style.display = "none";
@@ -288,6 +288,15 @@ function linesToDOMElement(lines, depth) {
             info.text = installEnv(info.text);
 
             const el = makeDiv(info.text);
+            if (nextElementClass)
+                el.classList.add(nextElementClass);
+            nextElementClass = undefined;
+
+            if (info.text == "⇓") {
+                el.classList.add("verticalConnector");
+                nodes[nodes.length - 1].classList.add("centered");
+                nextElementClass = "centered";
+            }
             if (info.id)
                 el.id = info.id;
 
@@ -316,7 +325,11 @@ function linesToDOMElement(lines, depth) {
 
 
 
-
+/**
+ * 
+ * @param {*} line 
+ * @returns an object {text: the text that should be displayed, id: the id if specified by "(id)", references: an array of references if specified by "by (azeaze,azeazeaz,azeaze)"}
+ */
 function getInfoLine(line) {
 
     if (!line.endsWith(")"))
@@ -352,7 +365,7 @@ function getInfoLine(line) {
 
 
         return {
-            text: text,
+            text: text.trim(),
             id: id,
             references: references
         };

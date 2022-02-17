@@ -52,7 +52,7 @@ newmachineM($w$)
         }
     }
 
-    Reduce $A$ to SAT in poly-time. Given an $A$-instance $w$, we define a Boolean formula $tr(w)$.
+    Reduce $A$ to SAT in poly-time. Given an $A$-instance $w$, we define a Boolean formula $tr(w)$ that intuitively says that the truth values of the propositional variables describe an accepting execution.
     {
         Given a finite set $P$ of propositional variables, define $\#(P) = 1$, saying that ``exactly one variable in $P$ is true''
         {
@@ -233,9 +233,13 @@ Define $tr(w)$
 
     }
 
-    1. $tr(w)$ is computable in poly-time in $w$
 
-    2. $w$ is $A$ iff $tr(w)$ is satisfiable.
+    $tr$ is a poly-time reduction from $A$ to SAT.
+    {
+        1. $tr(w)$ is computable in poly-time in $w$
+        2. $w$ is $A$ iff $tr(w)$ is satisfiable.
+    }
+    
 
 
     }
