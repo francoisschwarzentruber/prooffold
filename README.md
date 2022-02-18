@@ -5,14 +5,18 @@ This repository contains a engine for reading/studying mathematical proofs. It t
 
 The tool is available here: https://francoisschwarzentruber.github.io/prooffold/
 
+## Screenshots
 
 ![prooffoldsqrt2](https://user-images.githubusercontent.com/43071857/154649245-5c78c7a0-0562-4232-a087-5590c193cb94.gif)
+![prooffoldkonig](https://user-images.githubusercontent.com/43071857/154651369-334d3700-ffc0-4713-9c12-61ca5f6bcf00.gif)
+![prooffoldcook](https://user-images.githubusercontent.com/43071857/154651387-e604c450-f15e-4834-a3fa-d950024dec7f.gif)
+![prooffoldeuclideanTSP](https://user-images.githubusercontent.com/43071857/154651408-12462e46-c220-47e8-b43c-ad0ca2848d8e.gif)
 
 
 # Features
 
- - [X] LaTEX for writing formulas 
- - [X] Structured proof
+ - [X] Structured proofs
+ - [X] LaTEX for writing formulas
  - [X] Labels [(1) (2)] and references [by (1,2)]
  - [X] inline graphs via graphviz
  - [X] interactive canvas described in Processing (P5JS)
