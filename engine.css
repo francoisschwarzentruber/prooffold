@@ -98,9 +98,7 @@ env {
     border-right: 4px solid yellow;
 }
 
-.highlight {
-    background-color: yellow;
-}
+
 
 .button.on {
     border-top-right-radius: 0px;
@@ -199,4 +197,8 @@ env {
 
 .indent {
     margin-left: 20px;
+}
+
+.highlight {
+    background-color: yellow;
 }

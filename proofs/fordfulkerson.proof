@@ -4,10 +4,10 @@ Theorem. Ford-Fulkerson algorithm returns a maximum flow.
     \label{lemma:cutexpression}
     {
     $|f| = f(s, S)$
-    $    = f(s, S) - f(S, s) + \sum_{u \in E, u\neq s} f(u, S) - f(S, u)$
-    $    =  \sum_{u \in E} f(u, S) - f(S, u)$
-    $    = f(E, S) - f(S, E)$
-    $    = f(E, T) + f(E, E) - f(T, E) - f(E, E)$
+    $= f(s, S) - f(S, s) + \sum_{u \in E, u\neq s} f(u, S) - f(S, u)$
+    $=  \sum_{u \in E} f(u, S) - f(S, u)$
+    $= f(E, S) - f(S, E)$
+    $= f(E, T) + f(E, E) - f(T, E) - f(E, E)$
     }
 
     ---
@@ -30,8 +30,8 @@ Theorem. Ford-Fulkerson algorithm returns a maximum flow.
             {
                 $|f| = f(E, T) - f(T, E)$
                 \ref{lemma:cutexpression}
-                $    \leq f(E, T)$
-                $    \leq c(E, T)$
+                $\leq f(E, T)$
+                $\leq c(E, T)$
             }
         }
 
@@ -52,6 +52,7 @@ Theorem. Ford-Fulkerson algorithm returns a maximum flow.
                 If $u \not \rightarrow v$ and $v \not \rightarrow u$ in $G$,
                 - $f(u, v) = 0$
                 - $f(v, u) = 0$
+                
                 If $u \rightarrow v$ and $v \not \rightarrow u$ in $G$
                 - $f(u, v) = c(u, v)$
                 {
@@ -60,6 +61,7 @@ Theorem. Ford-Fulkerson algorithm returns a maximum flow.
                     ADD A PICTURE
                 }
                 - $f(v, u)=0$
+                
                 If $u \not \rightarrow v$ and $v \rightarrow u$  in $G$
                 - $f(u, v) = 0$
                 - $f(v, u) = 0$
