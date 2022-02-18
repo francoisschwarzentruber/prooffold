@@ -38,18 +38,22 @@ Proofs are easy to be written.
       Fact
       Theorem. $a^2 = b^2 + c^2$.
             {
-              write the proof of the theorem
-              with an amazing fact       (1)
+              explain sth of the proof of the theorem
+              an amazing fact       (1)
               {
                  proof of that amazing fact
               }
-              we have that         (2)
+              we have that $x = 0$         (2)
               Thus we have bling       by (1,2)
             }
       Another Fact
       
       
-Each line is a fact, or simple text. Blocks (panels) are delimited by `{` and `}` and corresponds to a detailed proof of some fact. `     (1)`, `   (2)` etc. and `      by (1,2)` enable to highlight some facts used to prove another fact.
+Each line is a fact, or simple text. Blocks (panels) are delimited by `{` and `}` and corresponds to a detailed proof of the fact written just before the block. `     (1)`, `   (2)` etc. and `      by (1,2)` enable to highlight some facts used to prove another fact. In the example below, `Thus we have bling` is deduced from `an amazing fact` and `we have that $x = 0$`.
+
+
+
+
 Graphs in graphviz are described by:
 
              graph {
@@ -67,7 +71,7 @@ Algorithms need indentation and they can be written via:
                  <<description of the algorithm>>
               }
               
-Interactive canvas are dsecribed in Processing (P5) via:
+Interactive canvas are described in Processing (P5) via:
 
              p5 {{
                  <<graphviz code>>
