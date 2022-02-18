@@ -8,6 +8,7 @@ The tool is available here: https://francoisschwarzentruber.github.io/prooffold/
 ## Screenshots
 
 ![prooffoldsqrt2](https://user-images.githubusercontent.com/43071857/154649245-5c78c7a0-0562-4232-a087-5590c193cb94.gif)
+![prooffoldrrt](https://user-images.githubusercontent.com/43071857/154652110-b4573d44-1de9-4af3-9a58-bb295e5888d2.gif)
 ![prooffoldkonig](https://user-images.githubusercontent.com/43071857/154651369-334d3700-ffc0-4713-9c12-61ca5f6bcf00.gif)
 ![prooffoldcook](https://user-images.githubusercontent.com/43071857/154651387-e604c450-f15e-4834-a3fa-d950024dec7f.gif)
 ![prooffoldeuclideanTSP](https://user-images.githubusercontent.com/43071857/154651408-12462e46-c220-47e8-b43c-ad0ca2848d8e.gif)
