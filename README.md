@@ -5,7 +5,27 @@ This repository contains a engine for reading/studying mathematical proofs. It t
 
 The tool is available here: https://francoisschwarzentruber.github.io/prooffold/
 
-# Writing proofs
+
+![prooffoldsqrt2](https://user-images.githubusercontent.com/43071857/154649245-5c78c7a0-0562-4232-a087-5590c193cb94.gif)
+
+
+# Features
+
+ - [X] LaTEX for writing formulas 
+ - [X] Structured proof
+ - [X] Labels [(1) (2)] and references [by (1,2)]
+ - [X] inline graphs via graphviz
+ - [X] interactive canvas described in Processing (P5JS)
+ - [X] Automatic aligned equations and inequations
+ - [ ] Asciiart, it partially works but soon via https://github.com/francoisschwarzentruber/asciidraw we will be able to write nice pictures
+ - [ ] Arrows of implications
+ - [ ] Include Tikz pictures
+
+
+
+# Documentation
+
+## Overview
 
 Proofs are easy to be written. 
 
@@ -33,6 +53,7 @@ Graphs in graphviz are described by:
              digraph {
                  <<graphviz code>>
               }
+                   
 
 Algorithms need indentation and they can be written via:
 
@@ -46,17 +67,7 @@ Interactive canvas are dsecribed in Processing (P5) via:
                  <<graphviz code>>
               }}
               
-# Features
 
- - [X] LaTEX for writing formulas 
- - [X] Structured proof
- - [X] Labels [(1) (2)] and references [by (1,2)]
- - [X] inline graphs via graphviz
- - [X] integeractive canvas described in Processing (P5JS)
- - [ ] Asciiart, it partially works but soon via https://github.com/francoisschwarzentruber/asciidraw we will be able to write nice pictures
- - [ ] Arrows of implications
- - [ ] Automatic aligned equations
- - [ ] Include Tikz pictures
 
 
 # How to contribute?
