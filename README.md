@@ -1,5 +1,5 @@
-# prooffold
-Prooffold is a tool to display **mathematical proofs** as **structured** objects. The tool is available here: https://francoisschwarzentruber.github.io/prooffold/
+<h1 align="center">Prooffold</h1>
+<p align="center">A tool to display **mathematical proofs** as **structured** objects, see https://francoisschwarzentruber.github.io/prooffold/</p>
 
 ![prooffoldsqrt2](https://user-images.githubusercontent.com/43071857/154649245-5c78c7a0-0562-4232-a087-5590c193cb94.gif)
 
