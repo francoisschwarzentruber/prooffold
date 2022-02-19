@@ -80,7 +80,7 @@ env {
     border-bottom-right-radius: 16px;
     display: block;
     background-color: white;
-    box-shadow: 12px 12px 20px rgba(0, 0, 255, .5);
+    box-shadow: 12px 12px 12px rgba(0, 0, 255, .5);
 }
 
 .button {
@@ -199,7 +199,7 @@ env {
 
 .example {
     color: darkblue;
-    background-color: rgba(128, 128, 255, 0.2);
+    background-color: rgba(128, 192, 255, 0.5);
     margin-left: auto;
     margin-right: 0;
 }
