@@ -1,7 +1,29 @@
+/**
+ * stores the indices of the opened tabs
+ * openTabs[0] is the index of the "opened" theorem in the root panel
+ * openTabs[1] is the index of the "opened" theorem in the second panel
+ * :
+ * openTabs[i] = -1 means that there is no "opened" theorem in the i-th level
+ */
 const openTabs = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
+
+/**
+ * tabs assigns a button (i.e. a theorem) to its box (the outline of the proof at the next level)
+ */
 const tabs = new Map();
+
+/**
+ * id of the proof
+ */
 let id = undefined;
 
+
+
+/**
+ * 
+ * @param {*} line 
+ * @returns line in which the ..$...$.. are replaced by ..\(...\)..
+ */
 function dollarToBackSlashParenthesis(line) {
     let left = true;
     while (line.indexOf("$") > -1) {
@@ -12,7 +34,12 @@ function dollarToBackSlashParenthesis(line) {
 }
 
 
-
+/**
+ * 
+ * @param {*} nodes 
+ * @param {*} depth 
+ * @returns a box of a given depth containing the nodes 
+ */
 function makeContainer(nodes, depth) {
     const container = document.createElement("div");
     container.classList.add("box");
@@ -22,19 +49,30 @@ function makeContainer(nodes, depth) {
     return container;
 }
 
+/**
+ * 
+ * @param {*} innerHTML 
+ * @returns a div containing innerHTML (where $..$ are replaced by \(...\))
+ */
 function makeDiv(innerHTML) {
     const el = document.createElement("div");
     el.innerHTML = dollarToBackSlashParenthesis(innerHTML);
     return el;
 }
 
-function setInvisibleUpToDepth(depth) {
+/**
+ * 
+ * @param {*} depth 
+ * @description hidden the boxes of depth >= depth
+ */
+function hideBoxesUpToDepth(depth) {
     for (let d = depth; d < 100; d++) {
         const els = document.getElementsByClassName("box" + d);
         for (let i = 0; i < els.length; i++)
             els[i].classList.add("hidden");
         //els[i].hidden = true;
     }
+    //remove .on on buttons in the last box of depth - 1 and in the next hidden boxes
     for (let d = depth - 1; d < 100; d++) {
         const els = document.querySelectorAll(".box" + d + " > .on");
         for (let i = 0; i < els.length; i++)
@@ -48,7 +86,7 @@ function setInvisibleUpToDepth(depth) {
 /**
  * 
  * @param {*} domElement 
- * @param {*} references 
+ * @param {*} references, a array of strings that are the ids of the premisses
  * @description add the mouse listener for handling the references
  */
 function attachReferences(domElement, references) {
@@ -68,8 +106,12 @@ function attachReferences(domElement, references) {
 }
 
 
-
-function linesToDotCode(lines) {
+/**
+ * 
+ * @param {*} lines 
+ * @returns dot code from the lines. It extracts
+ */
+function extractDotCode(lines) {
     let code = "";
     while (lines.length > 0) {
         const line = lines.shift().trim();
@@ -82,7 +124,7 @@ function linesToDotCode(lines) {
 
 
 
-function linesToJS(lines) {
+function extractJS(lines) {
     let code = "";
     while (lines.length > 0) {
         const line = lines.shift();
@@ -96,7 +138,7 @@ function linesToJS(lines) {
 }
 
 
-function linesToASCIIArt(lines) {
+function extractASCIIArt(lines) {
     let code = "";
     while (lines.length > 0) {
         const line = lines.shift();
@@ -110,14 +152,13 @@ function linesToASCIIArt(lines) {
 }
 
 
-
-function installEnv(line) {
-    const testEnv = (str) => {
-        if (line.startsWith(str)) {
-            return `<env>${str}</env>` + line.substr(str.length);
-        } else
-            return undefined;
-    }
+/**
+ * 
+ * @param {*} line 
+ * @returns the line in which the environement name is formated
+ */
+function formatEnv(line) {
+    const testEnv = (str) => line.startsWith(str) ? `<env>${str}</env>` + line.substr(str.length) : undefined;
 
     for (const str of ["Theorem.", "Definition.", "Proposition.", "Proof.", "Lemma."]) {
         const newLine = testEnv(str);
@@ -125,11 +166,14 @@ function installEnv(line) {
             return newLine;
     }
     return line;
-
-
 }
 
-
+/**
+ * 
+ * @param {*} lines 
+ * @param {*} depth 
+ * @returns the box of depth corresponding to the lines, given that the inner box are also created!
+ */
 function linesToDOMElement(lines, depth) {
     let nodes = [];
     let nextElementClass = undefined; //next class to add to the next element (because of ⇓ for instance that says that the next element is centered)
@@ -151,13 +195,23 @@ function linesToDOMElement(lines, depth) {
             el.style.display = "none";
             document.body.append(el);
         } else if (line == "digraph {" || line == "graph {") {
-            const dotCode = line + linesToDotCode(lines);
+            const dotCode = line + extractDotCode(lines);
             const el = document.createElement("div");
+
+            /**
+             * 
+             * @param {*} dotCode 
+             * @returns 
+             */
+            function svgFromDot(dotCode) {
+                return Viz(dotCode, "svg");
+            }
+
             el.innerHTML = svgFromDot(dotCode);
             el.children[0].style.width = "100%";
             nodes.push(el);
         } else if (line == "asciiart {") {
-            const content = linesToASCIIArt(lines);
+            const content = extractASCIIArt(lines);
             const el = document.createElement("textarea");
             el.value = content;
             el.rows = content.split("\n").length;
@@ -183,17 +237,16 @@ function linesToDOMElement(lines, depth) {
 
                 new p5(s, document.getElementById("p5test")); // invoke p5
                 */
-            const content = linesToJS(lines);
+            const content = extractJS(lines);
             const el = document.createElement("div");
             document.body.append(el);
             el.id = "p5arg";
             eval("const s = p => {" + content + "}; new p5(s, document.getElementById('p5arg'))");
             el.id = "";
             nodes.push(el);
-        } else if (line == "js {{") {
-            const content = linesToJS(lines);
-            window.eval(content);
-        } else if (line == "algo {") {
+        } else if (line == "js {{")
+            window.eval(extractJS(lines));
+        else if (line == "algo {") {
             const el = linesToDOMElement(lines);
             el.classList.remove("box");
             el.classList.add("algo");
@@ -201,7 +254,6 @@ function linesToDOMElement(lines, depth) {
             nodes.push(el);
         } else if (line == "{") {
             const box = linesToDOMElement(lines, depth + 1);
-            //      box.hidden = true;
             box.classList.add("hidden");
             const ibutton = nodes.length - 1;
             const button = nodes[nodes.length - 1];
@@ -209,7 +261,7 @@ function linesToDOMElement(lines, depth) {
             tabs.set(button, box);
             button.onclick = () => {
                 let h = box.classList.contains("hidden");
-                setInvisibleUpToDepth(depth + 1);
+                hideBoxesUpToDepth(depth + 1);
 
                 if (h) {
                     button.classList.toggle("on");
@@ -222,9 +274,6 @@ function linesToDOMElement(lines, depth) {
                     const previousBoxRectRight = (previousBox.style.left == "" ? 0 : parseInt(previousBox.style.left)) + previousBox.offsetWidth - 3;
                     const buttonRect = button.getBoundingClientRect();
                     const boxRect = box.getBoundingClientRect();
-
-
-
 
                     /*
                     resize the box if it contains long formulae!
@@ -241,7 +290,6 @@ function linesToDOMElement(lines, depth) {
                     }
 
                     resizeBox(box);
-
 
                     //if last element + boxRect sufficiently big + there is space on the bottom of previousBox
                     const INDENT = 32;
@@ -273,25 +321,16 @@ function linesToDOMElement(lines, depth) {
 
             };
             document.body.appendChild(box)
-        } else if (line == "}") {
+        } else if (line == "}")
             return makeContainer(nodes, depth);
-        } else if (line.startsWith("\\infer1")) {
-            const el = makeDiv(line.substr(7));
-            el.classList.add("infer1");
-            nodes.push(el);
-        } else if (line == "---") {
+        else if (line == "---") {
             const el = makeDiv(line);
             el.style.textAlign = "center";
             nodes.push(el);
-        } else if (line.startsWith("\\label{")) {
-            nodes[nodes.length - 1].id = line.substr("\\label{".length, line.length - "\\label{".length - 1);
-        } else if (line.startsWith("\\ref{"))
-            attachReferences(nodes[nodes.length - 1], line.substr("\\ref{".length, line.length - "\\ref{".length - 1).split(","));
-
-        else {
+        } else {
             const info = getInfoLine(line);
             console.log(info)
-            info.text = installEnv(info.text);
+            info.text = formatEnv(info.text);
 
             const el = makeDiv(info.text);
             if (nextElementClass)
@@ -312,8 +351,6 @@ function linesToDOMElement(lines, depth) {
             if (info.text == "Example" || info.text == "Examples")
                 el.classList.add("example");
 
-
-
             if (info.references)
                 attachReferences(el, info.references);
 
@@ -323,15 +360,9 @@ function linesToDOMElement(lines, depth) {
             el.style.left = nbSpace + "px";
             nodes.push(el);
         }
-
-
-
     }
-
     return makeContainer(nodes, 0);
 }
-
-
 
 
 /**
@@ -340,7 +371,6 @@ function linesToDOMElement(lines, depth) {
  * @returns an object {text: the text that should be displayed, id: the id if specified by "(id)", references: an array of references if specified by "by (azeaze,azeazeaz,azeaze)"}
  */
 function getInfoLine(line) {
-
     if (!line.endsWith(")"))
         return {
             text: line
@@ -372,7 +402,6 @@ function getInfoLine(line) {
         } else if (!text)
             text = line;
 
-
         return {
             text: text.trim(),
             id: id,
@@ -384,6 +413,11 @@ function getInfoLine(line) {
 
 }
 
+/**
+ * @description install mouseenter, mouseexit events for the span elements that have a ref attributes
+ * e.g. <span ref="1,2">Amazing fact</span>
+ *              
+ */
 function attachReferencesAdditionalSpan() {
     document.querySelectorAll("span").forEach((span) => {
         const refA = span.getAttribute("ref");
@@ -403,15 +437,8 @@ async function load(filename) {
     attachReferencesAdditionalSpan();
     document.body.appendChild(proof);
     MathJax.typeset();
-
-    // format ofi .dot
 }
 
-
-function svgFromDot(dotCode) {
-    let digraph = dotCode; // for svg
-    return Viz(digraph, "svg");
-}
 
 window.onload = () => {
     document.querySelectorAll("#menu a").forEach(function (a) {
@@ -452,10 +479,10 @@ window.onload = () => {
 }
 
 
-
-
-
+/**
+ * @description update the URL in the browser to take the tabs that are opened
+ */
 function updateURL() {
     const url = window.location.href.split("?")[0];
-    window.history.pushState({}, null, url + `?id=${id}&tabs=${openTabs.join("/")}`);
+    window.history.replaceState({}, null, url + `?id=${id}&tabs=${openTabs.filter((n) => n >= 0).join("/")}`);
 }
