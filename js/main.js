@@ -271,7 +271,7 @@ function linesToDOMElement(lines, depth) {
                     const previousBoxRect = previousBox.getBoundingClientRect();
                     //const previousBoxRect = previousBox.getBoundingClientRect();
                     const previousBoxRectLeft = (previousBox.style.left == "" ? 0 : parseInt(previousBox.style.left));
-                    const previousBoxRectRight = (previousBox.style.left == "" ? 0 : parseInt(previousBox.style.left)) + previousBox.offsetWidth - 3;
+                    const previousBoxRectRight = (previousBox.style.left == "" ? 0 : parseInt(previousBox.style.left)) + previousBox.offsetWidth;
                     const buttonRect = button.getBoundingClientRect();
                     const boxRect = box.getBoundingClientRect();
 
