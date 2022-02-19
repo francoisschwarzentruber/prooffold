@@ -10,6 +10,7 @@
 
 body {
     margin: 0px;
+    background-color: rgb(192, 213, 255);
 }
 
 .proof {
@@ -78,6 +79,8 @@ env {
     border-top-right-radius: 16px;
     border-bottom-right-radius: 16px;
     display: block;
+    background-color: white;
+    box-shadow: 12px 12px 20px rgba(0, 0, 255, .5);
 }
 
 .button {
@@ -154,37 +157,44 @@ env {
 .box1 {
     left: 400px;
     background-color: var(--box1-color);
+    z-index: 1;
 }
 
 .box2 {
     left: 800px;
     background-color: var(--box2-color);
+    z-index: 2;
 }
 
 .box3 {
     left: 1200px;
     background-color: var(--box3-color);
+    z-index: 3;
 }
 
 
 .box4 {
     left: 1600px;
     background-color: var(--box4-color);
+    z-index: 4;
 }
 
 .box5 {
     left: 1600px;
     background-color: var(--box5-color);
+    z-index: 5;
 }
 
 .box6 {
     left: 1600px;
     background-color: var(--box6-color);
+    z-index: 6;
 }
 
 .box7 {
     left: 1600px;
     background-color: var(--box7-color);
+    z-index: 7;
 }
 
 .example {

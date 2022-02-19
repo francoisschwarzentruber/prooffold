@@ -45,9 +45,9 @@ Example
     }}
 }
 
+Theorem. Euclidean TSP admits a poly-time approximation scheme (PTAS).
 
-
-Algorithm:
+Principle:
      1. Rounding the instance                       (step1)
      {
          Definition. A bounding box is the smallest axis-parallel  square that contains all $n$ points.
