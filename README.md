@@ -1,17 +1,29 @@
 # prooffold
-This repository contains a engine for reading/studying mathematical proofs. It tries to solve two main issues of traditional proofs written in a book:
-- the global organization of a proof in a textbook is often not very clear. This is due to the linearity of a textual proof. Here, the proof is displayed in panels, making an emphasis on the structure of the proof
-- In a textbook, justifications of a statement often ends up "by Theorem 1.2.3, Lemma 42.4 and Corollary 8.8.4 and Equation 1". Here, by clicking on a statement, the arguments used to deduced that fact are highlighted.
+Prooffold is a tool to display **mathematical proofs** as **structured** objects. The tool is available here: https://francoisschwarzentruber.github.io/prooffold/
 
-The tool is available here: https://francoisschwarzentruber.github.io/prooffold/
+![prooffoldsqrt2](https://user-images.githubusercontent.com/43071857/154649245-5c78c7a0-0562-4232-a087-5590c193cb94.gif)
+
+Video: [https://www.youtube.com/watch?v=FPZiGevIyR8]
+
 
 ## Screenshots
 
-![prooffoldsqrt2](https://user-images.githubusercontent.com/43071857/154649245-5c78c7a0-0562-4232-a087-5590c193cb94.gif)
+
 ![prooffoldrrt](https://user-images.githubusercontent.com/43071857/154652110-b4573d44-1de9-4af3-9a58-bb295e5888d2.gif)
 ![prooffoldeuclideanTSP](https://user-images.githubusercontent.com/43071857/154651408-12462e46-c220-47e8-b43c-ad0ca2848d8e.gif)
 ![prooffoldkonig](https://user-images.githubusercontent.com/43071857/154651369-334d3700-ffc0-4713-9c12-61ca5f6bcf00.gif)
 ![prooffoldcook](https://user-images.githubusercontent.com/43071857/154651387-e604c450-f15e-4834-a3fa-d950024dec7f.gif)
+
+
+## Raison d'être
+
+It tries to solve two main issues of traditional proofs written in a book:
+- the global organization of a proof in a textbook is often not very clear. This is due to the linearity of a textual proof. Here, the proof is displayed in panels, making an emphasis on the structure of the proof
+- In a textbook, justifications of a statement often ends up "by Theorem 1.2.3, Lemma 42.4 and Corollary 8.8.4 and Equation 1". Here, by clicking on a statement, the arguments used to deduced that fact are highlighted.
+
+
+
+
 
 
 
