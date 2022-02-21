@@ -90,9 +90,9 @@ Principle:
 
         We can transform $I$ into an $\epsilon$-nice instance $I'$ such that $opt(I') \leq (1+\epsilon)opt(I)$                        
         {
-            We keep control on the weight of a shortest tour by translating and scaling the input instance.                       (translatingscalingisok)
+            We keep control on the cost of a shortest tour by translating and scaling the input instance.                       (translatingscalingisok)
             {
-                By translating all points, nothing is changed. A shortest tour simply remain the same and has the same weight.
+                By translating all points, nothing is changed. A shortest tour simply remain the same and has the same cost.
                 p5 {{
                         let direction = false;
                         let x = 0;
@@ -103,7 +103,7 @@ Principle:
                         if(x < 0 ||x > 100) direction = !direction;
                         }
                 }}
-                By scaling the instance by a factor $\alpha$, we keep the same shortest tour, we just multiply the weight by $\alpha$.
+                By scaling the instance by a factor $\alpha$, we keep the same shortest tour, we just multiply the cost by $\alpha$.
                 p5 {{
                         let direction = false;
                         let factor = 1.0;
@@ -127,13 +127,22 @@ Principle:
             Let $I'$ obtained by mapping each point of $I$ to the closest point in that grid
             {
                 p5 {{
-                    let points = randomPoints();
-                    let points2 = points.map((point) => ({x: Math.round(point.x / 40) * 40, y: Math.round(point.y / 40) * 40 }));
                     
-                    points.push({x:10, y: 60});
-                    points.push({x:90, y: 10});
-                    points.push({x:200, y: 150});
-                    p.setup = () => p.createCanvas(400, 300);
+                    let points;
+                    let points2;
+
+                    function generate() {
+                        points = randomPoints();
+                        points.push({x:10, y: 60});
+                        points.push({x:90, y: 10});
+                        points.push({x:200, y: 150});
+                        points2 = points.map((point) => ({x: Math.round(point.x / 40) * 40, y: Math.round(point.y / 40) * 40 }));
+                    }
+
+                    generate();
+                    
+                    p.setup = () => {const canvas = p.createCanvas(400, 300);
+                    canvas.elt.onclick = () => generate();}
                     p.draw = () => {
                         p.background("white");
                         p.translate(10, 10);
@@ -239,11 +248,16 @@ Principle:
          ⇓
          😀 That is why we define portals
          {
+             😥
+             {
+                 Consider a square. We could define portals wrt to points that are outside the square. The issue is that we would to a $poly(n)$ number of portals, and thus a number of subproblems exponential in $n$.
+             }
+
              Let $m$ be a power of 2 such that $m \in [\frac {k} \epsilon, \frac {2k} \epsilon]$.
 
              For each square, put a portal into each of the four corners and put $m-1$ equally spaced portals along each side
              p5 {{
-                    let point = {x:0, y:0};
+                    let point = {x:100, y:100};
 
                     p.setup = () => p.createCanvas(400, 400);
                     p.draw = () => {
@@ -260,7 +274,7 @@ Principle:
                             p.strokeWeight(wPortal);
                             wPortal -= 1;
                             const m = 2;
-                            for(let x = x1; x<x1+w; x+=w/m) {
+                            for(let x = x1; x<=x1+w; x+=w/m) {
                                 p.point(x,y1);
                                 p.point(x,y1+w);
                             }
@@ -314,7 +328,7 @@ Principle:
                             p.strokeWeight(wPortal);
                             wPortal -= 1;
                             const m = 2;
-                            for(let x = x1; x<x1+w; x+=w/m) {
+                            for(let x = x1; x<=x1+w; x+=w/m) {
                                 p.point(x,y1);
                                 p.point(x,y1+w);
                             }
@@ -331,11 +345,11 @@ Principle:
          ⇓
          😀 Solution: let us translate the $L' \times L'$-bounding square!
          {
-             There exists integers  $a, b$ in $[0, \frac {L'} 2[$ such that translating the the $L' \times L'$-bounding square by $(-a, -b)$ leads to the existence of a p-tour of cost $\leq (1+4\epsilon)opt$.
+             There exists integers  $a, b$ in $[0, \frac {L'} 2[$ such that translating the $L' \times L'$-bounding square by $(-a, -b)$ leads to the existence of a p-tour of cost $\leq (1+4\epsilon)opt$.
              {
-                Let $a, b$ be two integers picked uniformly at random from $[0, \frac {L'} 2[$. Let us translate the $L' \times L'$-bounding square by $(-a, -b)$. Then:<br/> $\mathbb{P}($ there is p-tour of cost  $\leq (1+4\epsilon)opt$) $\geq \frac 1 2$.
+                Let $a, b$ be two integers picked uniformly at random from $[0, \frac {L'} 2[$. Let us translate the $L' \times L'$-bounding square by $(-a, -b)$. Then:<br/> $\mathbb{P}($ there is p-tour of cost  $\leq (1+4\epsilon)opt$) $> 0$.
                 {
-                    We massage an optimum tour into a p-tour.
+                    We tune an optimum tour into a p-tour.
                     Consider an optimum tour.
 
 
@@ -352,7 +366,7 @@ Principle:
                             $e$'s contribution to $opt$ is $\sqrt{x^2+y^2}$.
                             $x+y+2 \leq 2\sqrt{x^2+y^2}$
                             {
-                                $x+y \leq \sqrt{2(x^2+x^2)}$
+                                $x+y \leq \sqrt{2(x^2+y^2)}$
                                 {
                                     $(a-b)^2 = x^2 + y^2 - 2xy \geq 0$
                                     ⇓
@@ -364,9 +378,9 @@ Principle:
                                     ⇓
                                     $x+y \leq \sqrt{2(x^2+y^2)}$
                                 }
-                                $2 \leq \frac 1 2 \sqrt{x^2+x^2}$
+                                $2 \leq \frac 1 2 \sqrt{x^2+y^2}$
                                 {
-                                    $4 \leq \sqrt{x^2+x^2}$
+                                    $4 \leq \sqrt{x^2+y^2}$
                                     {
                                         Because two different points are of distance at least 4.
                                     }
@@ -432,6 +446,7 @@ Principle:
                     {
                         Markov inequality
                     }
+                    $\mathbb{P}$(total length increase of detours $\leq 4\epsilon  opt$) $\geq  \frac 1 2>0$
                 }
              }
              The sequel dynamic programming approach will be nested in a loop over all possible  $a, b$ in $[0, \frac {L'} 2[$.
@@ -490,7 +505,7 @@ Principle:
         Subproblems are described by:
          - a square $s$
          - A collection of portal-to-portal path endpoint specifications $(s_1, t_1, \dots, s_r, t_r)$ where $s_1, \dots, s_r, t_1, \dots, t_r$ are portals of $s$.
-        A subproblem is to compute $OPT[s, (s_1, t_1, \dots, s_r, t_r)]$ the minimum weight of connecting a path from $s_1$ to $t_1$, ..., a path from $s_r$ to $t_r$, so that each point in $s$ is visited
+        A subproblem is to compute $OPT[s, (s_1, t_1, \dots, s_r, t_r)]$ the minimum distance of connecting a path from $s_1$ to $t_1$, ..., a path from $s_r$ to $t_r$, so that each point in $s$ is visited
 
         The goal problem is to compute $OPT(\text{bounding box}, [])$ but with the additional constraint that it forms a single path (the tour!).
          
@@ -508,14 +523,20 @@ Principle:
                 There are $L'^2$ squares at level $k$.
                 $1+ 4 +4^2 + ... L'^2 = O(\frac {n^2} {\epsilon^2})$
             }
-            The number of path endpoint specifications is $poly(n)$ (but not $\frac 1 \epsilon$!)
+            The number of path endpoint specifications is $poly(n)$ (but not polynomial in $\frac 1 \epsilon$!)
             {
-                $m = O(\frac k \epsilon) = O(\frac {\log L'} epsilon) = O(\frac {\log \frac n \epsilon} \epsilon)$
+                $m = O(\frac k \epsilon) = O(\frac {\log L'} \epsilon) = O(\frac {\log \frac n \epsilon} \epsilon)$
                 There are $4m$ portals in a given square.
-                There are three possibilities for a portal: it is used 0, 1 or 2 times.
-                
-                So there are $3^{4m}$ configurations for the usage of the portals.
 
+                There are three possibilities for a portal: it is used 0, 1 or 2 times.
+                Definition. A configuration consists in saying the status for each portal: used 0, 1, 2 times.
+                
+                
+                There are $3^{4m}=poly(n)$ configurations for the usage of the portals.
+                {
+                    3 possibilities for each portal.
+                    $4m$ number of portals.
+                }
                 There are at most $4m$ paths.
                 {
                     Suppose there are strictly more than $4m$ paths
@@ -536,7 +557,25 @@ Principle:
                     Given a configuration, the number of layouts with $r$ paths is the $r$-th Catalan number $C_r := \frac 1 {r+1} \binom {2r} r$ and is bounded by $2^{2r} = O(2^{8m}))$
                     {
                         There are no crossings.
-                        A path endpoint specification corresponds to a arrangement of parentheseses.
+                        A path endpoint specification corresponds to a well-formed arrangement of $r$ pairs of parentheses.
+                        {
+                            TODO PICTURE
+                        }
+                        The number of well-formed arrangement of $r$ pairs of parentheses is $\frac 1 {r+1} \binom {2r} r$
+                        {
+                            The number of words of length $2r$ with equal number of "(" and ")" is $\binom {2r} r$.
+                            The number of words that are not well-formed arrangements of $r$ pairs of parentheses but that contains the same number of "(" and ")" is $\frac r {r+1} \binom {2r} r = \binom {2r} {r+1}$
+                            {
+                                Consider a word $w$ that is not well-formed  that contains the same number of "(" and ")".
+                                It is of the form $w := w_{ok} ) u$ with $w_ok$ which is well-formed and $u$ which contains one "(" more than ")".
+                                Define $f(w) := w_{ok} ) exchange(u)$ where $exchange(u)$ rewrites symbol "(" in ")" and ")" in "(".
+                                $f$ is a bijection from the the set of not-well-formed that contains the same number of "(" and ")" into the set of words that contains $r-1$ "(" and $r+1$ ")".
+                                There are $\binom {2r} {r+1}$ such words.
+                                Example {
+                                    TODO
+                                }
+                            }
+                        }
                     }
                 }
                 
