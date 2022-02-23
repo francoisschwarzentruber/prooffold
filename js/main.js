@@ -213,6 +213,8 @@ function linesToDOMElement(lines, depth) {
         } else if (line == "asciiart {") {
             const content = extractASCIIArt(lines);
             const el = document.createElement("textarea");
+            el.classList.add("asciiart");
+            el.readOnly = "true";
             el.value = content;
             el.rows = content.split("\n").length;
             el.cols = 40;

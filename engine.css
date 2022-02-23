@@ -57,8 +57,12 @@ div.infer1::before {
 
 
 
-textarea {
+.asciiart {
     margin: 8px;
+    overflow:hidden;
+    border: 0;
+    resize: none;
+    background-color: var(--box1-color);
 }
 
 env {
