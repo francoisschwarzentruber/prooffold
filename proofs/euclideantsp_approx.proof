@@ -361,7 +361,7 @@ Principle:
                         {
                             Consider an edge $e = (u, v)$ with $u = (x_u, y_u)$ and $v = (x_v, y_v)$.
                             Let $x := |x_u - x_v|$ and $y := |y_v - y_u|$.
-                            $e$ crosses at most $x+1$ vertical and $y+1$ horizontal lines.
+                            $e$ crosses at most $\lfloor x+1 \rfloor$ vertical and $\lfloor y+1 \rfloor$ horizontal lines.
                             $e$'s contribution to $T$ is at most $x+y+2$.
                             $e$'s contribution to $opt$ is $\sqrt{x^2+y^2}$.
                             $x+y+2 \leq 2\sqrt{x^2+y^2}$
@@ -446,7 +446,9 @@ Principle:
                     {
                         Markov inequality
                     }
-                    $\mathbb{P}$(total length increase of detours $\leq 4\epsilon  opt$) $\geq  \frac 1 2>0$
+                    $\mathbb{P}$(total length increase of detours $\leq 4\epsilon  opt$) $\geq  \frac 1 2>0$           (449)
+
+                     $\mathbb{P}$(there is a p-tour of cost $\leq (1+4\epsilon)  opt$) $\geq  \frac 1 2>0$        by (449)
                 }
              }
              The sequel dynamic programming approach will be nested in a loop over all possible  $a, b$ in $[0, \frac {L'} 2[$.

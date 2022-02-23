@@ -77,6 +77,9 @@ env {
     max-height: 100%;
     margin: 0px;
     top: 0px;
+    padding-left:8px;
+    padding-top:8px;
+    padding-bottom:8px;
     overflow-x: hidden;
     overflow-y: auto;
     transition: all 200ms;
@@ -84,7 +87,7 @@ env {
     border-bottom-right-radius: 16px;
     display: block;
     background-color: white;
-    box-shadow: 12px 12px 12px rgba(0, 0, 255, .5);
+    box-shadow: 10px 6px 12px rgba(0, 0, 0, .3);
 }
 
 .button {
@@ -123,6 +126,7 @@ env {
 
 .hidden {
     width: 0px;
+    padding:0px;
 }
 
 .box0 {
