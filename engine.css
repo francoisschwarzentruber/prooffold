@@ -95,8 +95,8 @@ env {
     cursor: pointer;
     background-color: rgba(0, 0, 0, 0.03);
     border-radius: 16px;
-    border-left: 4px solid orange;
-    border-right: 4px solid orange;
+    border-left: 3px solid rgb(107, 107, 192);
+    border-right: 3px solid rgb(107, 107, 192);
     transition: all 500ms;
     margin-left: 3px;
     margin-right: 3px;
@@ -104,8 +104,8 @@ env {
 
 .ref {
     border-radius: 16px;
-    border-left: 4px solid yellow;
-    border-right: 4px solid yellow;
+    border-left: 4px solid orange;
+    border-right: 4px solid orange;
 }
 
 
@@ -113,8 +113,8 @@ env {
 .button.on {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
-    border-left: 4px solid green;
-    border-right: 4px none green;
+    border-left: 8px solid rgb(107, 107, 192);
+    border-right: 4px none rgb(107, 107, 192);
     margin-right: 0px;
     width: auto;
 }
@@ -218,5 +218,5 @@ env {
 }
 
 .highlight {
-    background-color: yellow;
+    background-color: rgba(255, 229, 144, 0.8);
 }
