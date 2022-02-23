@@ -571,7 +571,8 @@ Principle:
                                 Define $f(w) := w_{ok} ) exchange(u)$ where $exchange(u)$ rewrites symbol "(" in ")" and ")" in "(".
                                 $f$ is a bijection from the the set of not-well-formed that contains the same number of "(" and ")" into the set of words that contains $r-1$ "(" and $r+1$ ")".
                                 There are $\binom {2r} {r+1}$ such words.
-                                Example {
+                                Example
+                                {
                                     TODO
                                 }
                             }
