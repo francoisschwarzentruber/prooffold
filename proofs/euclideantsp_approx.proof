@@ -442,7 +442,7 @@ Principle:
                     }
                     
 
-                    $\mathbb{P}$(total length increase of detours $\geq 4\epsilon  opt$) $\leq \frac {\mathbb{E} (\text{total increase for all detours})} {4\epsilon opt} = \frac {2 \epsilon opt} {4 \epsilon opt} = \frac 1 2$
+                    $\mathbb{P}$(total length increase of detours $\geq 4\epsilon  opt$) $\leq \frac {\mathbb{E} (\text{total increase for all detours})} {4\epsilon opt} \leq \frac {2 \epsilon opt} {4 \epsilon opt} = \frac 1 2$
                     {
                         Markov inequality
                     }
