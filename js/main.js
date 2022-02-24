@@ -1,3 +1,5 @@
+
+
 /**
  * stores the indices of the opened tabs
  * openTabs[0] is the index of the "opened" theorem in the root panel
