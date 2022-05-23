@@ -1,4 +1,4 @@
-
+let editor = undefined; //drawFlow thing
 
 /**
  * stores the indices of the opened tabs
@@ -261,6 +261,7 @@ function linesToDOMElement(lines, depth) {
             box.classList.add("hidden");
             const ibutton = nodes.length - 1;
             const button = nodes[nodes.length - 1];
+            
             button.classList.add("button");
             tabs.set(button, box);
             button.onclick = () => {
@@ -325,6 +326,15 @@ function linesToDOMElement(lines, depth) {
 
             };
             document.body.appendChild(box)
+
+            function generateID() {
+                return Math.floor(Math.random() * 1000000);
+            }
+            
+            box.id = generateID();
+            button.id = generateID();
+            editor.addConnection(box.id, button.id);
+
         } else if (line == "}")
             return makeContainer(nodes, depth);
         else if (line == "---") {
@@ -457,7 +467,9 @@ window.onload = () => {
         let searchParams = new URLSearchParams(split[1]);
         if (searchParams.get("id")) {
             id = searchParams.get("id");
-            console.log("loading " + id)
+            console.log("loading " + id);
+            editor = new Drawflow(document.body);
+            editor.start();
             load(id).then(() => {
                 if (searchParams.get("tabs")) {
                     const strtabs = searchParams.get("tabs");
