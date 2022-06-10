@@ -127,6 +127,7 @@ env {
 .hidden {
     width: 0px;
     padding:0px;
+    overflow: hidden;
 }
 
 .box0 {
