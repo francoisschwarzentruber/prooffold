@@ -7,23 +7,24 @@ size of a maximum matching = size of a minimum vertex cover.
     $\leq$
     {
     Remark. Proof of $\leq$ holds for arbitrary graphs.
-        Let $M$ a matching. Let $C$ a vertex cover.
+        Let $M$ a matching.          (Mmatching)
+        Let $C$ a vertex cover.             (Cvertexcover)
         We have $|M| \leq |C|$.
         {
-            $M = \bigcup_{u \in C} (M \cap Adj(u))$
+            $M = \bigcup_{u \in C} (M \cap Adj(u))$                         (Mbigcup)
             {
-                Any edge is adjacent to some vertex in $C$.
+                Any edge is adjacent to some vertex in $C$.             by (Cvertexcover)
             }
             where $Adj(u)$ is the set of edges adjacent to $u$
             
-            $|M \cap Adj(u)| \leq 1$
+            $|M \cap Adj(u)| \leq 1$                          (McapAdju)
             {
-                Each vertex in $C$ has at most one incident edge from $M$.
+                Each vertex $u$ in $C$ has at most one incident edge from $M$.            by (Mmatching)
             }
 
-            $|M| \leq \sum_{u \in C} |M \cap Adj(c)|$
+            $|M| \leq \sum_{u \in C} |M \cap Adj(c)|$                (Msum) by (Mbigcup)
 
-            $|M| \leq |C|$
+            $|M| \leq |C|$                       by (McapAdju,Msum)
         }
     }
 
@@ -47,6 +48,9 @@ size of a maximum matching = size of a minimum vertex cover.
             b3 -> t [penwidth="3mm"];
             b4 -> t [penwidth="3mm"];
         }
+        {
+        	In this example, we added the source $s$ and the sink $t$. We also show a flow of value 3. This flow corresponds to a maximum matching.
+        }
 
         A maximum matching = value of a max flow                        (maxflow)
         {
@@ -64,7 +68,7 @@ size of a maximum matching = size of a minimum vertex cover.
 
         Let $C = (A \cap T)\cup (B \cap E)$.
 
-        $C$ is a vertex, i.e. covers all edges.
+        $C$ is a vertex cover, i.e. covers all edges.
         {
             By contradiction.
 
@@ -102,7 +106,9 @@ Examples
             a2 -- b4 ;
             a3 --  b4 [penwidth="3mm"];
         }
-
+{
+The two groups of vertices in the bipartite graph are $\{a_1, a_2, a_3\}$ and $\{b_1, b_2, b_3, b_4\}$. The edges form a sort of compatibility relation. A matching associates some $a_i$ with some $b_j$ by respecting this compatibility relation. It is a set of pairs of the form $(a_i, b_j)$. Any $a_i$ matches at most one $b_j$. And any $b_j$ matches at most one $a_i$. A maximum matching is a matching of maximum cardinality.
+}
 A minimum vertex cover:
 graph {
             a1 -- b1;
@@ -115,4 +121,9 @@ graph {
             a2 [style=filled, fillcolor=orange]
             a3 [style=filled, fillcolor=orange]
         }
+        {
+A vertex cover is a subset of vertices such that any edge is touched by some vertex in the vertex cover. A minimum vertex cover is such a set of minimum cardinality.
 }
+}
+
+
