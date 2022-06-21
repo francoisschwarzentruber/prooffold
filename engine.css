@@ -59,7 +59,7 @@ div.infer1::before {
 
 .asciiart {
     margin: 8px;
-    overflow:hidden;
+    overflow: hidden;
     border: 0;
     resize: none;
     background-color: var(--box1-color);
@@ -77,9 +77,9 @@ env {
     max-height: 100%;
     margin: 0px;
     top: 0px;
-    padding-left:8px;
-    padding-top:8px;
-    padding-bottom:8px;
+    padding-left: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
     overflow-x: hidden;
     overflow-y: auto;
     transition: all 200ms;
@@ -88,6 +88,16 @@ env {
     display: block;
     background-color: white;
     box-shadow: 10px 6px 12px rgba(0, 0, 0, .3);
+}
+
+
+
+
+.inside {
+    position: relative;
+    left: 10px;
+    display: inline-block;
+    max-width: none;
 }
 
 .button {
@@ -110,7 +120,7 @@ env {
 
 
 
-.button.on {
+:not(.inside) .button.on {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
     border-left: 8px solid rgb(107, 107, 192);
@@ -120,14 +130,32 @@ env {
 }
 
 
+
+.inside .button.on {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-left: 8px solid rgb(107, 107, 192);
+    border-right: 4px none rgb(107, 107, 192);
+}
+
 .definition {
     background-color: rgba(0, 255, 0, 0.2);
 }
 
 .hidden {
     width: 0px;
-    padding:0px;
+    padding: 0px;
     overflow: hidden;
+}
+
+
+.box0.inside {
+    width: 100%;
+    max-width: 100%;
+}
+
+.inside.hidden {
+    display: none;
 }
 
 .box0 {
@@ -164,54 +192,55 @@ env {
 }
 
 .box1 {
-    left: 400px;
     background-color: var(--box1-color);
     z-index: 1;
 }
 
 .box2 {
-    left: 800px;
     background-color: var(--box2-color);
     z-index: 2;
 }
 
 .box3 {
-    left: 1200px;
     background-color: var(--box3-color);
     z-index: 3;
 }
 
 
 .box4 {
-    left: 1600px;
     background-color: var(--box4-color);
     z-index: 4;
 }
 
 .box5 {
-    left: 1600px;
     background-color: var(--box5-color);
     z-index: 5;
 }
 
 .box6 {
-    left: 1600px;
     background-color: var(--box6-color);
     z-index: 6;
 }
 
 .box7 {
-    left: 1600px;
     background-color: var(--box7-color);
     z-index: 7;
 }
+
 
 .example {
     color: darkblue;
     background-color: rgba(128, 192, 255, 0.5);
     margin-left: auto;
-    margin-right: 0;
 }
+
+
+.inside .example {
+    color: darkblue;
+    background-color: rgba(128, 192, 255, 0.5);
+    margin-left: unset;
+}
+
 
 
 .indent {

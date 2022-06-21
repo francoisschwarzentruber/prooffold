@@ -1,0 +1,67 @@
+\newcommand{\proba}[1]{{\mathbb P}(#1)}
+\newcommand{\expectation}[1]{\mathbb E(#1)}
+\newcommand{\variance}[1]{\mathbb V(#1)}
+\newcommand{\indicator}[1]{\mathbb 1_{#1}}
+
+
+
+The weak law of large numbers says that if you repeat the same experience again and again, the mean of the results converges to the expectation in the following sense:
+
+the probability that the mean is close to the expectation up to $\epsilon$ converges to 1.
+
+
+Theorem. (weak law of large numbers)
+Let $X_1, X_2, \dots, $ be an infinite sequence of independent and identically distributed Lebesgue integrable random variables with expected value $\mu$.
+{
+
+}
+For all $\epsilon > 0$,
+$\proba{|\frac {X_1 + \dots + X_n}{n} - \mu| < \epsilon} \xrightarrow{n \rightarrow +\infty} 1$
+{
+    $\proba{|\frac {X_1 + \dots + X_n}{n} - \mu| < \epsilon} = 1 - \proba{|\frac {X_1 + \dots + X_n}{n} - \mu| \geq \epsilon}$
+
+    $\proba{|\frac {X_1 + \dots + X_n}{n} - \mu| \geq \epsilon} \xrightarrow{n \rightarrow +\infty} 0$
+    {
+
+        We apply:
+       $\proba{|Y-\expectation Y| \geq \epsilon} \leq \frac {\variance Y}{\epsilon^2}$ (Bienaymé–Chebyshev inequality)          (cheby)
+        {
+            We apply:
+            If $Z\geq 0$ almost surely, $\proba{Z \geq a} \leq \frac{\expectation Z} a$ (Markov's inequality)
+            {
+                $a \indicator{Z\geq a} \leq Z$
+                {
+                   $a \indicator{Z\geq a} \leq Z \indicator{Z \geq a}\leq Z$
+                }
+                $a \expectation{\indicator{Z\geq a}} \leq \expectation Z$
+
+                $a \proba{Z\geq a} \leq \expectation Z$
+                {
+                    Because $\proba{E} = \expectation{\indicator{E}}$
+                }
+
+            }
+            with $Z = (Y - \expectation Y)^2$
+
+             ${|Y-\expectation Y| \geq \epsilon}  = {|Y-\expectation Y|^2 \geq \epsilon^2}$
+
+             $\expectation{(Y - \expectation Y)^2} = \variance Y$ 
+             {
+                Definition of $\variance {Y}$
+             }
+
+        }
+        with $Y := \frac {X_1 + \dots + X_n}{n}$.
+
+        $\expectation{\frac {X_1 + \dots + X_n}{n}} = \mu$               (exp)
+        {
+            Linearity of expectation
+        }
+
+        $\variance{\frac {X_1 + \dots + X_n}{n}} = \frac {\variance{X_1}} n$           (var)
+
+        $\proba{|\frac {X_1 + \dots + X_n}{n} - \mu| \geq \epsilon} \leq \frac {\variance{X_1}} {n\epsilon^2}$         by (cheby,exp,var)
+
+    }
+
+}

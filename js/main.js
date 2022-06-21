@@ -1,5 +1,3 @@
-
-
 /**
  * stores the indices of the opened tabs
  * openTabs[0] is the index of the "opened" theorem in the root panel
@@ -8,6 +6,9 @@
  * openTabs[i] = -1 means that there is no "opened" theorem in the i-th level
  */
 const openTabs = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
+
+const inside = true;
+
 
 /**
  * tabs assigns a button (i.e. a theorem) to its box (the outline of the proof at the next level)
@@ -46,6 +47,8 @@ function makeContainer(nodes, depth) {
     const container = document.createElement("div");
     container.classList.add("box");
     container.classList.add("box" + depth);
+    if (inside)
+        container.classList.add("inside");
     for (const node of nodes)
         container.appendChild(node);
     return container;
@@ -271,49 +274,51 @@ function linesToDOMElement(lines, depth) {
                     button.classList.toggle("on");
                     box.classList.remove("hidden");
 
-                    const previousBox = button.parentElement;
-                    const previousBoxRect = previousBox.getBoundingClientRect();
-                    //const previousBoxRect = previousBox.getBoundingClientRect();
-                    const previousBoxRectLeft = (previousBox.style.left == "" ? 0 : parseInt(previousBox.style.left));
-                    const previousBoxRectRight = (previousBox.style.left == "" ? 0 : parseInt(previousBox.style.left)) + previousBox.offsetWidth;
-                    const buttonRect = button.getBoundingClientRect();
-                    const boxRect = box.getBoundingClientRect();
+                    if (!inside) {
+                        const previousBox = button.parentElement;
+                        const previousBoxRect = previousBox.getBoundingClientRect();
+                        //const previousBoxRect = previousBox.getBoundingClientRect();
+                        const previousBoxRectLeft = (previousBox.style.left == "" ? 0 : parseInt(previousBox.style.left));
+                        const previousBoxRectRight = (previousBox.style.left == "" ? 0 : parseInt(previousBox.style.left)) + previousBox.offsetWidth;
+                        const buttonRect = button.getBoundingClientRect();
+                        const boxRect = box.getBoundingClientRect();
 
-                    /*
-                    resize the box if it contains long formulae!
-                    */
-                    const resizeBox = (box) => {
-                        let m = 400;
-                        for (const el of box.children)
-                            if (el.children.length > 0)
-                                m = Math.max(m, el.children[0].getBoundingClientRect().width);
+                        /*
+                        resize the box if it contains long formulae!
+                        */
+                        const resizeBox = (box) => {
+                            let m = 400;
+                            for (const el of box.children)
+                                if (el.children.length > 0)
+                                    m = Math.max(m, el.children[0].getBoundingClientRect().width);
 
-                        if (m > 400)
-                            box.style.maxWidth = m + 32 + "px";
+                            if (m > 400)
+                                box.style.maxWidth = m + 32 + "px";
 
+                        }
+
+                        resizeBox(box);
+
+                        //if last element + boxRect sufficiently big + there is space on the bottom of previousBox
+                        const INDENT = 32;
+                        if (previousBox.children[previousBox.children.length - 1] == button &&
+                            boxRect.width >= previousBoxRect.width - INDENT && previousBoxRect.top + previousBoxRect.height + boxRect.height < window.innerHeight) {
+                            //then put the box below (instead of on the right)
+                            console.log("below")
+                            box.style.left = (previousBoxRectLeft + INDENT) + "px";
+                            box.style.top = previousBoxRect.top + previousBoxRect.height;
+                        } else {
+                            box.style.left = previousBoxRectRight + "px";
+                            let y = buttonRect.top - boxRect.height / 2;
+                            if (y + boxRect.height > window.innerHeight)
+                                y = window.innerHeight - boxRect.height;
+                            if (y < 0)
+                                y = 0;
+                            box.style.top = y + "px";
+                        }
+
+                        setTimeout(() => document.body.scrollLeft = window.outerWidth, 500);
                     }
-
-                    resizeBox(box);
-
-                    //if last element + boxRect sufficiently big + there is space on the bottom of previousBox
-                    const INDENT = 32;
-                    if (previousBox.children[previousBox.children.length - 1] == button &&
-                        boxRect.width >= previousBoxRect.width - INDENT && previousBoxRect.top + previousBoxRect.height + boxRect.height < window.innerHeight) {
-                        //then put the box below (instead of on the right)
-                        console.log("below")
-                        box.style.left = (previousBoxRectLeft + INDENT) + "px";
-                        box.style.top = previousBoxRect.top + previousBoxRect.height;
-                    } else {
-                        box.style.left = previousBoxRectRight + "px";
-                        let y = buttonRect.top - boxRect.height / 2;
-                        if (y + boxRect.height > window.innerHeight)
-                            y = window.innerHeight - boxRect.height;
-                        if (y < 0)
-                            y = 0;
-                        box.style.top = y + "px";
-                    }
-
-                    setTimeout(() => document.body.scrollLeft = window.outerWidth, 500);
 
                     openTabs[depth] = ibutton;
 
@@ -324,7 +329,11 @@ function linesToDOMElement(lines, depth) {
                 updateURL();
 
             };
-            document.body.appendChild(box)
+
+            if (inside) {
+                nodes.push(box);
+            } else
+                document.body.appendChild(box)
         } else if (line == "}")
             return makeContainer(nodes, depth);
         else if (line == "---") {
