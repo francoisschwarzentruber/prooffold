@@ -250,3 +250,7 @@ env {
 .highlight {
     background-color: rgba(255, 229, 144, 0.8);
 }
+
+
+
+foreignObject { overflow: visible; }

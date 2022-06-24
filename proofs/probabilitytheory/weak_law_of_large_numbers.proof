@@ -11,16 +11,9 @@ the probability that the mean is close to the expectation up to $\epsilon$ conve
 
 
 Theorem. (weak law of large numbers)
-Let $X_1, X_2, \dots, $ be an infinite sequence of independent and identically distributed Lebesgue integrable random variables with expected value $\mu$.
-{
-
-}
+Let $X_1, X_2, \dots, $ be an infinite sequence of independent and identically distributed random variables with expected value $\mu$, and with finite variance.
 For all $\epsilon > 0$,
-$\proba{|\frac {X_1 + \dots + X_n}{n} - \mu| < \epsilon} \xrightarrow{n \rightarrow +\infty} 1$
-{
-    $\proba{|\frac {X_1 + \dots + X_n}{n} - \mu| < \epsilon} = 1 - \proba{|\frac {X_1 + \dots + X_n}{n} - \mu| \geq \epsilon}$
-
-    $\proba{|\frac {X_1 + \dots + X_n}{n} - \mu| \geq \epsilon} \xrightarrow{n \rightarrow +\infty} 0$
+$\proba{|\frac {X_1 + \dots + X_n}{n} - \mu| \geq \epsilon} \xrightarrow{n \rightarrow +\infty} 0$
     {
 
         We apply:
@@ -64,4 +57,4 @@ $\proba{|\frac {X_1 + \dots + X_n}{n} - \mu| < \epsilon} \xrightarrow{n \rightar
 
     }
 
-}
+
