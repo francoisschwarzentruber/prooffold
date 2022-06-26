@@ -73,7 +73,6 @@ env {
 .box {
     position: absolute;
     width: max-content;
-    max-width: 500px;
     max-height: 100%;
     margin: 0px;
     top: 0px;
@@ -118,7 +117,9 @@ env {
     border-right: 4px solid orange;
 }
 
-
+.statement {
+    max-width: 500px;
+}
 
 :not(.inside) .button.on {
     border-top-right-radius: 0px;

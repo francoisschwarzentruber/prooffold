@@ -7,7 +7,7 @@
  */
 const openTabs = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
 
-const inside = true;
+const inside = false;
 
 
 /**
@@ -118,6 +118,7 @@ function makeDiv(line) {
         }
 
         const el = document.createElement("div");
+        el.classList.add("statement");
         el.innerHTML = dollarToBackSlashParenthesis(innerHTMLString);
         return el;
     }
@@ -280,7 +281,9 @@ function extractASCIIArt(lines) {
 
 
 
-function extractProofGraph(lines) {
+function extractProofGraph(lines, depth) {
+
+    const element = document.createElement("div");
 
     function makeGraphWithGraphViZAndElements(nodes, edges) {
         const el = document.createElement("div");
@@ -370,6 +373,7 @@ function extractProofGraph(lines) {
 
 
     let nodes = {};
+    let lastElement = undefined;
     let edges = [];
     while (lines.length > 0) {
         const rawLine = lines.shift();
@@ -441,17 +445,106 @@ function extractProofGraph(lines) {
                 dotCode: dotCode
             });
         } else if (line == "{") {
-            linesToDOMElement(lines, 1);
+            const box = linesToDOMElement(lines, depth + 1);
+            const button = lastElement;
+            connectButtonBox(button, box, 1, depth);
+
+
+            if (inside) {
+                element.appendChild(box);
+            } else
+                document.body.appendChild(box);
         } else if (line == "}") {
-            return makeGraphWithGraphViZAndElements(nodes, edges);
+            const graph = makeGraphWithGraphViZAndElements(nodes, edges);
+            element.prepend(graph);
+            return element;
         } else {
             const el = makeDiv(line);
             nodes[el.id] = el;
+            lastElement = el;
         }
     }
 }
 
 
+
+
+
+function connectButtonBox(button, box, ibutton, depth) {
+    box.classList.add("hidden");
+    button.classList.add("button");
+    tabs.set(button, box);
+    button.onclick = () => {
+        let h = box.classList.contains("hidden");
+        hideBoxesUpToDepth(depth + 1);
+
+        if (h) {
+            button.classList.toggle("on");
+            box.classList.remove("hidden");
+
+            if (!inside) {
+                function getBox(el) {
+                    if (el.classList.contains("box"))
+                        return el;
+                    else
+                        return getBox(el.parentElement);
+                }
+
+                const previousBox = getBox(button);
+                const previousBoxRect = previousBox.getBoundingClientRect();
+                const previousBoxRectLeft = (previousBox.style.left == "" ? 0 : parseInt(previousBox.style.left));
+                const previousBoxRectRight = (previousBox.style.left == "" ? 0 : parseInt(previousBox.style.left)) + previousBox.offsetWidth;
+                const buttonRect = button.getBoundingClientRect();
+                const boxRect = box.getBoundingClientRect();
+
+                /*
+                resize the box if it contains long formulae!
+                */
+                const resizeBox = (box) => {
+                    let m = 400;
+                    for (const el of box.children)
+                        if (el.children.length > 0)
+                            m = Math.max(m, el.children[0].getBoundingClientRect().width);
+
+                    if (m > 400)
+                        box.style.maxWidth = m + 32 + "px";
+
+                }
+
+                resizeBox(box);
+
+                //if last element + boxRect sufficiently big + there is space on the bottom of previousBox
+                const INDENT = 32;
+                if (previousBox.children[previousBox.children.length - 1] == button &&
+                    boxRect.width >= previousBoxRect.width - INDENT && previousBoxRect.top + previousBoxRect.height + boxRect.height < window.innerHeight) {
+                    //then put the box below (instead of on the right)
+                    console.log("below")
+                    box.style.left = (previousBoxRectLeft + INDENT) + "px";
+                    box.style.top = previousBoxRect.top + previousBoxRect.height;
+                } else {
+                    box.style.left = previousBoxRectRight + "px";
+                    let y = buttonRect.top - boxRect.height / 2;
+                    if (y + boxRect.height > window.innerHeight)
+                        y = window.innerHeight - boxRect.height;
+                    if (y < 0)
+                        y = 0;
+                    box.style.top = y + "px";
+                }
+
+                setTimeout(() => document.body.scrollLeft = window.outerWidth, 500);
+            }
+
+            openTabs[depth] = ibutton;
+
+        } else {
+            openTabs[depth] = -1;
+            box.classList.add("hidden");
+        }
+        updateURL();
+
+    };
+
+}
 /**
  * 
  * @param {*} lines 
@@ -479,7 +572,7 @@ function linesToDOMElement(lines, depth) {
             el.style.display = "none";
             document.body.append(el);
         } else if (line == "proofgraph {") {
-            const el = extractProofGraph(lines);
+            const el = extractProofGraph(lines, depth);
             nodes.push(el);
         } else if (line == "digraph {" || line == "graph {") {
             const dotCode = line + extractDotCode(lines);
@@ -543,79 +636,13 @@ function linesToDOMElement(lines, depth) {
             nodes.push(el);
         } else if (line == "{") {
             const box = linesToDOMElement(lines, depth + 1);
-            box.classList.add("hidden");
             const ibutton = nodes.length - 1;
             const button = nodes[nodes.length - 1];
-            button.classList.add("button");
-            tabs.set(button, box);
-            button.onclick = () => {
-                let h = box.classList.contains("hidden");
-                hideBoxesUpToDepth(depth + 1);
-
-                if (h) {
-                    button.classList.toggle("on");
-                    box.classList.remove("hidden");
-
-                    if (!inside) {
-                        const previousBox = button.parentElement;
-                        const previousBoxRect = previousBox.getBoundingClientRect();
-                        //const previousBoxRect = previousBox.getBoundingClientRect();
-                        const previousBoxRectLeft = (previousBox.style.left == "" ? 0 : parseInt(previousBox.style.left));
-                        const previousBoxRectRight = (previousBox.style.left == "" ? 0 : parseInt(previousBox.style.left)) + previousBox.offsetWidth;
-                        const buttonRect = button.getBoundingClientRect();
-                        const boxRect = box.getBoundingClientRect();
-
-                        /*
-                        resize the box if it contains long formulae!
-                        */
-                        const resizeBox = (box) => {
-                            let m = 400;
-                            for (const el of box.children)
-                                if (el.children.length > 0)
-                                    m = Math.max(m, el.children[0].getBoundingClientRect().width);
-
-                            if (m > 400)
-                                box.style.maxWidth = m + 32 + "px";
-
-                        }
-
-                        resizeBox(box);
-
-                        //if last element + boxRect sufficiently big + there is space on the bottom of previousBox
-                        const INDENT = 32;
-                        if (previousBox.children[previousBox.children.length - 1] == button &&
-                            boxRect.width >= previousBoxRect.width - INDENT && previousBoxRect.top + previousBoxRect.height + boxRect.height < window.innerHeight) {
-                            //then put the box below (instead of on the right)
-                            console.log("below")
-                            box.style.left = (previousBoxRectLeft + INDENT) + "px";
-                            box.style.top = previousBoxRect.top + previousBoxRect.height;
-                        } else {
-                            box.style.left = previousBoxRectRight + "px";
-                            let y = buttonRect.top - boxRect.height / 2;
-                            if (y + boxRect.height > window.innerHeight)
-                                y = window.innerHeight - boxRect.height;
-                            if (y < 0)
-                                y = 0;
-                            box.style.top = y + "px";
-                        }
-
-                        setTimeout(() => document.body.scrollLeft = window.outerWidth, 500);
-                    }
-
-                    openTabs[depth] = ibutton;
-
-                } else {
-                    openTabs[depth] = -1;
-                    box.classList.add("hidden");
-                }
-                updateURL();
-
-            };
-
+            connectButtonBox(button, box, ibutton, depth);
             if (inside) {
                 nodes.push(box);
             } else
-                document.body.appendChild(box)
+                document.body.appendChild(box);
         } else if (line == "}")
             return makeContainer(nodes, depth);
         else if (line == "---") {

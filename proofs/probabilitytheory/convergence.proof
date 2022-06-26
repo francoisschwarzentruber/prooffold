@@ -1,7 +1,13 @@
 \newcommand{\proba}{\mathbb P}
 proofgraph {
 	$X_n \xrightarrow{p.s} X$            (ps)
+	{
+		Definition. $X_n \xrightarrow{p.s} X$  if $\proba(\lim_{n \rightarrow +\infty} X_n = X) = 1$.
+	}
 	$X_n \xrightarrow{\proba} X$      (proba)
+	{
+		Definition. $X_n \xrightarrow{\proba} X$ if for all $\epsilon > 0$, $\proba(|X_n - X| > \epsilon) \xrightarrow{n \rightarrow +\infty} 0$. 
+	}
 	$X_n \xrightarrow{\mathcal L} X$      (law)
 	$\forall \epsilon>0, \sum_{n=1}^\infty \proba(|X_n - X| \geq \epsilon) < \infty$             (condBorelCantelli)
 	$\forall x$ continuity points of $F_X$, $F_{X_n}(x) \xrightarrow{n \rightarrow +\infty} F_X(x)$            (FX)
