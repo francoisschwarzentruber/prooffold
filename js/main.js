@@ -346,7 +346,8 @@ function extractProofGraph(lines) {
             ellipseElement.style.visibility = "hidden";
 
             const textElement = el.querySelector("#node" + i + " > text");
-            textElement.style.visibility = "hidden";
+            if (textElement)
+                textElement.style.visibility = "hidden";
             if (ellipseElement != null) {
                 const w = node.getBoundingClientRect().width;
                 const h = node.getBoundingClientRect().height;
@@ -355,8 +356,8 @@ function extractProofGraph(lines) {
                 const y = parseInt(ellipseElement.getAttribute("cy")) - parseInt(ellipseElement.getAttribute("ry"));
                 fo.setAttribute("x", x + "");
                 fo.setAttribute("y", y + "");
-                fo.setAttribute("width", w*2 );
-                fo.setAttribute("height", h*2);
+                fo.setAttribute("width", w * 2);
+                fo.setAttribute("height", h * 2);
                 fo.appendChild(node);
                 i++;
             } else
@@ -380,6 +381,7 @@ function extractProofGraph(lines) {
             const id1 = s[0].trim();
             const id2 = s[1].trim();
             const dotCode = line.replace("<->", "->") + ' [dir="both"];';
+            console.log(dotCode)
             edges.push({
                 id1: id1,
                 id2: id2,
@@ -400,6 +402,7 @@ function extractProofGraph(lines) {
             const id1 = s[0].trim();
             const id2 = s[1].trim();
             const dotCode = line.replace("==", "->") + ' [arrowhead=none];';
+            console.log(dotCode)
             edges.push({
                 id1: id1,
                 id2: id2,
@@ -410,6 +413,7 @@ function extractProofGraph(lines) {
             const id1 = s[0].trim();
             const id2 = s[1].trim();
             const dotCode = `{ rank = same; ${id1}; ${id2} }  \n` + line.replace("- - -", "->") + ' [ style="dashed", arrowhead=none ];';
+            console.log(dotCode)
             edges.push({
                 id1: id1,
                 id2: id2,
@@ -420,6 +424,7 @@ function extractProofGraph(lines) {
             const id1 = s[0].trim();
             const id2 = s[1].trim();
             const dotCode = line.replace("<=>", "->") + ' [dir=both];'; //color="black:white:black" <= not working...
+            console.log(dotCode)
             edges.push({
                 id1: id1,
                 id2: id2,
@@ -435,6 +440,8 @@ function extractProofGraph(lines) {
                 id2: id2,
                 dotCode: dotCode
             });
+        } else if (line == "{") {
+            linesToDOMElement(lines, 1);
         } else if (line == "}") {
             return makeGraphWithGraphViZAndElements(nodes, edges);
         } else {
