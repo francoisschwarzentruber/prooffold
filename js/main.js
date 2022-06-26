@@ -308,7 +308,7 @@ function extractProofGraph(lines) {
             console.log(width)
             const height = node.getBoundingClientRect().height;
             const factor = 2 / (96);
-            dotCode += `${id} [width = ${ width *factor }, height = ${ height *factor }];`;
+            dotCode += `${id} [width = ${width * factor}, height = ${height * factor}];`;
         }
 
 
@@ -703,5 +703,5 @@ window.onload = () => {
  */
 function updateURL() {
     const url = window.location.href.split("?")[0];
-    window.history.replaceState({}, null, url + `?id=${id}&tabs=${openTabs.filter((n) => n >= 0).join("/") }`);
+    window.history.replaceState({}, null, url + `?id=${id}&tabs=${openTabs.filter((n) => n >= 0).join("/")}`);
 }
