@@ -10,6 +10,9 @@ proofgraph {
 	_fake => ps
 	_fake - - - proofBorelCantelli
 	Proof that uses Borel-Cantelli lemma               (proofBorelCantelli)
+	{
+		Here is the proof.
+	}
 	ps == _fake2
 	_fake2 == proba
 	_fake2 - - - fatou
