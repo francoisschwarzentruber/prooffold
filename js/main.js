@@ -196,7 +196,7 @@ function hideBoxesUpToDepth(depth) {
     }
     //remove .on on buttons in the last box of depth - 1 and in the next hidden boxes
     for (let d = depth - 1; d < 100; d++) {
-        const els = document.querySelectorAll(".box" + d + " > .on");
+        const els = document.querySelectorAll(".box" + d + " .on");
         for (let i = 0; i < els.length; i++)
             els[i].classList.remove("on");
 
@@ -478,8 +478,12 @@ function connectButtonBox(button, box, ibutton, depth) {
         let h = box.classList.contains("hidden");
         hideBoxesUpToDepth(depth + 1);
 
+
         if (h) {
+            console.log("toggle")
+            console.log(button.classList.contains("on"))
             button.classList.toggle("on");
+            console.log(button.classList.contains("on"))
             box.classList.remove("hidden");
 
             if (!inside) {
