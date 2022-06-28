@@ -7,6 +7,11 @@
  */
 const openTabs = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
 
+
+/**
+ * if false, it means that panels/boxes appears on the right
+ * if true, it means that they appears just below
+ */
 const inside = false;
 
 
@@ -40,8 +45,6 @@ function makeContainer(nodes, depth) {
         container.appendChild(node);
     return container;
 }
-
-
 
 
 
@@ -156,11 +159,6 @@ function makeDiv(line) {
 
     const el = makeDivFromText(info.text);
 
-
-    if (info.text == "⇓") {
-        el.classList.add("verticalConnector");
-        nodes[nodes.length - 1].classList.add("centered");
-    }
     if (["=", "$=", "$\\leq", "$\\geq", "< ", "> "].find((value) => info.text.startsWith(value)))
         el.classList.add("indent");
 
@@ -192,16 +190,13 @@ function hideBoxesUpToDepth(depth) {
         const els = document.getElementsByClassName("box" + d);
         for (let i = 0; i < els.length; i++)
             els[i].classList.add("hidden");
-        //els[i].hidden = true;
     }
     //remove .on on buttons in the last box of depth - 1 and in the next hidden boxes
     for (let d = depth - 1; d < 100; d++) {
         const els = document.querySelectorAll(".box" + d + " .on");
         for (let i = 0; i < els.length; i++)
             els[i].classList.remove("on");
-
     }
-
 }
 
 
