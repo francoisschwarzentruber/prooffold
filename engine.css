@@ -70,6 +70,7 @@ env {
     display: block;
     border-left: 4px solid black;
     border-radius: 16px;
+    background-color: rgba(0, 0, 0, 0.02);
 }
 
 
@@ -118,7 +119,7 @@ env {
 }
 
 .button:hover {
-    filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3));
+    filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, .3));
 }
 
 
@@ -212,8 +213,8 @@ foreignObject {
     position: absolute;
     z-index: 1000;
     pointer-events: none;
-    width:auto;
-    height:auto;
+    width: auto;
+    height: auto;
 }
 
 #svg line {

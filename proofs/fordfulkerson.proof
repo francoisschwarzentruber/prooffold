@@ -19,16 +19,22 @@ Theorem. Ford-Fulkerson algorithm returns a maximum flow.
         1 => correct
         1 => 2
         {
-            Otherwise we could augment the flow by running an extra step of Ford-Fulkerson algorithm.
+            By contrapositive. Suppose there is a $s-t$-path in the residual graph corresponding to $f$.
+            It means that we can augment the flow $f$ by running an extra step of Ford-Fulkerson algorithm.
+            $f$ is not a maximum flow.
         }
         2 => 3
         {
+            Suppose there is no $s-t$-path in the residual graph corresponding to $f$.               (supposenostpath)
             We define the cut $(E, T)$ by 
             $E := \{u \mid $ there is a $s-u$-path in the residual graph corresponding to $f$ $\}$
 
-            ADD PICTURE
+            $(E, T)$ is a cut
+            {
+                Because $t \in T$                           by (supposenostpath)
+            }
             
-            We show that $|f| = c(E, T)$.
+            $|f| = c(E, T)$.
             {
                 We have $|f| = f(E, T) - f(T, E)$              by (lemma:cutexpression)
 

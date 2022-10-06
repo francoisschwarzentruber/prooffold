@@ -24,7 +24,31 @@ const tabs = new Map();
  * id of the proof
  */
 let id = undefined;
+let buttons = [];
 
+
+function getButtonNumber(button) {
+    return buttons.indexOf(button);
+}
+
+
+
+/**
+ * 
+ * @param {*} el 
+ * @returns the rectangle that surrounds the element el in the absolute coordinate system of the window
+ */
+function getRectInBody(el) {
+    const r = el.getBoundingClientRect();
+    return {
+        left: r.left + window.scrollX,
+        top: r.top + window.scrollY,
+        right: r.right + window.scrollX,
+        bottom: r.bottom + window.scrollY,
+        width: r.width,
+        height: r.height
+    };
+}
 
 
 
@@ -460,7 +484,7 @@ function extractProofGraph(lines, depth) {
             const box = linesToDOMElement(lines, depth + 1);
             const button = lastElement;
             if (lastElement instanceof HTMLElement)
-                connectButtonBox(button, box, 1, depth);
+                connectButtonBox(button, box, depth);
             else//it is an edge, we postpone the connection later on
                 lastElement.box = box;
 
@@ -487,7 +511,7 @@ function extractProofGraph(lines, depth) {
                     const svgElementEdge = getSVGElementFromEdge(edge);
 
                     if (svgElementEdge)
-                        connectButtonBox(svgElementEdge, edge.box, 1, depth);
+                        connectButtonBox(svgElementEdge, edge.box, depth);
                     else
                         console.error("error: edge not found in svg")
                 }
@@ -501,13 +525,23 @@ function extractProofGraph(lines, depth) {
     }
 }
 
-
-function createSVGLine(x1, y1, x2, y2) {
+/**
+ * 
+ * @returns a SVG line that "connects" a button to a box
+ */
+function createSVGLine() {
     const svgLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     document.getElementById("svg").appendChild(svgLine);
     return svgLine;
 }
 
+/**
+ * 
+ * @param {*} svgLine 
+ * @param {*} point1 
+ * @param {*} point2 
+ * @description assigns the extreme point coordinates of svgLine
+ */
 function setLineCoordinates(svgLine, { x: x1, y: y1 }, { x: x2, y: y2 }) {
     svgLine.setAttribute('x1', x1);
     svgLine.setAttribute('y1', y1);
@@ -519,8 +553,46 @@ function setLineCoordinates(svgLine, { x: x1, y: y1 }, { x: x2, y: y2 }) {
 }
 
 
-function connectButtonBox(button, box, ibutton, depth) {
+
+function updateLineCoordinates(line, button, box) {
+    const buttonB = getRectInBody(button);
+    const boxB = getRectInBody(box);
+    let buttonHandlePoint;
+    let boxHandlePoint
+    if (buttonB.right <= boxB.left) {
+        if (button.classList.contains("edge"))
+            buttonHandlePoint = { x: buttonB.left + buttonB.width / 2, y: buttonB.top + buttonB.height / 2 };
+        else
+            buttonHandlePoint = { x: buttonB.right, y: buttonB.top + buttonB.height / 2 };
+
+        boxHandlePoint = { x: boxB.left, y: buttonB.top + buttonB.height / 2 };
+        if (boxHandlePoint.y < boxB.top || boxHandlePoint.y > boxB.bottom)
+            boxHandlePoint.y = boxB.top + boxB.height / 2;
+    }
+    else {
+        if (button.classList.contains("edge"))
+            buttonHandlePoint = { x: buttonB.left + buttonB.width / 2, y: buttonB.top + buttonB.height / 2 };
+        else
+            buttonHandlePoint = { x: buttonB.left + buttonB.width / 2, y: buttonB.bottom };
+
+        boxHandlePoint = { x: buttonB.left + buttonB.width / 2, y: boxB.top };
+        if (boxHandlePoint.x < boxB.left || boxHandlePoint.x > boxB.right)
+            boxHandlePoint.x = boxB.left + boxB.width / 2;
+
+    }
+
+    setLineCoordinates(line, buttonHandlePoint, boxHandlePoint);
+}
+
+/**
+ * 
+ * @param {*} button 
+ * @param {*} box 
+ * @param {*} depth 
+ */
+function connectButtonBox(button, box, depth) {
     box.classList.add("hidden");
+    buttons.push(button);
     button.classList.add("button");
     if (inside)
         button.classList.add("insideButton");
@@ -594,48 +666,26 @@ function connectButtonBox(button, box, ibutton, depth) {
                     box.style.top = y + "px";
 
 
-                    const buttonB = getRectInBody(button);
-                    const boxB = getRectInBody(box);
 
-                    let buttonHandlePoint;
-                    if (button.classList.contains("edge"))
-                        buttonHandlePoint = { x: buttonB.left + buttonB.width / 2, y: buttonB.top + buttonB.height / 2 };
-                    else
-                        buttonHandlePoint = { x: buttonB.right, y: buttonB.top + buttonB.height / 2 };
+                    updateLineCoordinates(line, button, box);
 
-                    let boxHandlePoint = { x: boxB.left, y: buttonB.top + buttonB.height / 2 };
-                    if (boxHandlePoint.y < boxB.top || boxHandlePoint.y > boxB.bottom)
-                        boxHandlePoint.y = boxB.top + boxB.height / 2;
-                    setLineCoordinates(line, buttonHandlePoint, boxHandlePoint);
                 }
 
                 setTimeout(() => document.body.scrollLeft = window.outerWidth, 500);
+            }
+            else {
+                updateLineCoordinates(line, button, box);
             }
 
 
             line.classList.remove("hidden");
 
 
-            /**
-             * 
-             * @param {*} el 
-             * @returns the rectangle that surrounds the element el in the absolute coordinate system of the window
-             */
-            function getRectInBody(el) {
-                const r = el.getBoundingClientRect();
-                return {
-                    left: r.left + window.scrollX,
-                    top: r.top + window.scrollY,
-                    right: r.right + window.scrollX,
-                    bottom: r.bottom + window.scrollY,
-                    width: r.width,
-                    height: r.height
-                };
-            }
 
 
 
-            openTabs[depth] = ibutton;
+
+            openTabs[depth] = getButtonNumber(button);
 
         } else {
             openTabs[depth] = -1;
@@ -738,9 +788,8 @@ function linesToDOMElement(lines, depth) {
             nodes.push(el);
         } else if (line == "{") {
             const box = linesToDOMElement(lines, depth + 1);
-            const ibutton = nodes.length - 1;
             const button = nodes[nodes.length - 1];
-            connectButtonBox(button, box, ibutton, depth);
+            connectButtonBox(button, box, depth);
             if (inside) {
                 nodes.push(box);
             } else
@@ -781,7 +830,7 @@ async function load(filename) {
     document.getElementById("menu").style.display = "none";
     const response = await fetch(`proofs/${filename}.proof`);
     const text = await response.text();
-
+    buttons = [];
     document.body.innerHTML = '<svg id="svg" ></svg>';
     setInterval(() => {
         svg.style.width = document.body.scrollWidth;
@@ -819,8 +868,8 @@ window.onload = () => {
                         if (i < 0)
                             break;
                         console.log("open tab n°" + i)
-                        node.children[i].onclick();
-                        node = tabs.get(node.children[i]);
+                        buttons[i].onclick();
+                        node = tabs.get(buttons[i]);
                     }
 
                 }
