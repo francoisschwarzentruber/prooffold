@@ -109,13 +109,13 @@ env {
 
 .on path {
     stroke-width: 10px;
-    stroke: blue;
+    stroke: #0088FF;
 }
 
 .on polygon {
     stroke-width: 10px;
-    fill: blue;
-    stroke: blue;
+    fill: #0088FF;
+    stroke: #0088FF;
 }
 
 .button:hover {
