@@ -191,7 +191,7 @@ function hideBoxesUpToDepth(depth) {
         for (let i = 0; i < els.length; i++)
             els[i].classList.add("hidden");
     }
-    for (let d = depth-1; d < 100; d++) {
+    for (let d = depth - 1; d < 100; d++) {
         const els = document.getElementsByClassName("line" + d);
         for (let i = 0; i < els.length; i++)
             els[i].classList.add("hidden");
@@ -284,6 +284,7 @@ function extractASCIIArt(lines) {
 function extractProofGraph(lines, depth) {
 
     const element = document.createElement("div");
+    element.classList.add("graphvizContainer");
 
     function makeGraphWithGraphViZAndElements(nodes, edges) {
         const el = document.createElement("div");
@@ -507,7 +508,7 @@ function createSVGLine(x1, y1, x2, y2) {
     return svgLine;
 }
 
-function setLineCoordinates(svgLine, x1, y1, x2, y2) {
+function setLineCoordinates(svgLine, { x: x1, y: y1 }, { x: x2, y: y2 }) {
     svgLine.setAttribute('x1', x1);
     svgLine.setAttribute('y1', y1);
     svgLine.setAttribute('x2', x2);
@@ -595,7 +596,17 @@ function connectButtonBox(button, box, ibutton, depth) {
 
                     const buttonB = getRectInBody(button);
                     const boxB = getRectInBody(box);
-                    setLineCoordinates(line, buttonB.right, buttonB.top + buttonB.height / 2, boxB.left, buttonB.top + buttonB.height / 2);
+
+                    let buttonHandlePoint;
+                    if (button.classList.contains("edge"))
+                        buttonHandlePoint = { x: buttonB.left + buttonB.width / 2, y: buttonB.top + buttonB.height / 2 };
+                    else
+                        buttonHandlePoint = { x: buttonB.right, y: buttonB.top + buttonB.height / 2 };
+
+                    let boxHandlePoint = { x: boxB.left, y: buttonB.top + buttonB.height / 2 };
+                    if (boxHandlePoint.y < boxB.top || boxHandlePoint.y > boxB.bottom)
+                        boxHandlePoint.y = boxB.top + boxB.height / 2;
+                    setLineCoordinates(line, buttonHandlePoint, boxHandlePoint);
                 }
 
                 setTimeout(() => document.body.scrollLeft = window.outerWidth, 500);
@@ -605,10 +616,18 @@ function connectButtonBox(button, box, ibutton, depth) {
             line.classList.remove("hidden");
 
 
+            /**
+             * 
+             * @param {*} el 
+             * @returns the rectangle that surrounds the element el in the absolute coordinate system of the window
+             */
             function getRectInBody(el) {
                 const r = el.getBoundingClientRect();
                 return {
-                    left: r.left + window.scrollX, top: r.top + window.scrollY, right: r.right + window.scrollX,
+                    left: r.left + window.scrollX,
+                    top: r.top + window.scrollY,
+                    right: r.right + window.scrollX,
+                    bottom: r.bottom + window.scrollY,
                     width: r.width,
                     height: r.height
                 };
@@ -688,18 +707,18 @@ function linesToDOMElement(lines, depth) {
                 const s = p => {
                 let x = 100;
                 let y = 100;
-
+ 
                 p.setup = function() {
                     p.createCanvas(700, 410);
                 };
-
+ 
                 p.draw = function() {
                     p.background(0);
                     p.fill(255);
                     p.rect(x, y, 50, 50);
                 };
                 };
-
+ 
                 new p5(s, document.getElementById("p5test")); // invoke p5
                 */
             const content = extractJS(lines);
@@ -756,12 +775,20 @@ function attachReferencesAdditionalSpan() {
 }
 
 
+
+
 async function load(filename) {
     document.getElementById("menu").style.display = "none";
     const response = await fetch(`proofs/${filename}.proof`);
     const text = await response.text();
 
-    document.body.innerHTML = '<svg id="svg" width="20000" height="20000"></svg>';
+    document.body.innerHTML = '<svg id="svg" ></svg>';
+    setInterval(() => {
+        svg.style.width = document.body.scrollWidth;
+        svg.style.height = document.body.scrollHeight;
+    }, 1000);
+
+
     const proof = linesToDOMElement(text.split("\n"), 0);
     attachReferencesAdditionalSpan();
     document.body.appendChild(proof);

@@ -9,8 +9,6 @@ Theorem. Ford-Fulkerson algorithm returns a maximum flow.
     $= f(E, T) + f(E, E) - f(T, E) - f(E, E)$
     }
 
-    ---
-
     proofgraph {
         $f$ is a maximum flow         (1)
         There is no $s-t$-path in the residual graph corresponding to $f$          (2)

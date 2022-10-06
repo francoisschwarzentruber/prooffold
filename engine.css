@@ -67,7 +67,6 @@ env {
     padding-bottom: 8px;
     overflow-x: hidden;
     overflow-y: auto;
-    transition: all 200ms;
     display: block;
     border-left: 4px solid black;
     border-radius: 16px;
@@ -95,12 +94,12 @@ env {
 
 .edge path {
     stroke-width: 6px;
-    stroke:black;
+    stroke: black;
 }
 
 .edge polygon {
-    stroke-width: 6px;
-    stroke:black;
+    stroke-width: 3px;
+    stroke: black;
 }
 
 .button:hover path {
@@ -115,11 +114,11 @@ env {
 .on polygon {
     stroke-width: 10px;
     fill: blue;
-    stroke:blue;
+    stroke: blue;
 }
 
 .button:hover {
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .3));
 }
 
 
@@ -151,7 +150,7 @@ env {
 }
 
 .definition {
-    background-color: rgba(0, 255, 0, 0.2);
+    color: rgb(0, 96, 0);
 }
 
 .hidden {
@@ -200,6 +199,9 @@ env {
 }
 
 
+.graphvizContainer svg {
+    scale: 0.8;
+}
 
 foreignObject {
     overflow: visible;
@@ -207,13 +209,11 @@ foreignObject {
 
 
 #svg {
-    position:absolute;
+    position: absolute;
     z-index: 1000;
     pointer-events: none;
-    max-height: 100vh;
-    max-width: 100vw;
-    height: 100%;
-    width: 100%;
+    width:auto;
+    height:auto;
 }
 
 #svg line {
