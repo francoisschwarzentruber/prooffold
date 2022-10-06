@@ -1,7 +1,6 @@
 Theorem. Ford-Fulkerson algorithm returns a maximum flow.
 {
-    Lemma. For all cuts $(E, T)$, $|f| = f(E, T) - f(T, E)$.
-    \label{lemma:cutexpression}
+    Lemma. For all cuts $(E, T)$, $|f| = f(E, T) - f(T, E)$.       (lemma:cutexpression)
     {
     $|f| = f(s, S)$
     $= f(s, S) - f(S, s) + \sum_{u \in E, u\neq s} f(u, S) - f(S, u)$
@@ -12,30 +11,19 @@ Theorem. Ford-Fulkerson algorithm returns a maximum flow.
 
     ---
 
-    Proposition. The three following statements are equivalent:
-    1. $f$ is a maximum flow
-    2. There is no $s-t$-path in the residual graph corresponding to $f$
-    3. There exists a $s-t$-cut whose capacity is $|f|$
-
-    Proof.
-    {
-        $1. \Rightarrow 2$.
+    proofgraph {
+        $f$ is a maximum flow         (1)
+        There is no $s-t$-path in the residual graph corresponding to $f$          (2)
+        There exists a $s-t$-cut whose capacity is $|f|$              (3)
+        Ford-Fulkerson terminates: the condition of the loop is false.           (termination)
+        Ford-Fulkerson is correct             (correct)
+        termination => 2
+        1 => correct
+        1 => 2
         {
             Otherwise we could augment the flow by running an extra step of Ford-Fulkerson algorithm.
         }
-
-        $3. \Rightarrow 1$.
-        {
-            This is because for all cuts $(E, T)$, $|f| \leq c(E, T)$.
-            {
-                $|f| = f(E, T) - f(T, E)$
-                \ref{lemma:cutexpression}
-                $\leq f(E, T)$
-                $\leq c(E, T)$
-            }
-        }
-
-        $2. \Rightarrow 3$.
+        2 => 3
         {
             We define the cut $(E, T)$ by 
             $E := \{u \mid $ there is a $s-u$-path in the residual graph corresponding to $f$ $\}$
@@ -44,8 +32,7 @@ Theorem. Ford-Fulkerson algorithm returns a maximum flow.
             
             We show that $|f| = c(E, T)$.
             {
-                We have $|f| = f(E, T) - f(T, E)$
-                \ref{lemma:cutexpression}
+                We have $|f| = f(E, T) - f(T, E)$              by (lemma:cutexpression)
 
                 Let $u \in E$, $v \in T$.
 
@@ -74,8 +61,14 @@ Theorem. Ford-Fulkerson algorithm returns a maximum flow.
                 Thus, $|f| = c(E, T)$
             }
         }
+        3 => 1
+        {
+            This is because for all cuts $(E, T)$, $|f| \leq c(E, T)$.
+            {
+                $|f| = f(E, T) - f(T, E)$        by (lemma:cutexpression)
+                $\leq f(E, T)$
+                $\leq c(E, T)$
+            }
+        }
     }
-    --- 
-
-    As the condition of termination of Ford-Fulkerson is 2., we have 1., that is Ford-Fulkerson algorithm is correct.
 }

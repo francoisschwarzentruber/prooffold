@@ -191,6 +191,11 @@ function hideBoxesUpToDepth(depth) {
         for (let i = 0; i < els.length; i++)
             els[i].classList.add("hidden");
     }
+    for (let d = depth-1; d < 100; d++) {
+        const els = document.getElementsByClassName("line" + d);
+        for (let i = 0; i < els.length; i++)
+            els[i].classList.add("hidden");
+    }
     //remove .on on buttons in the last box of depth - 1 and in the next hidden boxes
     for (let d = depth - 1; d < 100; d++) {
         const els = document.querySelectorAll(".box" + d + " .on");
@@ -336,6 +341,23 @@ function extractProofGraph(lines, depth) {
 
         el.innerHTML = svgFromDot(dotCode);
 
+        function removeStrokeColorsFromEdges(el) {
+            for (const p of el.querySelectorAll("polygon"))
+                if (p.parentNode.parentNode.tagName != "svg") {
+                    p.setAttribute("stroke", "");
+                    p.setAttribute("fill", "");
+                    p.classList.add("edge");
+                }
+
+            for (const p of el.querySelectorAll("path")) {
+                p.setAttribute("stroke", "");
+                p.classList.add("edge");
+            }
+
+
+        }
+
+        removeStrokeColorsFromEdges(el);
         let i = 1;
 
         for (const id in nodes) {
@@ -357,7 +379,7 @@ function extractProofGraph(lines, depth) {
                 const w = node.getBoundingClientRect().width;
                 const h = node.getBoundingClientRect().height;
                 //const w = node.innerHTML.indexOf("\\(") > -1 ? 0 : node.clientWidth / 2-8;
-                const x = parseInt(ellipseElement.getAttribute("cx")) - parseInt(ellipseElement.getAttribute("rx"))+4;
+                const x = parseInt(ellipseElement.getAttribute("cx")) - parseInt(ellipseElement.getAttribute("rx")) + 4;
                 const y = parseInt(ellipseElement.getAttribute("cy")) - parseInt(ellipseElement.getAttribute("ry"));
                 foreignObject.setAttribute("x", x + "");
                 foreignObject.setAttribute("y", y + "");
@@ -373,92 +395,102 @@ function extractProofGraph(lines, depth) {
         return el;
     }
 
-
     let nodes = {};
-    let lastElement = undefined;
+    let lastElement = undefined; //last element or edge
     let edges = [];
+
+    function addEdge(id1, id2, dotCode) {
+        const edge = {
+            id1: id1,
+            id2: id2,
+            dotCode: dotCode
+        }
+        lastElement = edge;
+        edges.push(edge);
+    }
+
+
     while (lines.length > 0) {
         const rawLine = lines.shift();
         const line = rawLine.trim();
-        if (line == "") {
+        if (line == "") { //ignore empty line
 
         } else if (line.indexOf("<->") > -1) {
             const s = line.split("<->");
             const id1 = s[0].trim();
             const id2 = s[1].trim();
             const dotCode = line.replace("<->", "->") + ' [dir="both"];';
-            console.log(dotCode)
-            edges.push({
-                id1: id1,
-                id2: id2,
-                dotCode: dotCode
-            });
+            addEdge(id1, id2, dotCode);
         } else if (line.indexOf("->") > -1) {
             const s = line.split("->");
             const id1 = s[0].trim();
             const id2 = s[1].trim();
-            console.log(line)
-            edges.push({
-                id1: id1,
-                id2: id2,
-                dotCode: line
-            });
+            addEdge(id1, id2, line);
+
         } else if (line.indexOf("==") > -1) {
             const s = line.split("==");
             const id1 = s[0].trim();
             const id2 = s[1].trim();
             const dotCode = line.replace("==", "->") + ' [arrowhead=none];';
-            console.log(dotCode)
-            edges.push({
-                id1: id1,
-                id2: id2,
-                dotCode: dotCode
-            });
+            addEdge(id1, id2, dotCode);
+
         } else if (line.indexOf("- - -") > -1) {
             const s = line.split("- - -");
             const id1 = s[0].trim();
             const id2 = s[1].trim();
             const dotCode = `{ rank = same; ${id1}; ${id2} }  \n` + line.replace("- - -", "->") + ' [ style="dashed", arrowhead=none ];';
-            console.log(dotCode)
-            edges.push({
-                id1: id1,
-                id2: id2,
-                dotCode: dotCode
-            });
+            addEdge(id1, id2, dotCode);
+
         } else if (line.indexOf("<=>") > -1) {
             const s = line.split("<=>");
             const id1 = s[0].trim();
             const id2 = s[1].trim();
             const dotCode = line.replace("<=>", "->") + ' [dir=both];'; //color="black:white:black" <= not working...
-            console.log(dotCode)
-            edges.push({
-                id1: id1,
-                id2: id2,
-                dotCode: dotCode
-            });
+            addEdge(id1, id2, dotCode);
+
         } else if (line.indexOf("=>") > -1) {
             const s = line.split("=>");
             const id1 = s[0].trim();
             const id2 = s[1].trim();
             const dotCode = line.replace("=>", "->") + '[]'; //color="black:white:black"
-            edges.push({
-                id1: id1,
-                id2: id2,
-                dotCode: dotCode
-            });
+            addEdge(id1, id2, dotCode);
+
         } else if (line == "{") {
             const box = linesToDOMElement(lines, depth + 1);
             const button = lastElement;
-            connectButtonBox(button, box, 1, depth);
-
+            if (lastElement instanceof HTMLElement)
+                connectButtonBox(button, box, 1, depth);
+            else//it is an edge, we postpone the connection later on
+                lastElement.box = box;
 
             if (inside) {
                 element.appendChild(box);
             } else
                 document.body.appendChild(box);
-        } else if (line == "}") {
+        } else if (line == "}") {             //END OF THE GRAPH
             const graph = makeGraphWithGraphViZAndElements(nodes, edges);
             element.prepend(graph);
+            for (const edge of edges) // we make the connection for the edges and their boxes
+                if (edge.box) {
+                    function getSVGElementFromEdge(edge) {
+                        const titles = graph.querySelectorAll("title");
+                        for (let i = 0; i < titles.length; i++) {
+                            const t = titles[i];
+                            console.log(t.textContent)
+                            if (t.textContent == edge.id1 + "->" + edge.id2) {
+                                return t.parentNode;
+                            }
+                        }
+                        return undefined;
+                    }
+                    const svgElementEdge = getSVGElementFromEdge(edge);
+
+                    if (svgElementEdge)
+                        connectButtonBox(svgElementEdge, edge.box, 1, depth);
+                    else
+                        console.error("error: edge not found in svg")
+                }
+
             return element;
         } else {
             const el = makeDiv(line);
@@ -469,12 +501,32 @@ function extractProofGraph(lines, depth) {
 }
 
 
+function createSVGLine(x1, y1, x2, y2) {
+    const svgLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    document.getElementById("svg").appendChild(svgLine);
+    return svgLine;
+}
 
+function setLineCoordinates(svgLine, x1, y1, x2, y2) {
+    svgLine.setAttribute('x1', x1);
+    svgLine.setAttribute('y1', y1);
+    svgLine.setAttribute('x2', x2);
+    svgLine.setAttribute('y2', y2);
+    svgLine.setAttribute("stroke", "black");
+
+    return svgLine;
+}
 
 
 function connectButtonBox(button, box, ibutton, depth) {
     box.classList.add("hidden");
     button.classList.add("button");
+    if (inside)
+        button.classList.add("insideButton");
+
+    const line = createSVGLine();
+    line.classList.add("line" + depth);
+
     tabs.set(button, box);
     button.onclick = () => {
         let h = box.classList.contains("hidden");
@@ -482,10 +534,13 @@ function connectButtonBox(button, box, ibutton, depth) {
 
 
         if (h) {
+            /**
+             * the box is hidden we show it
+             */
             console.log("toggle")
-            console.log(button.classList.contains("on"))
+            console.log(button.classList.contains("on"));
             button.classList.toggle("on");
-            console.log(button.classList.contains("on"))
+            console.log(button.classList.contains("on"));
             box.classList.remove("hidden");
 
             if (!inside) {
@@ -528,22 +583,44 @@ function connectButtonBox(button, box, ibutton, depth) {
                     box.style.left = (previousBoxRectLeft + INDENT) + "px";
                     box.style.top = previousBoxRect.top + previousBoxRect.height;
                 } else {
-                    box.style.left = previousBoxRectRight + "px";
+                    const SHIFT = 16;
+                    box.style.left = previousBoxRectRight + SHIFT + "px";
                     let y = buttonRect.top - boxRect.height / 2;
                     if (y + boxRect.height > window.innerHeight)
                         y = window.innerHeight - boxRect.height;
                     if (y < 0)
                         y = 0;
                     box.style.top = y + "px";
+
+
+                    const buttonB = getRectInBody(button);
+                    const boxB = getRectInBody(box);
+                    setLineCoordinates(line, buttonB.right, buttonB.top + buttonB.height / 2, boxB.left, buttonB.top + buttonB.height / 2);
                 }
 
                 setTimeout(() => document.body.scrollLeft = window.outerWidth, 500);
             }
 
+
+            line.classList.remove("hidden");
+
+
+            function getRectInBody(el) {
+                const r = el.getBoundingClientRect();
+                return {
+                    left: r.left + window.scrollX, top: r.top + window.scrollY, right: r.right + window.scrollX,
+                    width: r.width,
+                    height: r.height
+                };
+            }
+
+
+
             openTabs[depth] = ibutton;
 
         } else {
             openTabs[depth] = -1;
+            line.classList.add("hidden");
             box.classList.add("hidden");
         }
         updateURL();
@@ -684,7 +761,7 @@ async function load(filename) {
     const response = await fetch(`proofs/${filename}.proof`);
     const text = await response.text();
 
-    document.body.innerHTML = "";
+    document.body.innerHTML = '<svg id="svg" width="20000" height="20000"></svg>';
     const proof = linesToDOMElement(text.split("\n"), 0);
     attachReferencesAdditionalSpan();
     document.body.appendChild(proof);
