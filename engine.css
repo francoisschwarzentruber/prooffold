@@ -109,6 +109,7 @@ env {
     transition: all 500ms;
     margin-left: 3px;
     margin-right: 3px;
+    padding:6px;
 }
 
 .ref {
@@ -117,9 +118,15 @@ env {
     border-right: 4px solid orange;
 }
 
-.statement {
+:not(.inside) .statement {
     max-width: 500px;
 }
+
+
+.inside .statement {
+    max-width: none;
+}
+
 
 :not(.inside) .button.on {
     border-top-right-radius: 0px;

@@ -300,12 +300,19 @@ function extractProofGraph(lines, depth) {
             const node = nodes[id];
             node.style.display = "inline"
             tempContainer.appendChild(node);
+
+            {
+                const width = node.getBoundingClientRect().width;
+                console.log(node)
+                console.log(width)
+            }
+
             MathJax.typeset();
             const width = node.getBoundingClientRect().width;
             console.log(node)
             console.log(width)
             const height = node.getBoundingClientRect().height;
-            const factor = 2 / (96);
+            const factor = 1.7 / (96);
             dotCode += `${id} [width = ${width * factor}, height = ${height * factor}];`;
         }
 
@@ -337,8 +344,8 @@ function extractProofGraph(lines, depth) {
             const queryNode = "#node" + i;
             const nodeElement = el.querySelector(queryNode);
 
-            const fo = document.createElementNS('http://www.w3.org/2000/svg', "foreignObject");
-            nodeElement.appendChild(fo);
+            const foreignObject = document.createElementNS('http://www.w3.org/2000/svg', "foreignObject");
+            nodeElement.appendChild(foreignObject);
 
             const ellipseElement = el.querySelector("#node" + i + " > ellipse");
             ellipseElement.style.visibility = "hidden";
@@ -350,13 +357,13 @@ function extractProofGraph(lines, depth) {
                 const w = node.getBoundingClientRect().width;
                 const h = node.getBoundingClientRect().height;
                 //const w = node.innerHTML.indexOf("\\(") > -1 ? 0 : node.clientWidth / 2-8;
-                const x = parseInt(ellipseElement.getAttribute("cx")) - parseInt(ellipseElement.getAttribute("rx"));
+                const x = parseInt(ellipseElement.getAttribute("cx")) - parseInt(ellipseElement.getAttribute("rx"))+4;
                 const y = parseInt(ellipseElement.getAttribute("cy")) - parseInt(ellipseElement.getAttribute("ry"));
-                fo.setAttribute("x", x + "");
-                fo.setAttribute("y", y + "");
-                fo.setAttribute("width", w * 2);
-                fo.setAttribute("height", h * 2);
-                fo.appendChild(node);
+                foreignObject.setAttribute("x", x + "");
+                foreignObject.setAttribute("y", y + "");
+                foreignObject.setAttribute("width", w * 2);
+                foreignObject.setAttribute("height", h * 2);
+                foreignObject.appendChild(node);
                 i++;
             } else
                 throw "text Element '" + query + "' not found";
