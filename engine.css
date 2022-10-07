@@ -162,6 +162,10 @@ env {
 }
 
 
+.button:active {
+    opacity: 0.8;
+}
+
 .box0.inside {
     width: 100%;
     max-width: 100%;
