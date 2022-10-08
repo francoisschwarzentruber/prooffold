@@ -159,6 +159,7 @@ env {
     padding: 0px;
     overflow: hidden;
     visibility: hidden;
+    display: none;
 }
 
 

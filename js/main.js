@@ -718,7 +718,9 @@ async function load(filename) {
     buttons = [];
     document.body.innerHTML = '<svg id="svg" ></svg>';
     setInterval(() => {
-        svg.style.width = document.body.scrollWidth;
+        const w = Math.max(...[...document.querySelectorAll(".box:not(.hidden)")].map((el) => parseInt("0" + el.style.left) + el.clientWidth));
+        console.log(w);
+        svg.style.width = w;
         svg.style.height = document.body.scrollHeight;
     }, 1000);
 

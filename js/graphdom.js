@@ -128,7 +128,7 @@ class GraphDOM {
                 const h = node.getBoundingClientRect().height;
                 //const w = node.innerHTML.indexOf("\\(") > -1 ? 0 : node.clientWidth / 2-8;
                 const x = parseInt(ellipseElement.getAttribute("cx")) - parseInt(ellipseElement.getAttribute("rx")) + 4;
-                const y = parseInt(ellipseElement.getAttribute("cy")) - parseInt(ellipseElement.getAttribute("ry"));
+                const y = parseInt(ellipseElement.getAttribute("cy")) - parseInt(ellipseElement.getAttribute("ry")) + 6;
                 foreignObject.setAttribute("x", x + "");
                 foreignObject.setAttribute("y", y + "");
                 foreignObject.setAttribute("width", w * 2);

@@ -35,18 +35,18 @@ Dijkstra's algorithm is correct: it returns the distance from the source $s$ to 
 
                     $d[u] = \delta(u) = +\infty$
                 }
-                $u \neq s$ and there exists a path from $s$ to $u$
+                Case $u \neq s$ and there exists a path from $s$ to $u$
                 {
                     $d[u] = \delta(u)$
                     {
-                        Consider a shortest path $\pi$ from $s$ to $u$
-                        Let $y$ the first vertex in $\pi$ that is in the priority queue
-                        values $d[u]$ and $\delta(u)$ sandwiched by $d[y]$ and $d[y]$
+                        Consider a shortest path $\pi$ from $s$ to $u$.
+                        Let $y$ be the first vertex in $\pi$ that is in the priority queue.
+                        The values $d[u]$ and $\delta(u)$ are sandwiched by $d[y]$ and $d[y]$.
                         {
-                            Let $x$ the predecessor of $y$ in $\pi$
-                        $x$ is not in the priority queue, it has been popped             (xpopped)
+                            Let $x$ be the predecessor of $y$ in $\pi$
+                        $x$ is not in the priority queue, it has been popped.             (xpopped)
                         asciiart {
-s -> ... -> x -> y -> ... -> u
+s → ... → x → y → ... → u
                         }
                         
                         $d[y] \leq \delta[y]$
