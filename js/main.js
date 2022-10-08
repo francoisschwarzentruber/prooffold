@@ -12,7 +12,7 @@ const openTabs = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
  * if false, it means that panels/boxes appears on the right
  * if true, it means that they appears just below
  */
-const inside = false;
+const inside = true;
 
 
 /**
@@ -304,12 +304,23 @@ function extractASCIIArt(lines) {
 
 
 
-
+/**
+ * 
+ * @param {*} lines 
+ * @param {*} depth 
+ * @returns extract a div element that contains the graphviz graph of the proof written in lines
+ */
 function extractProofGraph(lines, depth) {
 
     const element = document.createElement("div");
     element.classList.add("graphvizContainer");
 
+    /**
+     * 
+     * @param {*} nodes 
+     * @param {*} edges 
+     * @returns a HTML element containing the graph whose nodes are nodes and edges are edges
+     */
     function makeGraphWithGraphViZAndElements(nodes, edges) {
         const el = document.createElement("div");
         const tempContainer = document.createElement("div");
@@ -317,12 +328,10 @@ function extractProofGraph(lines, depth) {
         document.body.appendChild(tempContainer);
         /**
          * 
-         * @param {*} dotCode 
-         * @returns 
+         * @param {*} dotCode (graphviz format)
+         * @returns the HTML code that represents the graph of the code dotCode (graphviz format)
          */
-        function svgFromDot(dotCode) {
-            return Viz(dotCode, "svg");
-        }
+        function svgFromDot(dotCode) { return Viz(dotCode, "svg"); }
 
         let dotCode = `digraph {`;
 
@@ -343,7 +352,7 @@ function extractProofGraph(lines, depth) {
             console.log(width)
             const height = node.getBoundingClientRect().height;
             const factor = 1.7 / (96);
-            dotCode += `${id} [width = ${width * factor}, height = ${height * factor}];`;
+            dotCode += `${id} [width = ${width * factor}, height = ${height * factor}];\n`;
         }
 
 
@@ -391,6 +400,8 @@ function extractProofGraph(lines, depth) {
             const queryNode = "#node" + i;
             const nodeElement = el.querySelector(queryNode);
 
+            if (nodeElement == null)
+                console.log(queryNode + " not found");
             const foreignObject = document.createElementNS('http://www.w3.org/2000/svg', "foreignObject");
             nodeElement.appendChild(foreignObject);
 
@@ -434,6 +445,8 @@ function extractProofGraph(lines, depth) {
         edges.push(edge);
     }
 
+const G = new GraphDOM();
+
 
     while (lines.length > 0) {
         const rawLine = lines.shift();
@@ -441,6 +454,7 @@ function extractProofGraph(lines, depth) {
         if (line == "") { //ignore empty line
 
         } else if (line.indexOf("<->") > -1) {
+ 
             const s = line.split("<->");
             const id1 = s[0].trim();
             const id2 = s[1].trim();
