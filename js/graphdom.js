@@ -15,7 +15,7 @@ class GraphDOM {
                 case "->": return id1 + " -> " + id2;
                 case "=>": return id1 + " -> " + id2;
                 case "==": return id1 + " -> " + id2 + ' [arrowhead=none];';
-                case "- - -": return `{ rank = same; ${id1}; ${id2} }  \n` + line.replace("- - -", "->") + ' [ style="dashed", arrowhead=none ];';
+                case "- - -": return `{ rank = same; ${id1}; ${id2} }  \n` + id1 + " -> " + id2 + ' [ style="dashed", arrowhead=none ];';
                 case "<->": case "<=>": return id1 + " -> " + id2 + ' [dir=both];';
                 default: throw `Error: ${type} unknown type`;
             }
