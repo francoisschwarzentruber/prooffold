@@ -311,141 +311,14 @@ function extractASCIIArt(lines) {
  * @returns extract a div element that contains the graphviz graph of the proof written in lines
  */
 function extractProofGraph(lines, depth) {
-
     const element = document.createElement("div");
     element.classList.add("graphvizContainer");
 
-    /**
-     * 
-     * @param {*} nodes 
-     * @param {*} edges 
-     * @returns a HTML element containing the graph whose nodes are nodes and edges are edges
-     */
-    function makeGraphWithGraphViZAndElements(nodes, edges) {
-        const el = document.createElement("div");
-        const tempContainer = document.createElement("div");
-        tempContainer.style.display = "inline-block";
-        document.body.appendChild(tempContainer);
-        /**
-         * 
-         * @param {*} dotCode (graphviz format)
-         * @returns the HTML code that represents the graph of the code dotCode (graphviz format)
-         */
-        function svgFromDot(dotCode) { return Viz(dotCode, "svg"); }
-
-        let dotCode = `digraph {`;
-
-        for (const id in nodes) {
-            const node = nodes[id];
-            node.style.display = "inline"
-            tempContainer.appendChild(node);
-
-            {
-                const width = node.getBoundingClientRect().width;
-                console.log(node)
-                console.log(width)
-            }
-
-            MathJax.typeset();
-            const width = node.getBoundingClientRect().width;
-            console.log(node)
-            console.log(width)
-            const height = node.getBoundingClientRect().height;
-            const factor = 1.7 / (96);
-            dotCode += `${id} [width = ${width * factor}, height = ${height * factor}];\n`;
-        }
-
-
-        const attrFakeNode = ' [label="", shape=point, width=0.01, height=0.01]; \n';
-
-        for (const edge of edges) {
-            if (nodes[edge.id1] == undefined)
-                dotCode += edge.id1 + attrFakeNode;
-
-            if (nodes[edge.id2] == undefined)
-                dotCode += edge.id2 + attrFakeNode;
-            dotCode += edge.dotCode + "\n";
-
-        }
-
-
-        dotCode += `}`;
-
-        console.log(dotCode)
-
-        el.innerHTML = svgFromDot(dotCode);
-
-        function removeStrokeColorsFromEdges(el) {
-            for (const p of el.querySelectorAll("polygon"))
-                if (p.parentNode.parentNode.tagName != "svg") {
-                    p.setAttribute("stroke", "");
-                    p.setAttribute("fill", "");
-                    p.classList.add("edge");
-                }
-
-            for (const p of el.querySelectorAll("path")) {
-                p.setAttribute("stroke", "");
-                p.classList.add("edge");
-            }
-
-
-        }
-
-        removeStrokeColorsFromEdges(el);
-        let i = 1;
-
-        for (const id in nodes) {
-            const node = nodes[id];
-
-            const queryNode = "#node" + i;
-            const nodeElement = el.querySelector(queryNode);
-
-            if (nodeElement == null)
-                console.log(queryNode + " not found");
-            const foreignObject = document.createElementNS('http://www.w3.org/2000/svg', "foreignObject");
-            nodeElement.appendChild(foreignObject);
-
-            const ellipseElement = el.querySelector("#node" + i + " > ellipse");
-            ellipseElement.style.visibility = "hidden";
-
-            const textElement = el.querySelector("#node" + i + " > text");
-            if (textElement)
-                textElement.style.visibility = "hidden";
-            if (ellipseElement != null) {
-                const w = node.getBoundingClientRect().width;
-                const h = node.getBoundingClientRect().height;
-                //const w = node.innerHTML.indexOf("\\(") > -1 ? 0 : node.clientWidth / 2-8;
-                const x = parseInt(ellipseElement.getAttribute("cx")) - parseInt(ellipseElement.getAttribute("rx")) + 4;
-                const y = parseInt(ellipseElement.getAttribute("cy")) - parseInt(ellipseElement.getAttribute("ry"));
-                foreignObject.setAttribute("x", x + "");
-                foreignObject.setAttribute("y", y + "");
-                foreignObject.setAttribute("width", w * 2);
-                foreignObject.setAttribute("height", h * 2);
-                foreignObject.appendChild(node);
-                i++;
-            } else
-                throw "text Element '" + query + "' not found";
-
-        }
-
-        return el;
-    }
-
-    let nodes = {};
     let lastElement = undefined; //last element or edge
-    let edges = [];
 
-    function addEdge(id1, id2, dotCode) {
-        const edge = {
-            id1: id1,
-            id2: id2,
-            dotCode: dotCode
-        }
-        lastElement = edge;
-        edges.push(edge);
-    }
+    const G = new GraphDOM();
 
-const G = new GraphDOM();
+
 
 
     while (lines.length > 0) {
@@ -454,45 +327,40 @@ const G = new GraphDOM();
         if (line == "") { //ignore empty line
 
         } else if (line.indexOf("<->") > -1) {
- 
             const s = line.split("<->");
             const id1 = s[0].trim();
             const id2 = s[1].trim();
-            const dotCode = line.replace("<->", "->") + ' [dir="both"];';
-            addEdge(id1, id2, dotCode);
+            lastElement = G.addEdge(id1, id2, "<->");
+
         } else if (line.indexOf("->") > -1) {
             const s = line.split("->");
             const id1 = s[0].trim();
             const id2 = s[1].trim();
-            addEdge(id1, id2, line);
+            lastElement = G.addEdge(id1, id2, "->");
 
         } else if (line.indexOf("==") > -1) {
             const s = line.split("==");
             const id1 = s[0].trim();
             const id2 = s[1].trim();
-            const dotCode = line.replace("==", "->") + ' [arrowhead=none];';
-            addEdge(id1, id2, dotCode);
+            lastElement = G.addEdge(id1, id2, "==");
 
         } else if (line.indexOf("- - -") > -1) {
             const s = line.split("- - -");
             const id1 = s[0].trim();
             const id2 = s[1].trim();
-            const dotCode = `{ rank = same; ${id1}; ${id2} }  \n` + line.replace("- - -", "->") + ' [ style="dashed", arrowhead=none ];';
-            addEdge(id1, id2, dotCode);
+            lastElement = G.addEdge(id1, id2, "- - -");
 
         } else if (line.indexOf("<=>") > -1) {
             const s = line.split("<=>");
             const id1 = s[0].trim();
             const id2 = s[1].trim();
-            const dotCode = line.replace("<=>", "->") + ' [dir=both];'; //color="black:white:black" <= not working...
-            addEdge(id1, id2, dotCode);
+            lastElement = G.addEdge(id1, id2, "<=>");
 
         } else if (line.indexOf("=>") > -1) {
             const s = line.split("=>");
             const id1 = s[0].trim();
             const id2 = s[1].trim();
-            const dotCode = line.replace("=>", "->") + '[]'; //color="black:white:black"
-            addEdge(id1, id2, dotCode);
+            lastElement = G.addEdge(id1, id2, "=>");
 
         } else if (line == "{") {
             const box = linesToDOMElement(lines, depth + 1);
@@ -507,12 +375,15 @@ const G = new GraphDOM();
             } else
                 document.body.appendChild(box);
         } else if (line == "}") {             //END OF THE GRAPH
-            const graph = makeGraphWithGraphViZAndElements(nodes, edges);
-            element.prepend(graph);
-            for (const edge of edges) // we make the connection for the edges and their boxes
+            G.prepare();
+
+            const graphElement = G.makeGraphWithGraphViZAndElements(G.nodes, G.edges);
+            element.prepend(graphElement);
+
+            for (const edge of G.edges) // we make the connection for the edges and their boxes
                 if (edge.box) {
                     function getSVGElementFromEdge(edge) {
-                        const titles = graph.querySelectorAll("title");
+                        const titles = graphElement.querySelectorAll("title");
                         for (let i = 0; i < titles.length; i++) {
                             const t = titles[i];
                             console.log(t.textContent)
@@ -533,7 +404,7 @@ const G = new GraphDOM();
             return element;
         } else {
             const el = makeDiv(line);
-            nodes[el.id] = el;
+            G.addNode(el.id, el);
             lastElement = el;
         }
     }

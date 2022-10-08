@@ -1,0 +1,110 @@
+Dijkstra's algorithm is correct: it returns the distance from the source $s$ to other vertices in the graph
+{
+    $\delta \leq d$ is an invariant
+    {
+        Initiation: true
+        Invariant by one iteration
+    }
+    For all popped $t$, $d[t] = \delta(t)$ is an invariant
+    {
+        Initialization
+        {
+            No vertex is popped, so the invariant holds
+        }
+        Maintenance
+        {
+            Consider a moment where not all vertices have been popped.
+
+            Suppose that for all popped $t$, $d[t] = \delta(t)$         (invariant)
+            Let $u$ be the next vertex to be popped.
+            $d[u] = \delta[u]$
+            {
+                Case $u = s$
+                {
+                    Initially $d[s] = 0$
+
+                    $\delta(s) = 0$
+
+                    $d[u] = \delta(u) = 0$
+                }
+                Case $u \neq s$ and <div id="nopath">no path from $s$ to $u$</div>
+                {
+                    $\delta(u) = +\infty$             by (nopath)
+
+                    $d[u] \geq \delta(u)$
+
+                    $d[u] = \delta(u) = +\infty$
+                }
+                $u \neq s$ and there exists a path from $s$ to $u$
+                {
+                    $d[u] = \delta(u)$
+                    {
+                        Consider a shortest path $\pi$ from $s$ to $u$
+                        Let $y$ the first vertex in $\pi$ that is in the priority queue
+                        values $d[u]$ and $\delta(u)$ sandwiched by $d[y]$ and $d[y]$
+                        {
+                            Let $x$ the predecessor of $y$ in $\pi$
+                        $x$ is not in the priority queue, it has been popped             (xpopped)
+                        asciiart {
+s -> ... -> x -> y -> ... -> u
+                        }
+                        
+                        $d[y] \leq \delta[y]$
+                        {
+                            proofgraph {
+                                the edge $x\rightarrow y$ <br/>has been treated                (A)
+                                $d[y] \leq d[x] + weight(x, y)$             (B)
+                                $d[x] = \delta(x)$                  (C)            by (xpopped,invariant)
+                                $d[y] \leq \delta[x] + weight(x, y)$             (D)
+
+                                Subpaths of $\pi$ <br/>are shortest paths        (a1)
+                                the subpath $\pi[s..x]$ <br> is a shortest path         (a1x)
+                                the subpath $\pi[s..y]$ <br> is a shortest path            (a1y)
+                                The weight of $\pi[s..x]$ is $\delta(x)$           (a2x)
+                                The weight of $\pi[s..y]$ is $\delta(y)$           (a2y) 
+                                $\pi[s..y] := \pi[s..x].y$              (p)
+                                $\delta(y) = \delta[x] + weight(x, y)$             (delta)
+
+                                $d[y] \leq \delta[y]$             (end)
+
+                                A => B
+                                B => D
+                                C => D
+                                a1 => a1x
+                                a1x => a2x
+                                a1 => a1y
+                                a1y => a2y
+                                p => delta
+                                a2x => delta
+                                a2y => delta
+
+                                delta => end
+                                D => end
+                            }
+
+                        }
+
+                        
+                        $\delta[y] \leq \delta(u)$
+                        {
+                            $\delta(u) = \delta(y)$ + sum of some edge weights
+                            There are only positive weights in the graph.
+                        }
+
+                        $d[u] \leq d[y]$
+                        {
+                            $u$ is the next vertex to be popped
+                            $d[u]$ is the minimum among unpopped vertices
+
+                        }
+
+                    }
+                    
+                    
+                }
+            }
+        }
+    }
+}
+
+
