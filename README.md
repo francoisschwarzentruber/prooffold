@@ -8,6 +8,7 @@ Video: [https://www.youtube.com/watch?v=FPZiGevIyR8]
 
 ## Screenshots
 
+![prooffold_inequalitiesastabs](https://user-images.githubusercontent.com/43071857/194746547-cec69dd2-3cb4-41b3-9ede-9149066afcac.gif)
 ![image](https://user-images.githubusercontent.com/43071857/194717214-e9785336-711f-4bdb-b455-dfcfd2293ac1.png)
 ![prooffoldrrt](https://user-images.githubusercontent.com/43071857/154652110-b4573d44-1de9-4af3-9a58-bb295e5888d2.gif)
 ![prooffoldeuclideanTSP](https://user-images.githubusercontent.com/43071857/154651408-12462e46-c220-47e8-b43c-ad0ca2848d8e.gif)
