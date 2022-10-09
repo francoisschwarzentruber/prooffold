@@ -65,81 +65,82 @@ Dijkstra's algorithm is correct: it returns the distance from the source $s$ to 
                 }
                 Case $u \neq s$ and there exists a path from $s$ to $u$
                 {
-                    $d[u] = \delta(u)$
+                    
+                    Consider a shortest path $\pi$ from $s$ to $u$.
+                    Let $y$ be the first vertex in $\pi$ that is in the priority queue.
+                    The values $d[u]$ and $\delta(u)$ are sandwiched by $d[y]$ and $d[y]$.
                     {
-                        Consider a shortest path $\pi$ from $s$ to $u$.
-                        Let $y$ be the first vertex in $\pi$ that is in the priority queue.
-                        The values $d[u]$ and $\delta(u)$ are sandwiched by $d[y]$ and $d[y]$.
-                        {
-                            Let $x$ be the predecessor of $y$ in $\pi$
-                            $x$ is not in the priority queue, it has been popped.             (xpopped)
-                            asciiart {
-    s → ... → x → y → ... → u
-                            }
-                        
-                        $d[y]$ <span id="d[y]<delta(y)">$\leq$</span> $\delta[y]$ <span id="delta(y)<delta(u)">$\leq$</span> $\delta(u)$ <span id="delta(u)<d[u]">$\leq$</span> $d[u]$ <span id="d[u]<d[y]">$\leq$</span> $d[y]$ 
-                        proof of d[y]<delta(y) {
-                            proofgraph {
-                                the edge $x\rightarrow y$ <br/>has been treated                (A)
-                                $d[y] \leq d[x] + weight(x, y)$             (B)
-                                $d[x] = \delta(x)$                  (C)            by (xpopped,invariant)
-                                $d[y] \leq \delta[x] + weight(x, y)$             (D)
-
-                                Subpaths of $\pi$ <br/>are shortest paths        (a1)
-                                the subpath $\pi[s..x]$ <br> is a shortest path         (a1x)
-                                the subpath $\pi[s..y]$ <br> is a shortest path            (a1y)
-                                The weight of $\pi[s..x]$ is $\delta(x)$           (a2x)
-                                The weight of $\pi[s..y]$ is $\delta(y)$           (a2y) 
-                                $\pi[s..y] := \pi[s..x].y$              (p)
-                                $\delta(y) = \delta[x] + weight(x, y)$             (delta)
-
-                                $d[y] \leq \delta[y]$             (end)
-
-                                A => B
-                                B => D
-                                C => D
-                                a1 => a1x
-                                a1x => a2x
-                                a1 => a1y
-                                a1y => a2y
-                                p => delta
-                                a2x => delta
-                                a2y => delta
-
-                                delta => end
-                                D => end
-                            }
-
+                        Let $x$ be the predecessor of $y$ in $\pi$
+                        $x$ is not in the priority queue, it has been popped.             (xpopped)
+                        asciiart {
+s → ... → x → y → ... → u
                         }
+                    
+                    $d[y]$ <span id="d[y]<delta(y)">$\leq$</span> $\delta[y]$ <span id="delta(y)<delta(u)">$\leq$</span> $\delta(u)$ <span id="delta(u)<d[u]">$\leq$</span> $d[u]$ <span id="d[u]<d[y]">$\leq$</span> $d[y]$ 
+                    proof of d[y]<delta(y) {
+                        proofgraph {
+                            the edge $x\rightarrow y$ <br/>has been treated                (A)
+                            $d[y] \leq d[x] + weight(x, y)$             (B)
+                            $d[x] = \delta(x)$                  (C)            by (xpopped,invariant)
+                            $d[y] \leq \delta[x] + weight(x, y)$             (D)
 
-                        proof of delta(u)<d[u] {
-                            From the invariant $\delta \leq d$
-                        }
-                        
-                        proof of delta(y)<delta(u) {
-                            $\delta(u) = \delta(y)$ + sum of some edge weights
-                            There are only positive weights in the graph.
-                        }
+                            Subpaths of $\pi$ <br/>are shortest paths        (a1)
+                            the subpath $\pi[s..x]$ <br> is a shortest path         (a1x)
+                            the subpath $\pi[s..y]$ <br> is a shortest path            (a1y)
+                            The weight of $\pi[s..x]$ is $\delta(x)$           (a2x)
+                            The weight of $\pi[s..y]$ is $\delta(y)$           (a2y) 
+                            $\pi[s..y] := \pi[s..x].y$              (p)
+                            $\delta(y) = \delta[x] + weight(x, y)$             (delta)
 
-                        proof of d[u]<d[y] {
-                            proofgraph {
-                                Dijkstra's algorithm chooses <br/> to pop the element with the <br/>smallest $d$ among unpopped vertices            (1)
-                                $u$ is the next vertex to be popped                              (2)
-                                $d[u]$ is the minimum among vertices in the priority queue                  (3)
-                                $y$ is still in the queue                  (4)
-                                $d[u] \leq d[y]$               (5)
-                                1 => 3
-                                2 => 3
-                                3 => 5
-                                4 => 5
-                            }
-                            
+                            $d[y] \leq \delta[y]$             (end)
+
+                            A => B
+                            B => D
+                            C => D
+                            a1 => a1x
+                            a1x => a2x
+                            a1 => a1y
+                            a1y => a2y
+                            p => delta
+                            a2x => delta
+                            a2y => delta
+
+                            delta => end
+                            D => end
                         }
 
                     }
+
+                    proof of delta(u)<d[u] {
+                        From the invariant $\delta \leq d$
+                    }
+                    
+                    proof of delta(y)<delta(u) {
+                        $\delta(u) = \delta(y)$ + sum of some edge weights
+                        There are only positive weights in the graph.
+                    }
+
+                    proof of d[u]<d[y] {
+                        proofgraph {
+                            Dijkstra's algorithm chooses <br/> to pop the element with the <br/>smallest $d$ among unpopped vertices            (1)
+                            $u$ is the next vertex to be popped                              (2)
+                            $d[u]$ is the minimum <br/> among vertices in the priority queue                  (3)
+                            $y$ is still in the queue                  (4)
+                            $d[u] \leq d[y]$               (5)
+                            1 => 3
+                            2 => 3
+                            3 => 5
+                            4 => 5
+                        }
+                        
+                    }
+
+                
                     
                     
                 }
+                ⇓
+                $d[u] = \delta(u)$
             }
         }
     }
