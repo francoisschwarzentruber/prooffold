@@ -1,9 +1,37 @@
 Dijkstra's algorithm is correct: it returns the distance from the source $s$ to other vertices in the graph
 {
+    Let $d$ be the array of distance computed in Dijkstra's algorithm
+    Let $\delta(t)$ be the weight of a shortest path from $s$ to $t$ if there is one, and $\delta(t) = \infty$ if there is no path from $s$ to $t$.
     $\delta \leq d$ is an invariant
     {
-        Initiation: true
-        Invariant by one iteration
+        Initialization
+        {
+            Initially, $d[s] = 0$ and $d[t] = \infty$ for all $t \neq s$
+
+            $\delta(s) = 0$
+            {
+                Because there is a trivial path from $s$ to $s$.
+            }
+            So $\delta(t) \leq d[t]$ for all vertices $t$
+        }
+        Maintenance
+        {
+            Suppose that $\delta \leq d$ at the beginning of the iteration.
+            
+            An update is of the form $d[v] := d[u] + weight(u, v)$
+
+            $\delta(u) \leq d[u]$
+
+            $\delta(v) \leq \delta(u)+weight(u, v) $
+            {
+                $\delta(u)+weight(u, v)$ is the weight of a path made up of a shortest path from $s$ to $u$ followed by $u \rightarrow v$
+            }
+            $\delta(u)+weight(u, v) \leq d[u]+weight(u, v)$
+            
+            $\delta(v) \leq d[u]+weight(u, v)$
+
+            After the update, $\delta(v) \leq d[v]$
+        }
     }
     For all popped $t$, $d[t] = \delta(t)$ is an invariant
     {
@@ -44,13 +72,13 @@ Dijkstra's algorithm is correct: it returns the distance from the source $s$ to 
                         The values $d[u]$ and $\delta(u)$ are sandwiched by $d[y]$ and $d[y]$.
                         {
                             Let $x$ be the predecessor of $y$ in $\pi$
-                        $x$ is not in the priority queue, it has been popped.             (xpopped)
-                        asciiart {
-s → ... → x → y → ... → u
-                        }
+                            $x$ is not in the priority queue, it has been popped.             (xpopped)
+                            asciiart {
+    s → ... → x → y → ... → u
+                            }
                         
-                        $d[y] \leq \delta[y]$
-                        {
+                        $d[y]$ <span id="d[y]<delta(y)">$\leq$</span> $\delta[y]$ <span id="delta(y)<delta(u)">$\leq$</span> $\delta(u)$ <span id="delta(u)<d[u]">$\leq$</span> $d[u]$ <span id="d[u]<d[y]">$\leq$</span> $d[y]$ 
+                        proof of d[y]<delta(y) {
                             proofgraph {
                                 the edge $x\rightarrow y$ <br/>has been treated                (A)
                                 $d[y] \leq d[x] + weight(x, y)$             (B)
@@ -84,18 +112,28 @@ s → ... → x → y → ... → u
 
                         }
 
+                        proof of delta(u)<d[u] {
+                            From the invariant $\delta \leq d$
+                        }
                         
-                        $\delta[y] \leq \delta(u)$
-                        {
+                        proof of delta(y)<delta(u) {
                             $\delta(u) = \delta(y)$ + sum of some edge weights
                             There are only positive weights in the graph.
                         }
 
-                        $d[u] \leq d[y]$
-                        {
-                            $u$ is the next vertex to be popped
-                            $d[u]$ is the minimum among unpopped vertices
-
+                        proof of d[u]<d[y] {
+                            proofgraph {
+                                Dijkstra's algorithm chooses <br/> to pop the element with the <br/>smallest $d$ among unpopped vertices            (1)
+                                $u$ is the next vertex to be popped                              (2)
+                                $d[u]$ is the minimum among vertices in the priority queue                  (3)
+                                $y$ is still in the queue                  (4)
+                                $d[u] \leq d[y]$               (5)
+                                1 => 3
+                                2 => 3
+                                3 => 5
+                                4 => 5
+                            }
+                            
                         }
 
                     }

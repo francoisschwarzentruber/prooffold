@@ -1,0 +1,51 @@
+Theorem. Let $a \geq 1$, $d \geq 2$, $b \geq 0$. Let $(T(n))_{n \in \mathbb N}$ be a sequence such that for all $n \geq 1$,
+$T(n) = aT(\lceil \frac n d \rceil) + n^b$.
+Then:
+$T(n) = \begin{cases} O(n^b) \text{ if } a < d^b \\ O(n^b \log n) \text{ if } a = d^b \\ O(n^{\log_d a}) \text{ if } a > d^b  \end{cases}$
+{
+	- if $n = d^h$                       (casendh)
+	it is true!  
+	{
+		$T(n) = n^b \sum_{\ell=0}^h \left( \frac a {d^b} \right)^\ell$
+
+		if $a < d^b$ then $T(n) = O(n^b)$
+		{
+			Because the series is convergent.
+		}
+		if $a = d^b$ then $T(n) = O(n^b \log n)$
+		{
+			Because the series is $h$. 
+
+			$h = \log_d n$              by (casendh)
+		}
+		if $a > d^b$ then $T(n) = O(n^{\log_d a})$
+		{
+			The series is divergent and is $O(\left( \frac a {d^b} \right)^h)$
+
+			$d^{bh} = n^b$
+
+			$T(n) = O(a^h)$
+
+			$h = \log_d n$              by (casendh)
+			
+			
+			$a^{\log_d n} = n^{\log_d a}$
+		}
+	}
+	- For any $n$,
+	it is true
+	{
+		$(T(n))_{n \in \mathbb N}$ is increasing
+		{
+			For all $n$, $T(1) \leq \dots \leq T(n)$
+			{
+				By induction on $n$	
+
+			}
+		}
+		Let $h := \lfloor \log_d n \rfloor$
+		$d^{h} \leq n < dd^{h}$
+
+		if $a < d^b$, $T(n) < T(dd^{h}) = O(d^{bh}) = O(n^b)$
+	}
+}

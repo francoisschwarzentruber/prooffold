@@ -68,9 +68,10 @@ env {
     overflow-x: hidden;
     overflow-y: auto;
     display: block;
-    border-left: 4px solid black;
+    border-left: 2px dotted black;
+    border-top: 2px solid black;
+    
     border-radius: 16px;
-    background-color: rgba(0, 0, 0, 0.02);
 }
 
 
@@ -176,10 +177,7 @@ env {
     display: none;
 }
 
-.box0 {
-    left: 0px;
-    border-left: 4px none black;
-}
+
 
 .example {
     color: darkblue;

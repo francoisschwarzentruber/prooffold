@@ -94,6 +94,8 @@ class GraphDOM {
                     p.setAttribute("fill", "");
                     p.classList.add("edge");
                 }
+                else
+                    p.remove();
 
             for (const p of el.querySelectorAll("path")) {
                 p.setAttribute("stroke", "");

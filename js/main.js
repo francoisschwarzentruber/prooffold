@@ -12,7 +12,7 @@ const openTabs = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
  * if false, it means that panels/boxes appears on the right
  * if true, it means that they appears just below
  */
-const inside = false;
+const inside = true;
 
 
 /**
@@ -671,7 +671,17 @@ function linesToDOMElement(lines, depth) {
             el.classList.add("algo");
             el.style.display = "block";
             nodes.push(el);
-        } else if (line == "{") {
+        }
+        else if (line.startsWith("proof of ") && line.endsWith("{")) {
+            const box = linesToDOMElement(lines, depth + 1);
+            const buttonid = line.substr("proof of ".length, line.length - "proof of {".length).trim();
+            setTimeout(() => connectButtonBox(document.getElementById(buttonid), box, depth), 100);
+            if (inside) {
+                nodes.push(box);
+            } else
+                document.body.appendChild(box);
+        }
+        else if (line == "{") {
             const box = linesToDOMElement(lines, depth + 1);
             const button = nodes[nodes.length - 1];
             connectButtonBox(button, box, depth);
@@ -719,7 +729,6 @@ async function load(filename) {
     document.body.innerHTML = '<svg id="svg" ></svg>';
     setInterval(() => {
         const w = Math.max(...[...document.querySelectorAll(".box:not(.hidden)")].map((el) => parseInt("0" + el.style.left) + el.clientWidth));
-        console.log(w);
         svg.style.width = w;
         svg.style.height = document.body.scrollHeight;
     }, 1000);
