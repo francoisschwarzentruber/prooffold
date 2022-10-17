@@ -166,7 +166,8 @@ function makeDiv(line) {
     function formatEnv(line) {
         const testEnv = (str) => line.startsWith(str) ? `<env>${str}</env>` + line.substr(str.length) : undefined;
 
-        for (const str of ["Theorem.", "Definition.", "Proposition.", "Proof.", "Lemma."]) {
+        for (const str of ["Théorème.", "Theorem.", "Définition", "Definition.", "Notation.", "Notations.", "Proposition.", "Corollaire.", "Corollary.", "Démonstration.", 
+        "Proof.", "Lemme.", "Lemma."]) {
             const newLine = testEnv(str);
             if (newLine)
                 return newLine;
@@ -564,11 +565,6 @@ function connectButtonBox(button, box, depth) {
 
 
             line.classList.remove("hidden");
-
-
-
-
-
 
             openTabs[depth] = getButtonNumber(button);
 

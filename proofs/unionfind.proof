@@ -1,3 +1,8 @@
+Notations.
+$x.h$ is the rank of a node, i.e. the height of the tree rooted at $x$ without path compression.
+$n$ is the number of elements in total, i.e. the number of nodes.
+
+
 Proposition. The tree rooted at $x$ contains at least $2^{x.h}$ nodes.          (treecontains)
 {
     Invariance.
@@ -39,7 +44,7 @@ Corollary. For all nodes, $x.h \leq \log n$              (bound)
 }
 
 
-Let $\log^* n$ be the minimum number of times to write $\log_2$ for having $\log_2 \log_2 \dots \log_2 n \leq 1$.
+Definition. Let $\log^* n$ be the minimum number of times to write $\log_2$ for having $\log_2 \log_2 \dots \log_2 n \leq 1$.
 {
     <table><tr><td>$n$</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>...</td><td>16</td><td>17</td><td>...</td><td>65536</td><td>65537</td><td>...</td></tr><tr><td>$\log^* n$</td><td>0</td><td>1</td><td>2</td><td>2</td><td>3</td><td>...</td><td>3</td><td>4</td><td>...</td><td>4</td><td>5</td><td>...</td></tr></table>
     If $n = $ the number of atoms in the universe...
@@ -48,7 +53,7 @@ Let $\log^* n$ be the minimum number of times to write $\log_2$ for having $\log
         For $n = 10^{78}$, $\log^* n = 6$.
     }
 }
-Find amortized cost is $O(\log^* n)$.
+Theorem. The amortized cost of Find is $O(\log^* n)$.
 {
 
     $m$ calls to Find is in $O((n+m)\log^* n)$.
@@ -99,7 +104,7 @@ Find amortized cost is $O(\log^* n)$.
                 {
                     distributed money $\leq \sum_{j=0}^{+\infty}p_j n_j$              by (givemoney)
 
-                    There are no nodes with $\log*(x.h) \geq \log^* n - 1$
+                    There are no nodes with $\log^*(x.h) \geq \log^* n - 1$
                     {
                         $x.h \leq \log_2 n$        (bound)
                         $\log^*(x.h) \leq \log^* \log n = \log^*n - 1$
