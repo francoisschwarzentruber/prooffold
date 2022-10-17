@@ -611,6 +611,12 @@ function linesToDOMElement(lines, depth) {
         } else if (line == "proofgraph {") {
             const el = extractProofGraph(lines, depth);
             nodes.push(el);
+        } else if (line == "block {") {
+            const el = linesToDOMElement(lines, depth);
+            const elBox = document.createElement("div");
+            elBox.append(el);
+            el.classList.remove("box"+depth);
+            nodes.push(elBox);
         } else if (line == "digraph {" || line == "graph {") {
             const dotCode = line + extractDotCode(lines);
             const el = document.createElement("div");
@@ -642,18 +648,18 @@ function linesToDOMElement(lines, depth) {
                 const s = p => {
                 let x = 100;
                 let y = 100;
- 
+     
                 p.setup = function() {
                     p.createCanvas(700, 410);
                 };
- 
+     
                 p.draw = function() {
                     p.background(0);
                     p.fill(255);
                     p.rect(x, y, 50, 50);
                 };
                 };
- 
+     
                 new p5(s, document.getElementById("p5test")); // invoke p5
                 */
             const content = extractJS(lines);

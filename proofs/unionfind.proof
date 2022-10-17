@@ -1,0 +1,165 @@
+Proposition. The tree rooted at $x$ contains at least $2^{x.h}$ nodes.          (treecontains)
+{
+    Invariance.
+
+    Initialization
+    {
+        At the beginning, all trees are single-root nodes.
+        Thus, the node $x$ contains $2^0$ nodes.
+    }
+    Maintenance
+    {
+        We consider the union operation of two trees.
+
+        Case when heights are different.
+        {
+            In that case, the final root will be the root $x$ of the trees with the biggest rank.
+
+            Before, $x$ contained at least $2^{x.h}$ nodes.
+
+            As we just attached a new subtree, $x$ still contains at least $2^{x.h}$ nodes.
+        }
+        Case when heights are equal
+        {
+            Let $h$ be that common height.
+            <img height=200px src="proofs/unionfind_unionsamerank.png"/>
+            We get a tree with at least $2^h+2^h=2^{h+1}$ elements.
+            The height of the new tree is $h+1$.
+            So the invariant is still true.
+        }
+    }
+}
+
+
+Corollary. For all nodes, $x.h \leq \log n$              (bound)
+{
+    We have $2^{x.h} \leq n$.
+    ⇓
+    $x.h \leq \log_2 n$
+}
+
+
+Let $\log^* n$ be the minimum number of times to write $\log_2$ for having $\log_2 \log_2 \dots \log_2 n \leq 1$.
+{
+    <table><tr><td>$n$</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>...</td><td>16</td><td>17</td><td>...</td><td>65536</td><td>65537</td><td>...</td></tr><tr><td>$\log^* n$</td><td>0</td><td>1</td><td>2</td><td>2</td><td>3</td><td>...</td><td>3</td><td>4</td><td>...</td><td>4</td><td>5</td><td>...</td></tr></table>
+    If $n = $ the number of atoms in the universe...
+    {
+        <img height=300px src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/LH_95.jpg/1200px-LH_95.jpg"></img>
+        For $n = 10^{78}$, $\log^* n = 6$.
+    }
+}
+Find amortized cost is $O(\log^* n)$.
+{
+
+    $m$ calls to Find is in $O((n+m)\log^* n)$.
+    {
+        Let $p_{j}$ be $2^{2^{\dots^2}}$ where the number of occurrences of $2$ is $j$.
+            {
+                More formally, we can define $p_j$ by induction on $j$:
+                - $p_{-1} = 0$;
+                - $p_j = 2^{p_{j-1}}$ for all integers $j$.
+
+                <table><tr><td>$j$</td><td>-1</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>...</td><tr><td>$p_j$</td><td>0</td><td>1</td><td>2</td><td>4</td><td>16</td><td>65536</td><td>>10^{19728}</td><td>...</td></tr></table>
+            }
+        $h \in [p_{\log^* h-1}+1, \dots, p_{\log^* h}]$
+        {
+            <table><tr><td>$n$</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>...</td><td>16</td><td>17</td><td>...</td><td>65536</td><td>65537</td><td>...</td><td>$p_5$</td><td>$p_5+1$</td><td>...</td></tr><tr><td>$\log^* n$</td><td>0</td><td>1</td><td>2</td><td>2</td><td>3</td><td>...</td><td>3</td><td>4</td><td>...</td><td>4</td><td>5</td><td>...</td><td>5</td><td>6</td><td>...</td></tr></table>
+        }
+        When a non-leaf node $x$ stops being a root, its rank $x.h$ remains the same.
+        {
+            <img height=200px src="proofs/unionfind_xstopsbeingaroot.gif"/>
+            Once a node stops being a root, it will not be a root again.
+            The rank only changes for the root during Union.
+            
+        }
+        
+        
+        block {
+            <h3>Transaction system</h3>
+            When a non-leaf node $x$ stops being a root, we give $p_{\log^*(x.h)}$ euros to $x$.                  (givemoney)
+            {
+                <img height=200px src="proofs/unionfind_givemoney.png"/>
+            }
+            When Find($x$), the node $x$ pays 1 euro when:
+            - $x$ is neither a root nor a leaf
+            - $x.parent$ is not a root
+            - $\log^*(x.h) = \log^*(x.parent.h)$
+            {
+                This condition means that the rank of $x$ and $x.parent.h$ lies in the same interval $[p_{j-1}+1, \dots, p_j]$.
+            }
+        }
+ 
+        $m$ calls to Find do $O(n \log^* n)$ paid elementary operations.
+        {
+            We give $O(n \log^* n)$ euros during the life of the data structure.
+            {
+                Let $n_j$ be the number of nodes $x$ with $\log^*(x.h) = j$ at the end.
+
+                distributed money $\leq \sum_{j=0}^{\log^* n - 1}p_j n_j$              
+                {
+                    distributed money $\leq \sum_{j=0}^{+\infty}p_j n_j$              by (givemoney)
+
+                    There are no nodes with $\log*(x.h) \geq \log^* n - 1$
+                    {
+                        $x.h \leq \log_2 n$        (bound)
+                        $\log^*(x.h) \leq \log^* \log n = \log^*n - 1$
+                    }
+                }
+
+               
+                
+                $n_j \leq \frac n {p_{j}}$
+                {
+                    $n_j$ is the number of nodes whose rank lies in $[p_{j-1}+1, \dots, p_j]$
+                    ⇓
+                    $n_j$ is bounded by the number of nodes whose rank lies in $[p_{j-1}+1, \dots, +\infty[$
+                    ⇓
+                    $n_j \leq \frac n{2^{p_{j-1}}} = \frac n {p_{j}}$
+                    {
+                        There are at most $\frac n {2^h}$ nodes of rank $\geq h+1$.
+                        {
+                            There are at most $\frac n {2^h}$ nodes of rank $h$.
+                            {
+                                Let $N$ be the number of such nodes of rank $h$.
+
+                                $N \times 2^h \leq n$         by (treecontains)
+                                ⇓
+                                $N \leq \frac n {2^h}$
+
+
+                            }
+                        }
+                    }
+                }
+                distributed money $\leq n \log^* n$
+            }
+            No node is overdrawn.
+            {
+                Consider a non-leaf and non-root node $x$.
+                When $x$ stops being a root, $x$ receives $p_{\log^* x.h}$ euros.
+                $x.h \in [p_{\log^*(x.h)-1}+1, p_{\log^*(x.h)}]$
+
+                x.parent.h stricly increases when $x$ pays.
+                {
+                    Each time $x$ pays, $x$ is connected to a new root $r$ with $r.h > x.parent.h$.
+                    {
+                        $r.h > x.parent.h$ because
+
+                        MAKE A PICTURE
+                    }
+                }
+
+                After less than $p_{\log^*(x.h)}$ payments, $\log^*(x.h) < \log^*(x.parent.h)$}
+
+                After less than $p_{\log^*(x.h)}$ payments, $x$ will not pay anymore. 
+            }
+        }
+        $m$ calls to Find do $O(m \log^* n)$ operations that are not paid.
+        {
+            Each call to Find does $O(\log^* n)$ operations that are not paid.
+            {
+                The call proceeds along a branch. The number of nodes $x$ along this branch with $\log^*(x.h) \neq \log^*(x.parent.h)$ is $O(\log^* n)$.
+            }
+        }
+    }
+}

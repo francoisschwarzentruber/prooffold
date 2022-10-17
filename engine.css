@@ -70,7 +70,7 @@ env {
     display: block;
     border-left: 2px dotted black;
     border-top: 2px solid black;
-    
+
     border-radius: 16px;
 }
 
@@ -222,4 +222,18 @@ foreignObject {
 
 #svg line {
     stroke-dasharray: 4 1;
+}
+
+
+table,
+tr,
+td {
+    border-collapse: collapse;
+    border: 1px solid black;
+
+}
+
+
+.block {
+    border-left: 1px solid black;
 }
