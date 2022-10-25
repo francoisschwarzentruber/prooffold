@@ -36,9 +36,9 @@ Proposition. The tree rooted at $x$ contains at least $2^{x.h}$ nodes.          
 }
 
 
-Corollary. For all nodes, $x.h \leq \log n$              (bound)
+Corollary. For all nodes $x$, $x.h \leq \log n$              (bound)
 {
-    We have $2^{x.h} \leq n$.
+    We have $2^{x.h} \leq n$.               by (treecontains)
     ⇓
     $x.h \leq \log_2 n$
 }
@@ -64,9 +64,9 @@ Theorem. The amortized cost of Find is $O(\log^* n)$.
                 - $p_{-1} = 0$;
                 - $p_j = 2^{p_{j-1}}$ for all integers $j$.
 
-                <table><tr><td>$j$</td><td>-1</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>...</td><tr><td>$p_j$</td><td>0</td><td>1</td><td>2</td><td>4</td><td>16</td><td>65536</td><td>>10^{19728}</td><td>...</td></tr></table>
+                <table><tr><td>$j$</td><td>-1</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>...</td><tr><td>$p_j$</td><td>0</td><td>1</td><td>2</td><td>4</td><td>16</td><td>65536</td><td>$>10^{19728}$</td><td>...</td></tr></table>
             }
-        $h \in [p_{\log^* h-1}+1, \dots, p_{\log^* h}]$
+        $h \in [p_{\log^* h-1}+1, \dots, p_{\log^* h}]$                 (logstarandinverse)
         {
             <table><tr><td>$n$</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>...</td><td>16</td><td>17</td><td>...</td><td>65536</td><td>65537</td><td>...</td><td>$p_5$</td><td>$p_5+1$</td><td>...</td></tr><tr><td>$\log^* n$</td><td>0</td><td>1</td><td>2</td><td>2</td><td>3</td><td>...</td><td>3</td><td>4</td><td>...</td><td>4</td><td>5</td><td>...</td><td>5</td><td>6</td><td>...</td></tr></table>
         }
@@ -85,7 +85,7 @@ Theorem. The amortized cost of Find is $O(\log^* n)$.
             {
                 <img height=200px src="proofs/unionfind_givemoney.png"/>
             }
-            When Find($x$), the node $x$ pays 1 euro when:
+            During a call Find($x$), the node $x$ pays 1 euro when:
             - $x$ is neither a root nor a leaf
             - $x.parent$ is not a root
             - $\log^*(x.h) = \log^*(x.parent.h)$
@@ -106,7 +106,7 @@ Theorem. The amortized cost of Find is $O(\log^* n)$.
 
                     There are no nodes with $\log^*(x.h) \geq \log^* n - 1$
                     {
-                        $x.h \leq \log_2 n$        (bound)
+                        $x.h \leq \log_2 n$       by (bound)
                         $\log^*(x.h) \leq \log^* \log n = \log^*n - 1$
                     }
                 }
@@ -117,7 +117,7 @@ Theorem. The amortized cost of Find is $O(\log^* n)$.
                 {
                     $n_j$ is the number of nodes whose rank lies in $[p_{j-1}+1, \dots, p_j]$
                     ⇓
-                    $n_j$ is bounded by the number of nodes whose rank lies in $[p_{j-1}+1, \dots, +\infty[$
+                    $n_j$ is bounded by the number of nodes whose rank lies in $[p_{j-1}+1, \dots, +\infty [$
                     ⇓
                     $n_j \leq \frac n{2^{p_{j-1}}} = \frac n {p_{j}}$
                     {
@@ -133,6 +133,11 @@ Theorem. The amortized cost of Find is $O(\log^* n)$.
 
 
                             }
+
+
+                            The number of nodes of rank $\geq h+1$ is bounded by $\frac n {2^{h+1}} + \frac n {2^{h+2}} + \dots$
+
+                            $\frac n {2^{h+1}} + \frac n {2^{h+2}} + \dots = \frac n {2^h}$
                         }
                     }
                 }
@@ -142,15 +147,15 @@ Theorem. The amortized cost of Find is $O(\log^* n)$.
             {
                 Consider a non-leaf and non-root node $x$.
                 When $x$ stops being a root, $x$ receives $p_{\log^* x.h}$ euros.
-                $x.h \in [p_{\log^*(x.h)-1}+1, p_{\log^*(x.h)}]$
+                $x.h \in [p_{\log^*(x.h)-1}+1, p_{\log^*(x.h)}]$             by (logstarandinverse)
 
-                x.parent.h stricly increases when $x$ pays.
+                $x.parent.h$ stricly increases when $x$ pays.
                 {
-                    Each time $x$ pays, $x$ is connected to a new root $r$ with $r.h > x.parent.h$.
+                    Each time $x$ pays, $x$ is connected to a root $r$ with $r.h > x.parent.h$.
                     {
                         Since $x$ pays, $x.parent.h$ is not the root         (1)
 
-                        something$.h$ are strictly increasing along a branch             (2)
+                        $y.h$ is increasing when $y$ moves up along a branch             (2)
 
                         $r.h > x.parent.h$           by (1,2)
 
