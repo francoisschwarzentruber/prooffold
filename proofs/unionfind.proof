@@ -148,9 +148,15 @@ Theorem. The amortized cost of Find is $O(\log^* n)$.
                 {
                     Each time $x$ pays, $x$ is connected to a new root $r$ with $r.h > x.parent.h$.
                     {
-                        $r.h > x.parent.h$ because
+                        Since $x$ pays, $x.parent.h$ is not the root         (1)
 
-                        MAKE A PICTURE
+                        something$.h$ are strictly increasing along a branch             (2)
+
+                        $r.h > x.parent.h$           by (1,2)
+
+                        <img height="200px" src="proofs/unionfind_connecttoroot.gif"/>
+
+                        By assigning $x.parent := r$, $r.h$ is the new $x.parent.h$.
                     }
                 }
 
