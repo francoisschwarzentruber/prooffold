@@ -46,12 +46,14 @@ Theorem. Ford-Fulkerson algorithm returns a maximum flow.
 
             $|f| = c(S, T)$.
             {
-                We have $|f| = f(S, T) - f(T, S)$                    (lemma:cutexpression2)    by (lemma:cutexpression)
-
+                
                 For $u \in S$ and $v \in T$, <br/> there is no edge $u \rightarrow v$ in the residual graph.          (noedgeuv)   by (defcut)
 
-                $f(S, T) = c(S, T)$             (fST)
-                {
+
+$|f| = f(S, T) - f(T, S)$                    (lemma:cutexpression2)    by (lemma:cutexpression)
+$= $ <span id="fSTcST">$c(S, T)$</span> - <span id="fTS0">0</span>
+                proof of fSTcST {
+
                     Let $u \in S$ and $v \in T$.
                     - If $u \not \rightarrow v$ in the network $G$, $f(u, v) = 0$
                     - If $u \rightarrow v$ in the network $G$, $f(u, v) = c(u, v)$
@@ -59,9 +61,9 @@ Theorem. Ford-Fulkerson algorithm returns a maximum flow.
                         <img height=100px src="proofs/flows/uvandnouv.svg"/>
                         The flow is up to the hilt from $u$ to $v$.                 by (noedgeuv)
                     }
+                    So $f(S, T) = c(S, T)$
                 }
-                $f(T, S) = 0$                  (fTS)
-                {
+                proof of fTS0 {
                     Let $v \in T$ and $u \in S$.
 
                     - If $v \not \rightarrow u$ in the network $G$, $f(v, u)=0$
@@ -70,11 +72,8 @@ Theorem. Ford-Fulkerson algorithm returns a maximum flow.
                             <img height=100px src="proofs/flows/vuandnouv.svg"/>
                             There is no flow from $v$ to $u$.                 by (noedgeuv)
                         }
+                    So $f(T, S) = 0$
                 }
-
-                
-
-                Thus, $|f| = c(S, T)$                by (lemma:cutexpression2,fST,fTS)
             }
         }
         3 => 1
