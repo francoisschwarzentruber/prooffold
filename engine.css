@@ -75,6 +75,11 @@ env {
 }
 
 
+.box.inside {
+    top: 10px;
+}
+
+
 .inside {
     position: relative;
     left: 10px;
@@ -200,6 +205,18 @@ env {
 
 .highlight {
     background-color: rgba(255, 229, 144, 0.8);
+}
+
+
+.highlight path {
+    stroke-width: 10px;
+    stroke: rgb(255, 196, 0);
+}
+
+.highlight polygon {
+    stroke-width: 10px;
+    stroke: rgb(255, 196, 0);
+    fill: rgb(255, 196, 0);
 }
 
 

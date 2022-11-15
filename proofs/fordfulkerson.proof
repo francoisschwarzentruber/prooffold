@@ -1,93 +1,121 @@
-Theorem. Ford-Fulkerson algorithm returns a maximum flow.
+
+Lemma. For all cuts $(S, T)$, $|f| = f(S, T) - f(T, S)$. <br/><img height=200px src="proofs/flows/flowequation.svg"/>      (lemma:cutexpression)
 {
-    Lemma. For all cuts $(S, T)$, $|f| = f(S, T) - f(T, S)$. <br/><img height=200px src="proofs/flows/flowequation.svg"/>      (lemma:cutexpression)
-    {
-        
     $|f| = f(s, V)$
     $= f(s, V) - $<span id="fVs">$f(V, s)$</span> $ + \sum_{u \in S, u\neq s}$ <span id="fuVfVu">$f(u, V) - f(V, u)$</span>
     proof of fVs {
         $f(V, s) = 0$ because the inflow at the source is 0.
     }
     proof of fuVfVu {
-        Kirshoff's law
+        equals 0 by Kirshoff's law
+
+        (note that $t \not \in S$)
     }
     $=  \sum_{u \in S} f(u, V) - f(V, u)$
     $= f(S, V) - f(V, S)$
     $= f(S, T) + f(S, S) - f(T, S) - f(S, S)$
     $= f(S, T) - f(T, S)$
+}
+
+
+<strong>Weak duality.</strong> For all flows $f$, for all cuts $(S, T)$, $|f| \leq c(S, T)$.               (weakduality)
+{
+    $|f| = f(S, T) - f(T, S)$        by (lemma:cutexpression)
+    $\leq f(S, T)$
+    $\leq c(S, T)$
+}
+
+proofgraph {
+    $f$ is a maximum flow         (1)
+    There is no $s-t$-path in the<br/> residual graph corresponding to $f$         (2)
+    There exists a $s-t$-cut whose capacity is $|f|$              (3)
+    1 => 2                     
+    {
+        By contrapositive. Suppose there is a $s-t$-path in the residual graph corresponding to $f$.
+        It means that we can augment the flow $f$ by running an extra step of Ford-Fulkerson algorithm.
+        $f$ is not a maximum flow.
     }
-    Consider the end of Ford-Fulkerson algorithm.
-    proofgraph {
-        $f$ is a maximum flow         (1)
-        There is no $s-t$-path in the<br/> residual graph corresponding to $f$ <br/><img height=200px src="proofs/flows/nopathinresidualgraph.svg"/>         (2)
-        There exists a $s-t$-cut whose capacity is $|f|$              (3)
-        The condition of the while loop is false.           (termination)
-        Ford-Fulkerson is correct             (correct)
-        termination => 2
-        1 => correct
-        1 => 2
+    2 => 3
+    {
+        Suppose there is no $s-t$-path in the residual graph corresponding to $f$.               (supposenostpath)
+        <img height=200px src="proofs/flows/nopathinresidualgraph.svg"/>
+        We define the cut $(S, T)$ by 
+        $S := \{u \mid $ there is a $s-u$-path in the residual graph corresponding to $f$ $\}$         (defcut)
+
+        $(S, T)$ is a cut
         {
-            By contrapositive. Suppose there is a $s-t$-path in the residual graph corresponding to $f$.
-            It means that we can augment the flow $f$ by running an extra step of Ford-Fulkerson algorithm.
-            $f$ is not a maximum flow.
+            Because $t \in T$                           by (supposenostpath)
         }
-        2 => 3
+        
+
+        $|f| = c(S, T)$.
         {
-            Suppose there is no $s-t$-path in the residual graph corresponding to $f$.               (supposenostpath)
-            <img height=200px src="proofs/flows/nopathinresidualgraph.svg"/>
-            We define the cut $(S, T)$ by 
-            $S := \{u \mid $ there is a $s-u$-path in the residual graph corresponding to $f$ $\}$         (defcut)
-
-            $(S, T)$ is a cut
-            {
-                Because $t \in T$                           by (supposenostpath)
-            }
             
-
-            $|f| = c(S, T)$.
-            {
-                
-                For $u \in S$ and $v \in T$, <br/> there is no edge $u \rightarrow v$ in the residual graph.          (noedgeuv)   by (defcut)
+            For $u \in S$ and $v \in T$, <br/> there is no edge $u \rightarrow v$ in the residual graph.          (noedgeuv)   by (defcut)
 
 
 $|f| = f(S, T) - f(T, S)$                    (lemma:cutexpression2)    by (lemma:cutexpression)
 $= $ <span id="fSTcST">$c(S, T)$</span> - <span id="fTS0">0</span>
-                proof of fSTcST {
+            proof of fSTcST {
 
-                    Let $u \in S$ and $v \in T$.
-                    - If $u \not \rightarrow v$ in the network $G$, $f(u, v) = 0$
-                    - If $u \rightarrow v$ in the network $G$, $f(u, v) = c(u, v)$
-                     {
-                        <img height=100px src="proofs/flows/uvandnouv.svg"/>
-                        The flow is up to the hilt from $u$ to $v$.                 by (noedgeuv)
+                Let $u \in S$ and $v \in T$.
+                - If $u \not \rightarrow v$ in the network $G$, $f(u, v) = 0$
+                - If $u \rightarrow v$ in the network $G$, $f(u, v) = c(u, v)$
+                    {
+                    <img height=100px src="proofs/flows/uvandnouv.svg"/>
+                    The flow is up to the hilt from $u$ to $v$.                 by (noedgeuv)
+                }
+                So $f(S, T) = c(S, T)$
+            }
+            proof of fTS0 {
+                Let $v \in T$ and $u \in S$.
+
+                - If $v \not \rightarrow u$ in the network $G$, $f(v, u)=0$
+                - If $v \rightarrow u$  in the network  $G$, $f(v, u) = 0$
+                    {
+                        <img height=100px src="proofs/flows/vuandnouv.svg"/>
+                        There is no flow from $v$ to $u$.                 by (noedgeuv)
                     }
-                    So $f(S, T) = c(S, T)$
-                }
-                proof of fTS0 {
-                    Let $v \in T$ and $u \in S$.
-
-                    - If $v \not \rightarrow u$ in the network $G$, $f(v, u)=0$
-                    - If $v \rightarrow u$  in the network  $G$, $f(v, u) = 0$
-                        {
-                            <img height=100px src="proofs/flows/vuandnouv.svg"/>
-                            There is no flow from $v$ to $u$.                 by (noedgeuv)
-                        }
-                    So $f(T, S) = 0$
-                }
+                So $f(T, S) = 0$
             }
         }
-        3 => 1
-        {
-            For all flows $f$, for all cuts $(S, T)$, $|f| \leq c(S, T)$.               (weakduality)
-            {
-                $|f| = f(S, T) - f(T, S)$        by (lemma:cutexpression)
-                $\leq f(S, T)$
-                $\leq c(S, T)$
-            }
+    }
+    3 => 1
+    {
+        
 
-            We have a cut $(S, T)$ with $c(S, T) = |f|$.                   (cutflow)
+        We have a cut $(S, T)$ with $c(S, T) = |f|$.                   (cutflow)
 
-            $f$ is maximum                  by (weakduality,cutflow)
-        }
+        $f$ is maximum                  by (weakduality,cutflow)
+    }
+}
+
+
+
+Theorem. Ford-Fulkerson algorithm returns a maximum flow.
+{
+    Consider the end of the algorithm.
+    Let $f$ be the flow at the end of the algorithm.
+    The condition of the while loop is false.
+    ⇓
+    {
+        See pseudo-code!
+    }
+    There is no $s-t$-path in the residual graph corresponding to $f$
+    ⇓                       by (2->3,3->1)
+    Thus, $|f|$ is maximal
+
+}
+
+
+
+ <strong>Strong duality.</strong> |max flow| = |min cut|.
+{
+    |max flow| $\leq$ |min cut|               by (weakduality)
+    |min cut| $\leq$ |max flow|
+    {
+        Let $f^*$ be the max flow. 
+        There is a cut $(S, T)$ of capacity $|f^*|$                 by (1->2,2->3)
+        A min cut is even smaller.
     }
 }

@@ -166,8 +166,8 @@ function makeDiv(line) {
     function formatEnv(line) {
         const testEnv = (str) => line.startsWith(str) ? `<env>${str}</env>` + line.substr(str.length) : undefined;
 
-        for (const str of ["Théorème.", "Theorem.", "Définition", "Definition.", "Notation.", "Notations.", "Proposition.", "Corollaire.", "Corollary.", "Démonstration.", 
-        "Proof.", "Lemme.", "Lemma."]) {
+        for (const str of ["Théorème.", "Theorem.", "Définition", "Definition.", "Notation.", "Notations.", "Proposition.", "Corollaire.", "Corollary.", "Démonstration.",
+            "Proof.", "Lemme.", "Lemma."]) {
             const newLine = testEnv(str);
             if (newLine)
                 return newLine;
@@ -381,19 +381,27 @@ function extractProofGraph(lines, depth) {
             const graphElement = G.makeGraphWithGraphViZAndElements(G.nodes, G.edges);
             element.prepend(graphElement);
 
+
+            function getSVGElementFromEdge(edge) {
+                const titles = graphElement.querySelectorAll("title");
+                for (let i = 0; i < titles.length; i++) {
+                    const t = titles[i];
+                    console.log(t.textContent)
+                    if (t.textContent == edge.id1 + "->" + edge.id2) {
+                        return t.parentNode;
+                    }
+                }
+                return undefined;
+            }
+
+
+            for (const edge of G.edges) {
+                const svgElementEdge = getSVGElementFromEdge(edge);
+                svgElementEdge.id = edge.id1 + "->" + edge.id2;
+            }
             for (const edge of G.edges) // we make the connection for the edges and their boxes
                 if (edge.box) {
-                    function getSVGElementFromEdge(edge) {
-                        const titles = graphElement.querySelectorAll("title");
-                        for (let i = 0; i < titles.length; i++) {
-                            const t = titles[i];
-                            console.log(t.textContent)
-                            if (t.textContent == edge.id1 + "->" + edge.id2) {
-                                return t.parentNode;
-                            }
-                        }
-                        return undefined;
-                    }
+
                     const svgElementEdge = getSVGElementFromEdge(edge);
 
                     if (svgElementEdge)
@@ -560,7 +568,8 @@ function connectButtonBox(button, box, depth) {
                 setTimeout(() => document.body.scrollLeft = window.outerWidth, 500);
             }
             else {
-                updateLineCoordinates(line, button, box);
+                for (let i = 0; i < 3; i++)
+                    setTimeout(() => updateLineCoordinates(line, button, box), 500 * i);
             }
 
 
@@ -611,7 +620,7 @@ function linesToDOMElement(lines, depth) {
             const el = linesToDOMElement(lines, depth);
             const elBox = document.createElement("div");
             elBox.append(el);
-            el.classList.remove("box"+depth);
+            el.classList.remove("box" + depth);
             nodes.push(elBox);
         } else if (line == "digraph {" || line == "graph {") {
             const dotCode = line + extractDotCode(lines);
