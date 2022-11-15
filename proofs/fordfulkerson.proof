@@ -1,5 +1,5 @@
 
-Lemma. For all cuts $(S, T)$, $|f| = f(S, T) - f(T, S)$. <br/><img height=200px src="proofs/flows/flowequation.svg"/>      (lemma:cutexpression)
+Lemma. For all cuts $(S, T)$, $|f| = f(S, T) - f(T, S)$.      (lemma:cutexpression)
 {
     $|f| = f(s, V)$
     $= f(s, V) - $<span id="fVs">$f(V, s)$</span> $ + \sum_{u \in S, u\neq s}$ <span id="fuVfVu">$f(u, V) - f(V, u)$</span>
@@ -15,6 +15,7 @@ Lemma. For all cuts $(S, T)$, $|f| = f(S, T) - f(T, S)$. <br/><img height=200px 
     $= f(S, V) - f(V, S)$
     $= f(S, T) + f(S, S) - f(T, S) - f(S, S)$
     $= f(S, T) - f(T, S)$
+    <img height=200px src="proofs/flows/flowequation.svg"/>
 }
 
 
