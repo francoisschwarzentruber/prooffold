@@ -85,6 +85,7 @@ env {
     left: 10px;
     display: inline-block;
     max-width: none;
+    margin-bottom:12px;
 }
 
 .button {
