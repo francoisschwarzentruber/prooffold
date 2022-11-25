@@ -24,10 +24,10 @@ Theorem. (Cook) SAT is NP-complete.
 
         algo {
 algo($\phi$)
-        for all variables $p$ in $\phi$
+        for all variables $p$ appearing $\phi$
                 $\nu[p]$ := choose 0 or 1
 
-        if $\nu \models \phi$
+        if $\nu$ makes $\phi$ true
                 accept
         else
                 reject

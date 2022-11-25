@@ -1,0 +1,85 @@
+\newcommand\alphabet{\{0, 1\}}
+There is an oracle $A$ such that $P^A \neq NP^A$.
+{
+    For any language $A$, let $L_A = \{1^n \mid $ there is a word of length $n$ in $A\}$
+    For any language $A$, $L_A \in NP^A$.              (NPA)
+    {
+        $L_A$ is decided by the following non-deterministic poly-time algorithm with oracle $A$:
+        algo {
+            algo($w$)
+                if $w$ is not of the form $1^n$ then
+                        reject
+                else
+                      choose a word $x$ of the same length that $w$
+                      if the oracle says that $x \in A$ then 
+                            accept
+                      else
+                            reject
+        }
+    }
+    There is some $A$ such that $L_A \not \in P^A$      (PA)
+    {
+        Let $(M_i^?)_i$ be an enumeration of machine with an unknown oracle that runs in poly-time
+        
+        <h3>Definition of $A$</h3>
+        Let $(A_i)_i$ a sequence of languages and $(\ell_i)$ a sequences of integers defined by induction on $i$ as follows.
+        Let $A_0 = \emptyset$ and $\ell_0 = 0$.
+        For $i>0$, we set  $\ell_i$ to be a sufficiently large integer such that:
+        - $\ell_i > \ell_{i-1}$
+        - $\ell_i$ is larger than the maximal length of a query to the oracle during the execution $M_{i-1}^{A_1 \cup \dots \cup A_{i-2}}(1^{\ell_{i-1}})$              (2)
+        - The execution time of $M_i^{A_1 \cup \dots \cup A_{i-1}}(1^{\ell_i})$ is $< 2^{\ell_i}$             (3)
+        We set $A_i = \emptyset$ if $M_i^{A_1 \cup \dots \cup A_{i-1}}(1^{\ell_i})$ is accepting               (defAi)
+        We set $A_i = \{x_i\}$ otherwise, where <span id="xi">$x_i \in \{0, 1\}^{\ell_i}$ not queried to the oracle by $M_i^{A_1 \cup \dots \cup A_{i-1}}(1^{\ell_i})$</span>              (defAixi)
+        proof of xi {
+            Such a $x_i$ exists because $M_i^{A_1 \cup \dots \cup A_{i-1}}(1^{\ell_i})$ has not the time to query all words in $\{0, 1\}^{\ell_i}$.                  by (3)
+        }
+        Let $A = \bigcup_{i \in \mathcal N} A_i$.             (defA)
+        
+        For all integers $i$, $M_i^A$ does not decide $L_A$.
+        {
+            For all integers $i$, executions of $M_i^A(\ell_i)$ and $M_i^{A_1 \cup \dots \cup A_{i-1}}(1^{\ell_i})$ are the same          (same)
+            {
+                We prove by induction on $t$ that the first $t$ steps of $M_i^A(\ell_i)$ and $M_i^{A_1 \cup \dots \cup A_{i-1}}(1^{\ell_i})$ are the same
+                For $t = 0$, ok
+                Suppose it is true until the $t-1$-th steps. Let us prove that the $t$-step is the same.
+                {
+                    If the $t$-th step is not waiting for the oracle answer, it is the same
+                    Otherwise, the answers of the oracle $A$ and $A_1 \cup \dots \cup A_{i-1}$ is the same.
+                    {
+                        Let $q$ be the query to the oracle.
+                        If $|q| < \ell_i$, the answer is the same.
+                        {
+                            Because $A_1\cup \dots \cup A_{i-1} \cap \alphabet^{<\ell_i} = A \cap \alphabet^{<\ell_i}$             by (defAi,defAixi,defA)
+                        }
+                        If $|q| = \ell_i$, the answer is the same.
+                        {
+                            $q \not \in A_i$
+                            {
+                                Either $A_i$ is either empty or contains a word not queried by $M_i^{A_1 \cup \dots \cup A_{i-1}}(1^{\ell_i})$              by (defAi,defAixi)
+                            }
+                        }
+                        If $\ell_i < |q|  < \ell_{i+1}$, the answer is no.
+                        {
+                            Because both $A_1 \cup \dots \cup A_{i-1}$ and $A$ do not contain $q$ because $q$ is not of length $\ell_j$ for some $j$.               by (defAi,defAixi,defA)
+                        }
+                        $|q| > \ell_{i+1}$ is impossible.
+                        {
+                                Because $\ell_{i+1}>$ the maximal length of queried words by $M_i^{A_1 \cup \dots \cup A_{i}}(1^{\ell_{i+1}})$           by (2)
+                        }
+                    }   
+                }
+            }
+            For all integers $i$, $M_i^A(1^{\ell_i})$ is accepting iff $A$ does not contain any word of length $\ell_i$
+            {
+                $M_i^A(1^{\ell_i})$ is accepting
+                ⇕                 by (same)
+                $M_i^{A_1 \cup \dots \cup A^{i-1}}(1^{\ell_i})$ is accepting
+                ⇕                    by (defAi)
+                $A_i = \emptyset$
+                ⇕                   by (defAi,defAixi,defA)       
+                $A$ does not contain any word of length $\ell_i$
+            }
+        }
+    }
+    For that particular $A$, $L_A  \in NP^A \setminus P^A$             by (NPA,PA)
+}
