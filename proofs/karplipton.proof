@@ -1,0 +1,42 @@
+If $NP \subseteq P|_{poly}$, then $PH = \Sigma_2^p$.
+{
+	$NP \subseteq P|_{poly}$
+	⇓
+	$SAT \in P|_{poly}$
+	{
+		Because $SAT$ is in NP.
+	}
+	⇓
+	there exists a poly-size family of circuits $(C_n)_{n \in \mathbb N}$ such that for all satisfiable Boolean formulas $\varphi$, $C_{|\varphi|}(\varphi) \models \varphi$.
+	{
+		There is a poly-size family of circuits that decides $SAT$
+		There is a poly-time algorithm with an oracle to SAT that given a satisfiable formula $\varphi$ returns truth-values for variables in $\varphi$ that satisfies $\varphi$ 
+		For a formula $\varphi$, we can build a circuit that simulates that algorithm and replace the call to the oracle by a circuit 
+	}
+	⇓
+	$\forall \vec x \exists \vec y \varphi(\vec x, \vec y)$ is true iff there is a poly-size circuit $C$ such that for all truth values $v$ for $\vec x$, $C(\varphi(v, \vec y)) \models \varphi(v, \vec y)$
+	{
+		$\forall \vec x \exists \vec y \varphi(\vec x, \vec y)$ is true
+		iff
+		for all $\vec x$-truth values $v$, $\varphi(v, \vec y)$ is satisfiable
+		iff 
+		for all $\vec x$-truth values $v$, $C_{|\varphi|}(\varphi(v, \vec y)) \models \varphi(v, \vec y)$
+		iff
+		there exists a poly-size circuit $C$ such that 	for all $\vec x$-truth values $v$, $C(\varphi(v, \vec y)) \models \varphi(v, \vec y)$
+	}
+	⇓
+	$\Pi_2$-SAT is in $\Sigma_2^p$
+	{
+		The following $\Sigma_2$-algorithm decides $\Pi_2$-SAT in poly-time
+		algo {
+			checkTruth($\forall \vec x \exists \vec y \varphi(\vec x, \vec y)$)
+		    	existential player chooses a circuit $C$ of poly-size
+			    universal player chooses $\vec x$-truth values $v$
+		     	accept if $C(\varphi(v, \vec y)) \models \varphi(v, \vec y)$, reject otherwise
+		}
+	}
+	⇓
+	$\Pi_2^p = \Sigma^2_p$
+	⇓
+	$PH = \Sigma_2^p$
+}
