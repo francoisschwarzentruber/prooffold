@@ -1,0 +1,76 @@
+\newcommand\set[1]{\{#1\}}
+\newcommand{\setcertificataccept}[1]{\mathcal A_{#1}}
+\newcommand{\setcertificatreject}[1]{\mathcal R_{#1}}
+\newcommand\suchthat\mid
+\newcommand{\ensemblesequenceszonezm}{\left(\set{0, 1}^m\right)^m}
+$BPP \subseteq \Sigma_2^p \cap \Pi_2^p$
+{
+    $BPP \subseteq \Sigma_2^p$
+    {
+        Let $A$ be a problem in $BPP$.
+        ⇓
+        There is a Turing machine $M$ and a polynomial $n^c$ such that:
+        - If $x \in A$, then $|\setcertificatreject x| \leq 2^{n^c-n}$ 
+        - If $x \not \in A$, then $|\setcertificataccept x| \leq 2^{n^c-n}$ 
+        with  $\setcertificataccept x := \set{y \in \set{0,1}^{n^c} \suchthat M(x, y) \text{ is accepting}}$ 
+        and $\setcertificatreject x := \set{y \in \set{0,1}^{n^c} \suchthat M(x,y) \text{ is rejecting}}$.
+        
+        The rest of the proof is for $n$ sufficiently large.
+        Let $m = n^c$.
+         $x \in A$ iff there is $(z_1, \dots, z_m) \in \ensemblesequenceszonezm$ such that $\setcertificataccept x \oplus \set{z_1, \dots, z_m} = \set{0, 1}^m$.
+         {
+            $\Leftarrow$
+            {
+                By contrapositive.
+                If $x \not \in A$, then there is no $(z_1, \dots, z_m) \in \ensemblesequenceszonezm$ such that $\setcertificataccept x \oplus \set{z_1, \dots, z_m} = \set{0, 1}^m$.
+                {
+                    Let $x \not \in A$.
+                    $|\setcertificataccept x| \leq 2^{m-n}$.
+                    For all $z_1, \dots, z_m \in \set{0, 1}^m$,  $|\setcertificataccept x \oplus \set{z_1, \dots, z_m}| \leq 2^{m-n} \times m < 2^m$.
+                    $\setcertificataccept x \oplus \set{z_1, \dots, z_m} \neq \set{0, 1}^m$.
+                }
+            }
+            $\Rightarrow$
+            {
+                Let $x \in A$.
+                We say that $(z_1, \dots, z_m)$ is bad if there exists $w \in \set{0, 1}^m$ with $\set{w} \oplus \set{z_1, \dots, z_m} \subseteq \setcertificatreject{x}$.
+                Otherwise we say that $(z_1, \dots, z_m)$ is good.
+
+                There are stricly less than $2^{m^2}$ bad $(z_1, \dots, z_m)$.
+                {
+                    The mapping $w \oplus \cdot : z \mapsto w \oplus z$ is bijective from $\set{0, 1}^m$ in $\set{0, 1}^m$.
+                    Hence choosing $(z_1, \dots, z_m)$ is the same than choosing $m$ elements of $\setcertificatreject{x}$ and a word $w$.
+                    There are at most $2^(m-n)$ elements in $\setcertificatreject{x}$.
+                    There are at most $2^{(m-n)m}$ sequences of $m$ words in $\setcertificatreject{x}$.
+                    Hence $2^{(m-n)m}$ for images of $(z_1, \dots, z_m)$ by the mapping $w \oplus \cdot$.
+                    To that, we add $2^m$ choices for word $w$.
+                    So the number of bad $(z_1, \dots, z_m)$ is bounded by $2^{(m-n)m} \times 2^m = 2^{(m-n)m + m} < 2^{m^2}$.
+                }
+                There is a good $(z_1, \dots, z_m)$.
+                {
+                    The number of possible $(z_1, \dots, z_m)$ is $(2^{m})^{m} = 2^{m^2}$.
+                    As the number of bad ones is strictly smaller, there are good ones.
+                }
+                Let $(z_1, \dots, z_m)$ be a good sequence.
+                $w \in \set{0, 1}^m$, $\set{w} \oplus \set{z_1, \dots, z_m}$ contains an element of $\setcertificataccept x$.
+                Thus, $\setcertificataccept x \oplus \set{z_1, \dots, z_m} = \set{0, 1}^m$.
+            }
+         }
+         $A \in \Sigma_2^p$
+         {
+            Here is a $\Sigma_2$-machine that decides $A$ is poly-time:
+            algo {
+                algo($x$)
+                    $n = |x|$
+                    $m = n^c$
+                    the existential player chooses a $(z_1, \dots, z_m) \in (\set{0, 1}^m)^m$
+                    the universal player chooses a word $w \in \set{0, 1}^m$
+                    if $w \in \set{y \oplus z_j \suchthat y \in A_x \text{ and } j = 1..m}$ then
+                            accept
+                    else
+                            reject
+            }
+         }
+    }
+    As $BPP$ is closed under complementation, we have $BPP \subseteq \Sigma_2^p \cap \Pi_2^p$
+}
