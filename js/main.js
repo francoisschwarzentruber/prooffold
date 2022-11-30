@@ -451,31 +451,34 @@ function setLineCoordinates(svgLine, { x: x1, y: y1 }, { x: x2, y: y2 }) {
 function updateLineCoordinates(line, button, box) {
     const buttonB = getRectInBody(button);
     const boxB = getRectInBody(box);
-    let buttonHandlePoint;
-    let boxHandlePoint
-    if (buttonB.right <= boxB.left) {
+    let buttonPoint;
+    let boxPoint;
+    if (buttonB.right <= boxB.left) { //the box is on the right of the button
         if (button.classList.contains("edge"))
-            buttonHandlePoint = { x: buttonB.left + buttonB.width / 2, y: buttonB.top + buttonB.height / 2 };
+            buttonPoint = { x: buttonB.left + buttonB.width / 2, y: buttonB.top + buttonB.height / 2 };
         else
-            buttonHandlePoint = { x: buttonB.right, y: buttonB.top + buttonB.height / 2 };
+            buttonPoint = { x: buttonB.right, y: buttonB.top + buttonB.height / 2 };
 
-        boxHandlePoint = { x: boxB.left, y: buttonB.top + buttonB.height / 2 };
-        if (boxHandlePoint.y < boxB.top || boxHandlePoint.y > boxB.bottom)
-            boxHandlePoint.y = boxB.top + boxB.height / 2;
+        boxPoint = { x: boxB.left, y: buttonB.top + buttonB.height / 2 };
+        if (boxPoint.y < boxB.top || boxPoint.y > boxB.bottom)
+            boxPoint.y = boxB.top + boxB.height / 2;
     }
     else {
         if (button.classList.contains("edge"))
-            buttonHandlePoint = { x: buttonB.left + buttonB.width / 2, y: buttonB.top + buttonB.height / 2 };
+            buttonPoint = { x: buttonB.left + buttonB.width / 2, y: buttonB.top + buttonB.height / 2 };
         else
-            buttonHandlePoint = { x: buttonB.left + buttonB.width / 2, y: buttonB.bottom };
+            buttonPoint = { x: buttonB.left + buttonB.width / 2, y: buttonB.bottom };
 
-        boxHandlePoint = { x: buttonB.left + buttonB.width / 2, y: boxB.top };
-        if (boxHandlePoint.x < boxB.left || boxHandlePoint.x > boxB.right)
-            boxHandlePoint.x = boxB.left + boxB.width / 2;
+        boxPoint = { x: buttonB.left + buttonB.width / 2, y: boxB.top };
+        if (boxPoint.x < boxB.left || boxPoint.x > boxB.right)
+            boxPoint.x = boxB.left + boxB.width / 2;
+
+        if (buttonPoint.x > boxB.right)
+            buttonPoint.x = boxPoint.x;
 
     }
 
-    setLineCoordinates(line, buttonHandlePoint, boxHandlePoint);
+    setLineCoordinates(line, buttonPoint, boxPoint);
 }
 
 /**
