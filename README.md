@@ -96,3 +96,10 @@ Interactive canvas are described in Processing (P5) via:
 # How to contribute?
 
 Adding new proofs! Also discussing about how to improve the way to display proofs.
+
+1) Create a new file in the `proofs` folder, for instance `myproof.proof`.
+2) Write your proof inside
+3) Locally run `./run.sh`
+4) Open http://0.0.0.0:8000/?id=myproof
+
+Then if you want, you can make a **pull request**!
