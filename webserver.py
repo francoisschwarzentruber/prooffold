@@ -57,10 +57,8 @@ if __name__ == '__main__':
 
     port = 8888
     server_address = ("", port)
-    print ("0!")
     #server = TCPServerV4(server_address, MyHTTPRequestHandler)
     httpd = socketserver.TCPServer(server_address, MyHTTPRequestHandler)
-    print ("1!")
 
     #httpd.server_close()
     #httpd.socket.close()
