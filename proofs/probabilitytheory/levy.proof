@@ -1,0 +1,69 @@
+\newcommand{\expectation}[1]{\mathbb E(#1)}
+\newcommand{\variance}[1]{\mathbb V(#1)}
+\newcommand{\convergenceloin}{\xrightarrow{\mathcal L}_{n \rightarrow +\infty}}
+\newcommand{\convergen}{\xrightarrow{}_{n \rightarrow +\infty}}
+\newcommand{\characteristicfunction}[1]{\varphi_{#1}}
+\newcommand\loiproba{\mu}
+\newcommand{\set}[1]{\{#1\}}
+Théorème. Soit $(X_n)_{n \in \mathbb N}$ une suite de variables aléatoires et $X$ une variable aléatoire.
+$X_n \convergenceloin X$ iff $\characteristicfunction {X_n} \convergen \characteristicfunction X$
+{
+    $\Rightarrow$             (=>)
+    {
+        TODO (appliquer la def de la convergence en loi à $f:x \mapsto e^{itx}$)
+    }
+
+    $\Leftarrow$
+    {
+        Théorème de Prohorov. Toute famille de mesures tendue est relativement compacte.            (prohorov)
+        {
+            TODO
+        }
+
+        Proposition. Soit $(\loiproba_n)_{n \in \mathbb N}$ une suite de mesures de probabilité telle que :
+        1) $\set{\loiproba_n, n \in \mathbb N}$ est tendue
+        2) toute sous-suite de $(\loiproba_n)_{n \in \mathbb N}$ qui converge en loi, converge vers $\loiproba$
+        Alors $\loiproba_n \convergenceloin \loiproba$.               (propositionmiracle)
+        {
+            TODO
+        }
+        
+
+        Supposons $\characteristicfunction {X_n} \convergen \characteristicfunction X$
+        On note $\loiproba_n$ la loi de probabilité de $X_n$ sur $\mathbb R$.
+        On note $\loiproba$ la loi de probabilité de $X$ sur $\mathbb R$.
+        $\set{\loiproba_n, n \in \mathbb N}$ tendue.             (tendue)
+        {
+            Par définition d'être tendue, il faut montrer qu'il existe un compact $K'$ tel que pour tout $n \in \mathbb N$, $\loiproba_n(K') \geq 1-\epsilon$.
+            Soit $n \geq 0, a \geq 0$. On a :
+            $\frac 1 {2a} \int_{-a}^a (1 - \characteristicfunction{\loiproba_n}(t) dt) \geq (1 - \frac 2 \pi) \mu_n(\set{x \in \mathbb R \mid |x| \geq \frac \pi {2a}})$.
+            {
+                TODO. Indice : calcul avec $\frac{\sin ax}{ax}$
+            }
+            Il existe $n_0$ tel que pour tout $n \geq n_0$, $\frac 1 {2a} \int_{-a} a (1 - \characteristicfunction{\loiproba_n}) \leq \epsilon ( 1 - \frac 2 \pi)$.
+            Pour tout $n \geq n_0$, $\mu_n(\set{x \in \mathbb R \mid |x| \geq \frac \pi {2a}}) \leq \epsilon$.
+            $\set{\mu_n, n \leq n_0}$ tendue
+            {
+                car $\set{\mu_n, n \leq n_0}$ finie.
+            }
+            Il existe $K$ compact avec pour tout $n \leq n_0$, $\mu_n(K) \leq 1-\epsilon$
+            $K' := K \cup [-\frac \pi {2a}, \frac \pi {2a}]$
+            Pour tout $n \in \mathbb N$, $\loiproba_n(K') \geq 1-\epsilon$.
+        }
+        
+        Toute sous-suite de $(\loiproba_n)_{n \in \mathbb N}$ qui converge en loi, converge vers $\loiproba$             (convergenceloipareil)
+        {
+            Considérons une telle sous-suite $(\loiproba_{\lambda_n})_{n \in \mathbb N}$ qui converge en loi.
+            On note $\loiproba^*$ la loi telle que $\loiproba_{\lambda_n} \convergenceloin \loiproba^*$.
+            $\characteristicfunction{\loiproba_{\lambda_n}} \convergen \characteristicfunction {\loiproba^*}$        by (=>)
+            $\characteristicfunction{\loiproba_{\lambda_n}} \convergen \characteristicfunction \loiproba$
+            $\characteristicfunction {\loiproba^*} = \characteristicfunction \loiproba$
+            Egalité des fonctions caractéristiques implique égalité des lois
+            $\loiproba = \loiproba^*$           
+        }
+
+        $\loiproba_n \convergenceloin \loiproba$                 by (tendue,propositionmiracle,convergenceloipareil)
+        Autrement dit, $X_n \convergenceloin X$.
+    }
+    
+}

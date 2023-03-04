@@ -6,7 +6,7 @@
               }
               $O$ := odd degree vertices in $T$
               $M$ = minimum perfect matching among $I$                   (M)
-              $TM$ := multiset contaning edges of $T$ and a copy of edges of $M$           (TM)
+              $TM$ := multiset containing edges of $T$ and a copy of edges of $M$           (TM)
               $\tau$ := Eulerian tour in $TM$                     (tau)
               $sol$ :=  $\tau$ in which we remove non-first occurrences               (sol)
               return $sol$

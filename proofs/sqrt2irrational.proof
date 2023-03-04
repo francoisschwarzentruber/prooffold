@@ -3,8 +3,11 @@ Prove that $\sqrt 2$ is irrational.
 	Lemma. $a^2$ even implies $a$ even.            (lemma)
 	{
 		Suppose $a$ is odd.
+		⇓
 		$a = 2k+1$ for some integer $k$
+		⇓
 		$a^2 = 4k^2+4k+1$
+		⇓
 		$a^2$ is odd
 	}
 	

@@ -1,0 +1,61 @@
+\newcommand{\expectation}[1]{\mathbb E(#1)}
+\newcommand{\variance}[1]{\mathbb V(#1)}
+\newcommand{\convergenceloin}{\xrightarrow{\mathcal L}_{n \rightarrow +\infty}}
+\newcommand{\convergen}{\xrightarrow{}_{n \rightarrow +\infty}}
+\newcommand{\characteristicfunction}[1]{\varphi_{#1}}
+Théorème centrale limite. Soit $(X_n)_{n \geq 1}$ une suite de variables aléatoires iid avec $\variance{X_1} < +\infty$. Alors :
+$\sqrt n (\bar X_n - \expectation {X_1}) \convergenceloin  \mathcal N(0, \variance {X_1})$.
+{
+    Cas $\variance {X_1} = 0$.
+    {
+        Les variables $X_n$ sont constantes égales à $\expectation {X_1}$.
+        $\sqrt n (\bar X_n - \expectation {X_1})$ vaut toujours 0
+        Il y a convergence en loi vers $\mathcal N(0, 0)$.
+    }
+    Cas $\variance{X_1} \neq 0$.
+    {
+        On suppose sans perte de généralité que $\expectation{X_1} = 0$ et $\variance{X_1} = 1$.
+        {
+            Quitte à centrer et réduire les variables, i.e. à remplacer $X_n$ par $\frac {X_n - \expectation{X_1}}{\variance{X_1}}$.
+        }
+        $\sqrt n \bar X_n \convergenceloin  \mathcal N(0, 1)$. 
+        {
+            La fonction caractéristique de $\mathcal N(0, 1)$ est $t \mapsto e^{-t^2/2}$.
+            {
+                TODO
+            }
+            La fonction caractéristique de $\sqrt n \bar X_n$ converge vers la fonction caractéristique de $\mathcal N(0, 1)$ point par point.        (convergencepointapoint)
+            {
+                Pour $t \in \mathbb R$, $\characteristicfunction{\sqrt n \bar X_n}(t) \convergen$ $e^{-t^2/2}$.
+                {
+                    $\characteristicfunction{\sqrt n \bar X_n}(t) = \characteristicfunctionX(\frac t {\sqrt n})^n$
+                    {
+                        TODO
+                    }
+                    $\characteristicfunction X(\frac t {\sqrt n}) = 1 - \frac {t^2} {2n} + o(1)$
+                    {
+                        Par le lien entre dérivée en 0 de la fonction caractéristique et les moments :
+                        TODO
+                    }
+
+                    $e^{-t^2}{2n} = 1 - \frac{t^2}{2n} + o(\frac 1 n)$
+                    {
+                        TODO (DL normal)
+                    }
+                    Lemme. Soit $z, u \in \mathbb C$ avec $|z| \leq 1, |u| \leq 1$. On a $|z^n - u^n| \leq n|z - u|$.
+                    {
+                        TODO
+                    }
+                    $|\characteristicfunction X(\frac t {\sqrt n})^n - e^{\frac{-t^2}{2}}| = o(1)$
+                    {
+                        Utiliser le lemme ci-dessus.
+                    }
+                }
+            }
+            La fonction caractéristique de $\mathcal N(0, 1)$ est continue en 0.             (continue0)
+            On conclut avec le théorème de Levy.              by (continue0,convergencepointapoint)
+        }
+
+
+    } 
+}
