@@ -15,6 +15,11 @@ $X_n \convergenceloin X$ iff $\characteristicfunction {X_n} \convergen \characte
 
     $\Leftarrow$
     {
+        Définition. Une famille $\mathcal F$ de mesures est tendue si pour tout $\epsilon > 0$, il existe un compact $K$ tel que pour tout mesure $\mu \in \mathcal F$, $mu(K) \geq 1-\epsilon$.
+
+        Définition. Une famille $\mathcal F$ de mesures est relativement compacte si toute suite d'élements de $\mathcal F$ admet une sous-suite qui converge en loi.
+        
+         
         Théorème de Prohorov. Toute famille de mesures tendue est relativement compacte.            (prohorov)
         {
             TODO
@@ -45,10 +50,14 @@ $X_n \convergenceloin X$ iff $\characteristicfunction {X_n} \convergen \characte
             $\set{\mu_n, n \leq n_0}$ tendue
             {
                 car $\set{\mu_n, n \leq n_0}$ finie.
+                TODO (expliquer plus)
             }
             Il existe $K$ compact avec pour tout $n \leq n_0$, $\mu_n(K) \leq 1-\epsilon$
-            $K' := K \cup [-\frac \pi {2a}, \frac \pi {2a}]$
+            On pose $K' := K \cup [-\frac \pi {2a}, \frac \pi {2a}]$.
             Pour tout $n \in \mathbb N$, $\loiproba_n(K') \geq 1-\epsilon$.
+            {
+                TODO
+            }
         }
         
         Toute sous-suite de $(\loiproba_n)_{n \in \mathbb N}$ qui converge en loi, converge vers $\loiproba$             (convergenceloipareil)

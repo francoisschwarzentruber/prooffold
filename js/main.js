@@ -196,7 +196,7 @@ function makeDiv(line) {
     if (info.references)
         attachReferences(el, info.references);
 
-    if (line.startsWith("Let ") || line.startsWith("Define "))
+    if (line.startsWith("Let ") || line.startsWith("Define ") || line.startsWith("On note ") || line.startsWith("On pose "))
         el.classList.add("definition");
 
     return el;
@@ -230,6 +230,10 @@ function hideBoxesUpToDepth(depth) {
 }
 
 
+
+let leaderLines = [];
+
+
 /**
  * 
  * @param {*} domElement 
@@ -237,17 +241,39 @@ function hideBoxesUpToDepth(depth) {
  * @description add the mouse listener for handling the references
  */
 function attachReferences(domElement, references) {
+
+
+    domElement.by = references;
+
     domElement.onmouseenter = () => {
         for (const ref of references) {
-            if (document.getElementById(ref) == undefined)
+            const source = document.getElementById(ref);
+            if (source == undefined)
                 console.log("element " + ref + " not found!");
-            document.getElementById(ref).classList.add("highlight");
+            else {
+                source.classList.add("highlight");
+                leaderLines.push(new LeaderLine(
+                    source,
+                    domElement,
+                    { color: '#FFFFFF88', outlineColor: 'orange', endPlugColor: 'orange', dropShadow: false, outline: true, path: "straight" }
+                ));
+            }
+
+
         }
     };
     domElement.onmouseleave = () => {
         for (const ref of references) {
-            document.getElementById(ref).classList.remove("highlight");
+            const source = document.getElementById(ref);
+            if (source == undefined)
+                console.log("element " + ref + " not found!");
+            else
+                source.classList.remove("highlight");
         }
+
+        for (const line of leaderLines)
+            line.remove();
+        leaderLines = [];
     };
     domElement.classList.add("ref");
 }
@@ -801,3 +827,33 @@ function updateURL() {
     const url = window.location.href.split("?")[0];
     window.history.replaceState({}, null, url + `?id=${id}&tabs=${openTabs.filter((n) => n >= 0).join("/")}`);
 }
+
+
+
+
+// let leaderLines = [];
+
+// setInterval(() => {
+//     for (const line of leaderLines)
+//         line.remove();
+//     leaderLines = [];
+
+//     const divs = [...document.querySelectorAll("div")];
+//     for (const target of divs) {
+//         if (target.by)
+//             for (const id of target.by) {
+//                 const source = document.getElementById(id);
+//                 if (source)
+//                     leaderLines.push(new LeaderLine(
+//                         source,
+//                         target,
+//                         { color: '#FFFFFF88', outlineColor: 'orange', endPlugColor: 'orange', dropShadow: false, outline: true, path: "fluid" }
+//                     ));
+//             }
+//     }
+
+
+
+// }, 5);
+
+
