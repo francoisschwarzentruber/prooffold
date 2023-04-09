@@ -1,0 +1,191 @@
+\newcommand\set[1]{\{#1\}}
+\newcommand{\expectation}[1]{\mathbb E(#1)}
+\newcommand{\proba}[1]{\mathbb P(#1)}
+Let $d \geq 1$ be an integer.
+Let $\set{e_1, \dots, e_{d}}$ be the canonical base of $\mathbb R^d$.
+Let $(X_n)_{n \in \mathbb N}$ be random variables, independent and that follow the uniform distribution on $\set{e_1, -e_1, \dots, e_d, -e_d}$.
+{
+    TODO ANIMATION
+}
+
+We define $(S_n)_{n \in \mathbb N}$ to be:
+- $S_0 = 0$
+- $S_n = S_{n-1} + X_n$
+{
+    TODO ANIMATION
+}
+
+Let $N_k$ the number of times the location $k$ is visited: $N_k = \sum_{n=0}^{+\infty} 1_{S_n = k}$.
+
+
+Theorem.
+- If $d \leq 2$, $\proba{N_0 = +\infty} = 1$.
+- If $d \geq 3$, $\proba{N_0 = +\infty} = 0$.
+
+Proof.
+{
+
+
+    
+    
+    $\expectation{N_0} < +\infty$ iff $d \geq 3$
+    {
+
+    Let $\phi : t \mapsto \expectation{e^{it X}}$ be the characteristic function of any of the $X_i$. 
+        
+        
+        
+        
+        $\expectation{N_0} = \frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} \frac 1 {1 - \phi^2(t)}dt$
+        {
+            $\expectation{N_0} = \sum_{n=0}^{+\infty} \proba{S_n = 0}$
+            {
+                Linearity of expectation + Fubini-Tonelli
+                $\expectation{N_0} = \sum_{n=0}^{+\infty} \expectation{1_{S_n = 0}}$
+            }
+            $\expectation{N_0} = \sum_{n=0}^{+\infty} \proba{S_{2n} = 0}$
+            {
+                Because $\proba{S_{2n+1} = 0} = 0$.
+            }
+            Let $\phi_{S_n} : t \mapsto \expectation{e^{i t X}}$ be the characteristic function of $S_n$.
+            $\phi_{S_n} = \phi^n$
+            {
+                Because:
+                $S_n = \sum_{i=1}^n X_i$
+                $X_1, \dots, X_n$ are independent
+            }
+            Let $|k|_1 = |k_1| + \dots + |k_d|$ for all $k = (k_1, \dots, k_d) \in \mathbb Z^d$.
+            $\phi_{S_n}(t) = \sum_{k \in \mathbb Z^d, |k|_1 \leq n} \proba{S_n=k}e^{itk}$
+            {
+                By definition of the expectation in $\expectation{e^{iX_1 t}}$
+
+                Note that values $k$ of $S_n$ are such that $|k|_1 \leq n$
+                {
+                    No time in $n$ steps to go further.
+                    ADD ANIMATION
+                }             
+            }
+            $\frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} \phi_{S_n}(t) dt = \proba{S_n = 0}$.
+            {
+                $\frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} \phi_{S_n}(t) dt = \frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} \sum_{k \in \mathbb Z^d, |k|_1 \leq n} \proba{S_n=k}e^{itk} dt$
+                $= \sum_{k \in \mathbb Z^d, |k|_1 \leq n} \proba{S_n=k} \frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d}  e^{itk} dt$
+
+                $\int_{[-\pi, \pi]^d}  e^{it 0} dt = \int_{[-\pi, \pi]^d} 1 = (2\pi)^d$
+                {
+                    Just the measure of $[-\pi, \pi]^d$
+                }
+
+                For $k \neq 0$, $\int_{[-\pi, \pi]^d}  e^{it k} dt = 0$
+                {
+                    TODO
+                }
+
+            }
+
+            $\expectation{N_0} = \sum_{n=0}^{+\infty} \proba{S_{2n} = 0}$
+            $= \sum_{n=0}^{+\infty} \frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} \phi_{S_{2n}}(t) dt$
+            $= \sum_{n=0}^{+\infty} \frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} \phi^{2n}(t) dt$
+            $=  \frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} \sum_{n=0}^{+\infty} \phi^{2n}(t) dt$
+            $=  \frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} \frac 1 {1 - \phi^{2}(t)} dt$
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        Let $||t||^2 = t_1^2 + \dots t_d^2$
+
+        $\expectation{N_0} < +\infty$ 
+        iff
+         $t \mapsto \frac 1 {1 - \phi^2(t)}$ is integrable on $[-\pi, \pi]^d$
+        iff
+        {
+            $\phi(t) = \frac 1 d \sum_{k=1}^d cos(t_k)$
+            {
+                $\phi(t) = \expectation{e^{itX}}$
+                $= \frac 1 d \sum_{k=1}^d (e^{ite_k} + e^{-ite_k})$
+                $= \frac 1 d \sum_{k=1}^d cos(t_k)$
+            }
+            The issue of integrability on the border of $[-\pi, \pi]^d$ is the same as in 0.
+            {
+                By symmetry of $cos$
+            }
+            $\frac 1 {1 - \phi^2(t)} =_{t \rightarrow 0} \frac d {||t||^2} + o(\frac 1 {||t||^2})$
+            {
+                $\phi(t) = \frac 1 d \sum_{k=1}^d cos(t_k)$
+                $= \frac 1 d \sum_{k=1}^d (1 - \frac  {t_k^2} 2 + o(|t_k|^2))$
+                $= 1 - \frac  {||t||^2} {2d} + o(||t||^2)$
+            }
+
+        }
+         $t \mapsto \frac 1 {||t||^2}$ is integrable in 0
+        iff
+        {
+            TODO
+        }
+        $r \mapsto \frac 1 {r^2} r^{d-1}$ is integrable in 0
+        iff
+        {
+            TODO
+        }
+        $d \geq 3$
+    }
+
+    Case $d \leq 2$: $\expectation{N_0} = +\infty$               ($\expectation{N_0} = +\infty$)
+    ⇓
+    {
+        Let $T = sup \set{n \geq 0 \mid S_n = 0}$.
+        {
+            $T$ is the last time to reach 0.
+        }
+        $\proba{T < +\infty} = \sum_{n=0}^{+\infty} \proba{T=n}$
+        $ = \sum_{n=0}^{+\infty} \proba{S_n=0, \forall k >n, S_k \neq 0}$
+        $ = \sum_{n=0}^{+\infty} \proba{S_n=0, \forall k >n, S_k -S_n \neq 0}$
+        $ = \sum_{n=0}^{+\infty} \proba{S_n=0}\proba{T = 0}$           (computation $\proba{T < +\infty}$)
+
+
+        $\proba{T < +\infty} \leq 1$              ($\proba{T < +\infty} \leq 1$)
+
+
+        $\proba{T = 0} = 0$                       ($\proba{T = 0} = 0$)              by ($\expectation{N_0} = +\infty$,$\proba{T < +\infty} \leq 1$)
+
+        $\proba{T < +\infty} = 0$            by (computation $\proba{T < +\infty}$,$\proba{T = 0} = 0$)  
+        ⇓        
+        $\proba{T = +\infty} = 1$ 
+        
+        
+        The events $T < +\infty$ and $N_0 = +\infty$ are equal.
+    }
+    $\proba{N_0 = +\infty} = 1$
+
+
+    Case $d \geq 3$. $\expectation{N_0} < +\infty$
+    ⇓
+    {
+        $\proba{N_0 = +\infty} > 0$
+        ⇓
+        $\expectation{N_0} = +\infty$
+    }
+    $\proba{N_0 = +\infty} = 0$.
+}
+
+
+
+
+
+
+
+
+Corollary.
+- If $d \geq 3$, $\proba{|S_n| \xrightarrow{n \rightarrow +\infty}  +\infty} = 1$.
+{
+    TODO
+}

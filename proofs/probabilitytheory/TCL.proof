@@ -52,8 +52,7 @@ $\sqrt n (\bar X_n - \expectation {X_1}) \convergenceloin  \mathcal N(0, \varian
                     }
                 }
             }
-            La fonction caractéristique de $\mathcal N(0, 1)$ est continue en 0.             (continue0)
-            On conclut avec le théorème de Levy.              by (continue0,convergencepointapoint)
+            On conclut avec le théorème de Levy.              by (convergencepointapoint)
         }
 
 

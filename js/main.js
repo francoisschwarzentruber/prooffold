@@ -12,7 +12,7 @@ const openTabs = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
  * if false, it means that panels/boxes appears on the right
  * if true, it means that they appears just below
  */
-const inside = true;
+const inside = false;
 
 
 /**
