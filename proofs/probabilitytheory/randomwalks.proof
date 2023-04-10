@@ -38,35 +38,31 @@ Proof.
         
         $\expectation{N_0} = \frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} \frac 1 {1 - \phi^2(t)}dt$
         {
-            $\expectation{N_0} = \sum_{n=0}^{+\infty} \proba{S_n = 0}$
-            {
-                Linearity of expectation + Fubini-Tonelli
-                $\expectation{N_0} = \sum_{n=0}^{+\infty} \expectation{1_{S_n = 0}}$
-            }
-            $\expectation{N_0} = \sum_{n=0}^{+\infty} \proba{S_{2n} = 0}$
-            {
-                Because $\proba{S_{2n+1} = 0} = 0$.
-            }
+            
             Let $\phi_{S_n} : t \mapsto \expectation{e^{i t X}}$ be the characteristic function of $S_n$.
-            $\phi_{S_n} = \phi^n$
+            $\phi_{S_n} = \phi^n$               (phiS2n=phi2n)
             {
                 Because:
                 $S_n = \sum_{i=1}^n X_i$
                 $X_1, \dots, X_n$ are independent
             }
-            Let $|k|_1 = |k_1| + \dots + |k_d|$ for all $k = (k_1, \dots, k_d) \in \mathbb Z^d$.
-            $\phi_{S_n}(t) = \sum_{k \in \mathbb Z^d, |k|_1 \leq n} \proba{S_n=k}e^{itk}$
+            
+            $\proba{S_n = 0} = \frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} \phi_{S_n}(t) dt$.           (expressionPSn=0)               
             {
-                By definition of the expectation in $\expectation{e^{iX_1 t}}$
-
-                Note that values $k$ of $S_n$ are such that $|k|_1 \leq n$
+                Let $|k|_1 = |k_1| + \dots + |k_d|$ for all $k = (k_1, \dots, k_d) \in \mathbb Z^d$.
+                We have for all $t$:
+                $\phi_{S_n}(t) = \sum_{k \in \mathbb Z^d, |k|_1 \leq n} \proba{S_n=k}e^{itk}$
                 {
-                    No time in $n$ steps to go further.
-                    ADD ANIMATION
-                }             
-            }
-            $\frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} \phi_{S_n}(t) dt = \proba{S_n = 0}$.
-            {
+                    By definition of the expectation in $\expectation{e^{iX_1 t}}$
+
+                    Note that values $k$ of $S_n$ are such that $|k|_1 \leq n$
+                    {
+                        No time in $n$ steps to go further.
+                        ADD ANIMATION
+                    }             
+                }
+
+                By integrating by $\frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} ...$ we obtain:
                 $\frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} \phi_{S_n}(t) dt = \frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} \sum_{k \in \mathbb Z^d, |k|_1 \leq n} \proba{S_n=k}e^{itk} dt$
                 $= \sum_{k \in \mathbb Z^d, |k|_1 \leq n} \proba{S_n=k} \frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d}  e^{itk} dt$
 
@@ -82,10 +78,32 @@ Proof.
 
             }
 
-            $\expectation{N_0} = \sum_{n=0}^{+\infty} \proba{S_{2n} = 0}$
+            $\expectation{N_0} = \expectation{\sum_{n=0}^{+\infty} 1_{S_n = 0}}$
+            ⇓
+            {
+                Linearity of expectation + Fubini-Tonelli
+            }
+            $= \sum_{n=0}^{+\infty} \expectation{1_{S_n = 0}}$
+            ⇓
+            {
+                    $\expectation{1_{S_n = 0}} = \proba{S_n = 0}$
+            }
+            $= \sum_{n=0}^{+\infty} \proba{S_n = 0}$
+            ⇓
+            {
+                Because $\proba{S_{2n+1} = 0} = 0$.
+            }
+            $= \sum_{n=0}^{+\infty} \proba{S_{2n} = 0}$
+            ⇓            by (expressionPSn=0)
             $= \sum_{n=0}^{+\infty} \frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} \phi_{S_{2n}}(t) dt$
+            ⇓            by (phiS2n=phi2n)
             $= \sum_{n=0}^{+\infty} \frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} \phi^{2n}(t) dt$
+            ⇓  by Fubini
             $=  \frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} \sum_{n=0}^{+\infty} \phi^{2n}(t) dt$
+            ⇓
+            {
+                Because $\sum_{i=0}^\infty x^i = \frac 1 {1-x}$
+            }
             $=  \frac {1} {(2\pi)^d} \int_{[-\pi, \pi]^d} \frac 1 {1 - \phi^{2}(t)} dt$
         }
 
