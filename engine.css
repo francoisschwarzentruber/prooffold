@@ -7,6 +7,10 @@ body {
     margin: 0px;
 }
 
+.arrow {
+    font-size: 120%;
+    margin-top: -5px;
+}
 
 .box>div {
     padding: 6px;
@@ -85,7 +89,7 @@ env {
     left: 10px;
     display: inline-block;
     max-width: none;
-    margin-bottom:12px;
+    margin-bottom: 12px;
 }
 
 .button {
@@ -254,4 +258,16 @@ td {
 
 .block {
     border-left: 1px solid black;
+}
+
+
+
+.help {
+    margin-left: auto;
+    background: rgb(255, 255, 128);
+    border: 2px solid rgb(187, 131, 26);
+    color: rgb(187, 131, 26);
+    font-weight: bolder;
+    padding: 0px;
+    border-radius:2px;
 }

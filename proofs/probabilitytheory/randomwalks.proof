@@ -4,6 +4,7 @@
 Let $d \geq 1$ be an integer.
 Let $\set{e_1, \dots, e_{d}}$ be the canonical base of $\mathbb R^d$.
 Let $(X_n)_{n \in \mathbb N}$ be random variables, independent and that follow the uniform distribution on $\set{e_1, -e_1, \dots, e_d, -e_d}$.
+?
 {
     TODO ANIMATION
 }
@@ -11,6 +12,7 @@ Let $(X_n)_{n \in \mathbb N}$ be random variables, independent and that follow t
 We define $(S_n)_{n \in \mathbb N}$ to be:
 - $S_0 = 0$
 - $S_n = S_{n-1} + X_n$
+?
 {
     TODO ANIMATION
 }
@@ -161,6 +163,7 @@ Proof.
     ⇓
     {
         Let $T = sup \set{n \geq 0 \mid S_n = 0}$.
+        ?
         {
             $T$ is the last time to reach 0.
         }

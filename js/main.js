@@ -147,6 +147,15 @@ function makeDiv(line) {
         const el = document.createElement("div");
         el.classList.add("statement");
         el.innerHTML = dollarToBackSlashParenthesis(innerHTMLString);
+
+        if (innerHTMLString == "⇓") {
+            el.classList.add("arrow");
+        }
+
+        if (innerHTMLString == "?") {
+            el.classList.add("help");
+        }
+
         return el;
     }
 
